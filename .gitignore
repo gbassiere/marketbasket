@@ -1,0 +1,11 @@
+# Python byte-compiled / optimized / DLL files ------------
+__pycache__/
+*.py[cod]
+
+# Translations --------------------------------------------
+*.mo
+*.pot
+
+# Django --------------------------------------------------
+local_settings.py
+db.sqlite3
