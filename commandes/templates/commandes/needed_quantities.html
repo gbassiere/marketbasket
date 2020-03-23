@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Le potagérôme</title>
-    <meta name="description" content="Système de commande de produits maraîchers">
-    <meta name="author" content="Gilles Bassière">
-    <!-- link rel="stylesheet" href="style.css" -->
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block main %}
       {% if deliveries %}
         {% for d in deliveries %}
           <h1>{{ d.location }} {{ d.date }}</h1>
@@ -24,6 +16,4 @@
       {% else %}
         <p>No delivery scheduled.</p>
       {% endif %}
-    <!-- script src="script.js"></script -->
-  </body>
-</html>
+{% endblock %}

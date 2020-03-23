@@ -24,4 +24,4 @@ def needed_quantities(request):
                                        .annotate(quantity=Sum("carts__items__quantity"))]})
 
 
-    return render(request, "commandes/index.html", context)
+    return render(request, "commandes/needed_quantities.html", context)
