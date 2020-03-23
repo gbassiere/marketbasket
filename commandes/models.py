@@ -62,11 +62,23 @@ class Cart(models.Model):
             null=True,
             related_name="carts")
 
+    def get_total(self):
+        total = 0
+        for i in self.items.all():
+            total = total + i.unit_price * i.quantity
+        return total
+
     def __str__(self):
         day = self.delivery.slot_date
         user = self.user
         items = self.items.count()
         return f"{day:%d-%b-%Y}: {user!s} ({items} items)"
+
+
+class CartItemManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset() \
+                      .annotate(price=models.F('unit_price') * models.F('quantity'))
 
 
 class CartItem(models.Model):
@@ -80,6 +92,9 @@ class CartItem(models.Model):
     unit_price = models.DecimalField(max_digits=5, decimal_places=2)
     unit_type = models.CharField(max_length=1, choices=UnitTypes.choices)
     quantity = models.DecimalField(max_digits=6, decimal_places=3)
+
+    # Manager with prices computed automatically annotated
+    objects = CartItemManager()
 
     def __str__(self):
         q = self.quantity

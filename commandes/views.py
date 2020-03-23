@@ -1,8 +1,8 @@
 import datetime
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.db.models import Sum
 
-from .models import Delivery, UnitTypes
+from .models import Delivery, Cart, UnitTypes
 
 
 def needed_quantities(request):
@@ -25,3 +25,9 @@ def needed_quantities(request):
 
 
     return render(request, "commandes/needed_quantities.html", context)
+
+
+def cart(request, id):
+    """A buyer can see or edit his orders"""
+    cart = get_object_or_404(Cart, id=id)
+    return render(request, "commandes/cart.html", {"cart": cart})

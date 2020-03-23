@@ -19,5 +19,6 @@ import commandes.views
 
 urlpatterns = [
     path('', commandes.views.needed_quantities),
+    path('order/<int:id>', commandes.views.cart),
     path('admin/', admin.site.urls),
 ]

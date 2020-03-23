@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block main %}
+<p>Date : {{ cart.delivery.slot_date }}</p>
+<p>Place : {{ cart.delivery.location.name }}</p>
+<p>Customer : {{ cart.user }}</p>
+
+<table>
+    <caption>Your order</caption>
+    <thead>
+      <tr>
+          <th>Article</th><th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if cart.items.count %}
+    {% for i in cart.items.all %}
+      <tr>
+          <td>{{ i.label }}</td><td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td><td></td>
+      </tr>
+    {% endfor %}
+    {% else %}
+        <td colspan="2">Your cart is empty...</td>
+    {% endif %}
+    </tbody>
+    <tfoot>
+      <tr>
+          <td>Total price :</td><td>{{ cart.get_total|floatformat:2 }}€</td>
+      </tr>
+    </tfoot>
+</table>
+{% endblock %}
