@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Le potagérôme</title>
+    <meta name="description" content="Système de commande de produits maraîchers">
+    <meta name="author" content="Gilles Bassière">
+    <!-- link rel="stylesheet" href="style.css" -->
+  </head>
+  <body>
+      {% if deliveries %}
+        {% for d in deliveries %}
+          <h1>{{ d.location }} {{ d.date }}</h1>
+          {% if d.orders %}
+            <ul>
+            {% for o in d.orders %}
+              <li>{{ o.label }} : {{ o.quantity }} {{ o.unit }}</li>
+            {% endfor %}
+            </ul>
+          {% else %}
+            <p>No orders.</p>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <p>No delivery scheduled.</p>
+      {% endif %}
+    <!-- script src="script.js"></script -->
+  </body>
+</html>
