@@ -29,6 +29,7 @@ def needed_quantities(request):
             'orders': [{'label': l, 'unit': units[u], 'quantity': q} for (l, u, q) in
                        Delivery.objects.filter(location__name=d['location__name'],
                                               slot_date=d['slot_date']) \
+                                       .exclude(carts__items__isnull=True) \
                                        .values_list('carts__items__label',
                                                'carts__items__unit_type') \
                                        .annotate(quantity=Sum('carts__items__quantity'))]})
