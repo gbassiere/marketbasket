@@ -1,16 +1,19 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from django.utils.formats import date_format
 
 
 class UnitTypes(models.TextChoices):
-    UNIT = 'U', 'unit(s)'
-    WEIGHT = 'W', 'Kg'
+    UNIT = 'U', _('unit(s)')
+    WEIGHT = 'W', _('Kg')
 
 
 class Article(models.Model):
-    code = models.PositiveSmallIntegerField(unique=True)
-    label = models.CharField(max_length=255)
-    unit_price = models.DecimalField(max_digits=5, decimal_places=2)
+    code = models.PositiveSmallIntegerField(_('code'), unique=True)
+    label = models.CharField(_('name'), max_length=255)
+    unit_price = models.DecimalField(_('unit price'), max_digits=5, decimal_places=2)
     unit_type = models.CharField(
+            _('unit type'),
             max_length=1,
             choices=UnitTypes.choices,
             default=UnitTypes.WEIGHT)
@@ -18,14 +21,22 @@ class Article(models.Model):
     # to decide which payment method is allowed
     # tax_rate: may be useful later to emit invoices
 
+    class Meta:
+        verbose_name = _('article')
+        verbose_name_plural = _('articles')
+
     def __str__(self):
         return self.label
 
 
 class DeliveryLocation(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(_('name'), max_length=255)
     # address full
     # lat lon
+
+    class Meta:
+        verbose_name = _('delivery location')
+        verbose_name_plural = _('delivery locations')
 
     def __str__(self):
         return self.name
@@ -34,7 +45,8 @@ class DeliveryLocation(models.Model):
 class Delivery(models.Model):
     location = models.ForeignKey(
             DeliveryLocation,
-            on_delete=models.PROTECT)
+            on_delete=models.PROTECT,
+            verbose_name=_('location'))
     # TODO: refactor using a FK to a DeliverySlot model
     slot_date = models.DateField()
     slot_from = models.TimeField()
@@ -43,13 +55,14 @@ class Delivery(models.Model):
     # cart max count
 
     class Meta:
-        verbose_name_plural = 'deliveries'
+        verbose_name = _('delivery')
+        verbose_name_plural = _('deliveries')
 
     def __str__(self):
         loc = self.location.name
-        s_day = self.slot_date
-        s_from = self.slot_from
-        return f'{loc} ({s_day:%d-%b-%Y} {s_from:%H:%M})'
+        s_day = date_format(self.slot_date, 'SHORT_DATE_FORMAT')
+        s_from = date_format(self.slot_from, 'TIME_FORMAT')
+        return f'{loc} ({s_day} {s_from})'
 
 
 class Cart(models.Model):
@@ -62,6 +75,10 @@ class Cart(models.Model):
             null=True,
             related_name='carts')
 
+    class Meta:
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
+
     def get_total(self):
         total = 0
         for i in self.items.all():
@@ -69,10 +86,10 @@ class Cart(models.Model):
         return total
 
     def __str__(self):
-        day = self.delivery.slot_date
+        day = date_format(self.delivery.slot_date, 'SHORT_DATE_FORMAT')
         user = self.user
         items = self.items.count()
-        return f'{day:%d-%b-%Y}: {user!s} ({items} items)'
+        return f'{day}: {user!s} ({items} items)'
 
 
 class CartItemManager(models.Manager):
@@ -85,13 +102,18 @@ class CartItem(models.Model):
     cart = models.ForeignKey(
             Cart,
             on_delete=models.CASCADE,
-            related_name='items')
+            related_name='items',
+            verbose_name=_('cart'))
     # Duplicate article label and unit_price so we can keep consitent cart
     # history even when article definition is updated
     label = models.CharField(max_length=255)
     unit_price = models.DecimalField(max_digits=5, decimal_places=2)
     unit_type = models.CharField(max_length=1, choices=UnitTypes.choices)
     quantity = models.DecimalField(max_digits=6, decimal_places=3)
+
+    class Meta:
+        verbose_name = _('item')
+        verbose_name_plural = _('items')
 
     # Manager with prices computed automatically annotated
     objects = CartItemManager()

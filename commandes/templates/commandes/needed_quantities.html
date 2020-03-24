@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block main %}
       {% if deliveries %}
         {% for d in deliveries %}
-          <h1>{{ d.location }} {{ d.date }}</h1>
+          <h1>{{ d.location }} {{ d.date|date:"SHORT_DATE_FORMAT" }}</h1>
           {% if d.orders %}
             <ul>
             {% for o in d.orders %}
@@ -10,10 +11,10 @@
             {% endfor %}
             </ul>
           {% else %}
-            <p>No orders.</p>
+          <p>{% trans "No orders." %}</p>
           {% endif %}
         {% endfor %}
       {% else %}
-        <p>No delivery scheduled.</p>
+      <p>{% trans "No delivery scheduled." %}</p>
       {% endif %}
 {% endblock %}

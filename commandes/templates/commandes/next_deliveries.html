@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block main %}
-<p>Next deliveries:</p>
+<p>{% trans "Next deliveries:" %}</p>
 <ul>
     {% for d in deliveries %}
     <li>
         {{ d.location.name }},
         {{ d.slot_date }}.
-        <a href="{% url "new_cart" d.id %}">Place an order</a>.
+        <a href="{% url "new_cart" d.id %}">{% trans "Place an order" %}</a>.
     </li>
     {% endfor %}
 </ul>

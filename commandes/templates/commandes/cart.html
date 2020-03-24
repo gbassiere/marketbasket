@@ -1,18 +1,19 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% block main %}
-<p>Date: {{ cart.delivery.slot_date }}</p>
-<p>Place: {{ cart.delivery.location.name }}</p>
+<p>{% trans "Date:" %} {{ cart.delivery.slot_date }}</p>
+<p>{% trans "Place:" %} {{ cart.delivery.location.name }}</p>
 {% if user_form %}
     <form action="" method="post">
     {% csrf_token %}
         <p>
-            Customer:
+            {% trans "Customer:" %}
             {{ user_form.name }}
             <input type="submit" value="OK">
         </p>
     </form>
 {% else %}
-    <p>Customer: {{ cart.user }}</p>
+    <p>{% trans "Customer:" %} {{ cart.user }}</p>
 {% endif %}
 
 {% if item_form %}
@@ -23,10 +24,10 @@
 </form>
 {% endif %}
 <table>
-    <caption>Your order</caption>
+    <caption>{% trans "Your order" %}</caption>
     <thead>
       <tr>
-          <th>Article</th><th>Price</th>
+          <th>{% trans "Article" %}</th><th>{% trans "Price" %}</th>
       </tr>
     </thead>
     <tbody>
@@ -37,12 +38,12 @@
       </tr>
     {% endfor %}
     {% else %}
-        <td colspan="2">Your cart is empty...</td>
+        <td colspan="2">{% trans "Your basket is empty..." %}</td>
     {% endif %}
     </tbody>
     <tfoot>
       <tr>
-          <td>Total price :</td><td>{{ cart.get_total|floatformat:2 }}€</td>
+          <td>{% trans "Total price:" %}</td><td>{{ cart.get_total|floatformat:2 }}€</td>
       </tr>
     </tfoot>
 </table>
