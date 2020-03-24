@@ -18,8 +18,9 @@ from django.urls import path
 import commandes.views
 
 urlpatterns = [
-    path('', commandes.views.needed_quantities),
+    path("", commandes.views.next_deliveries, name="next_deliveries"),
     path("delivery/<int:id>/order", commandes.views.new_cart, name="new_cart"),
     path("order/<int:id>", commandes.views.cart, name="cart"),
+    path("deliveries", commandes.views.needed_quantities, name="needed_quantities"),
     path('admin/', admin.site.urls),
 ]

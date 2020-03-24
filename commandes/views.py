@@ -8,6 +8,13 @@ from django import forms
 from .models import Article, Delivery, Cart, CartItem, UnitTypes
 
 
+def next_deliveries(request):
+    deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today())
+    return render(request,
+                  "commandes/next_deliveries.html",
+                  {"deliveries": deliveries})
+
+
 def needed_quantities(request):
     """Quantities needed for each delivery"""
     deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today()) \
