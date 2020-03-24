@@ -1,5 +1,7 @@
 import datetime
 from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.db.models import Sum
 from django import forms
 
@@ -28,6 +30,26 @@ def needed_quantities(request):
     return render(request, "commandes/needed_quantities.html", context)
 
 
+class UserNameForm(forms.Form):
+    name = forms.CharField(max_length=127)
+
+
+def new_cart(request, id):
+    """A buyer can start a new cart"""
+    d = Delivery.objects.get(id=id)
+    cart = Cart(delivery=d)
+    if request.method == "POST":
+        form = UserNameForm(request.POST)
+        if form.is_valid():
+            cart.user = form.cleaned_data["name"]
+            cart.save()
+            return HttpResponseRedirect(reverse("cart", args=[cart.id]))
+    else:
+        form = UserNameForm()
+
+    return render(request, "commandes/cart.html", {"cart": cart, "user_form": form})
+
+
 class CartItemForm(forms.Form):
     article = forms.ModelChoiceField(queryset=Article.objects.all())
     quantity = forms.DecimalField(max_digits=6, decimal_places=5)
@@ -50,4 +72,4 @@ def cart(request, id):
     else:
         form = CartItemForm()
 
-    return render(request, "commandes/cart.html", {"cart": cart, "form": form})
+    return render(request, "commandes/cart.html", {"cart": cart, "item_form": form})

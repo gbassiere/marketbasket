@@ -1,14 +1,27 @@
 {% extends "base.html" %}
 {% block main %}
-<p>Date : {{ cart.delivery.slot_date }}</p>
-<p>Place : {{ cart.delivery.location.name }}</p>
-<p>Customer : {{ cart.user }}</p>
+<p>Date: {{ cart.delivery.slot_date }}</p>
+<p>Place: {{ cart.delivery.location.name }}</p>
+{% if user_form %}
+    <form action="" method="post">
+    {% csrf_token %}
+        <p>
+            Customer:
+            {{ user_form.name }}
+            <input type="submit" value="OK">
+        </p>
+    </form>
+{% else %}
+    <p>Customer: {{ cart.user }}</p>
+{% endif %}
 
+{% if item_form %}
 <form action="" method="post">
     {% csrf_token %}
-    {{ form }}
+    {{ item_form }}
     <input type="submit" value="OK">
 </form>
+{% endif %}
 <table>
     <caption>Your order</caption>
     <thead>
