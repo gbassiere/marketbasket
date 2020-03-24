@@ -2,8 +2,8 @@ from django.db import models
 
 
 class UnitTypes(models.TextChoices):
-    UNIT = "U", "unit(s)"
-    WEIGHT = "W", "Kg"
+    UNIT = 'U', 'unit(s)'
+    WEIGHT = 'W', 'Kg'
 
 
 class Article(models.Model):
@@ -43,13 +43,13 @@ class Delivery(models.Model):
     # cart max count
 
     class Meta:
-        verbose_name_plural = "deliveries"
+        verbose_name_plural = 'deliveries'
 
     def __str__(self):
         loc = self.location.name
         s_day = self.slot_date
         s_from = self.slot_from
-        return f"{loc} ({s_day:%d-%b-%Y} {s_from:%H:%M})"
+        return f'{loc} ({s_day:%d-%b-%Y} {s_from:%H:%M})'
 
 
 class Cart(models.Model):
@@ -60,7 +60,7 @@ class Cart(models.Model):
             Delivery,
             on_delete=models.SET_NULL,
             null=True,
-            related_name="carts")
+            related_name='carts')
 
     def get_total(self):
         total = 0
@@ -72,7 +72,7 @@ class Cart(models.Model):
         day = self.delivery.slot_date
         user = self.user
         items = self.items.count()
-        return f"{day:%d-%b-%Y}: {user!s} ({items} items)"
+        return f'{day:%d-%b-%Y}: {user!s} ({items} items)'
 
 
 class CartItemManager(models.Manager):
@@ -85,7 +85,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(
             Cart,
             on_delete=models.CASCADE,
-            related_name="items")
+            related_name='items')
     # Duplicate article label and unit_price so we can keep consitent cart
     # history even when article definition is updated
     label = models.CharField(max_length=255)
@@ -100,4 +100,4 @@ class CartItem(models.Model):
         q = self.quantity
         u = self.get_unit_type_display()
         item = self.label
-        return f"{item}: {q} {u}"
+        return f'{item}: {q} {u}'
