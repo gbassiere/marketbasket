@@ -29,9 +29,14 @@ Install
 
     # Get application code
     git clone <project repository>
+    cd <project dir>/
 
     # Install 3rd-party python modules
     pip install -r requirements.txt
+
+    # Set instance-specific settings
+    cp <project>/local_settings.py.example <project>/local_settings.py
+    # edit <project>/local_settings.py
 
     # Create database schema
     python manage.py migrate
