@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-24 19:42+0100\n"
+"POT-Creation-Date: 2020-03-26 23:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -85,7 +85,7 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
-#: commandes/templates/base.html:7
+#: commandes/templates/base.html:8
 msgid "Market pre-ordering system"
 msgstr "Système de pré-commande de produits maraîchers"
 
@@ -137,3 +137,11 @@ msgstr "Prochaines livraisons :"
 #: commandes/templates/commandes/next_deliveries.html:10
 msgid "Place an order"
 msgstr "Commander"
+
+#: commandes/templates/navbar.html:12
+msgid "Sign up"
+msgstr "S'inscrire"
+
+#: commandes/templates/navbar.html:15
+msgid "Sign in"
+msgstr "S'identifier"
