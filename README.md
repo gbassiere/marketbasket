@@ -36,6 +36,9 @@ Install
     # Create database schema
     python manage.py migrate
 
+    # Run test suite
+    python manage.py test <app>
+
     # Run development server
     python manage.py runserver
 
