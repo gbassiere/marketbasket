@@ -9,7 +9,9 @@ from .models import Article, Delivery, Cart, CartItem, UnitTypes
 
 
 def next_deliveries(request):
-    deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today())
+    deliveries = Delivery.objects \
+                            .filter(slot_date__gte=datetime.date.today()) \
+                            .order_by('slot_date')
     return render(request,
                   'commandes/next_deliveries.html',
                   {'deliveries': deliveries})
@@ -19,6 +21,7 @@ def needed_quantities(request):
     """Quantities needed for each delivery"""
     deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today()) \
                                  .values('location__name', 'slot_date') \
+                                 .order_by('slot_date') \
                                  .distinct()
     context = {'deliveries': []}
     units = dict(UnitTypes.choices)

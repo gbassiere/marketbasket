@@ -132,7 +132,7 @@ msgstr "Aucune distribution planifiée."
 
 #: commandes/templates/commandes/next_deliveries.html:4
 msgid "Next deliveries:"
-msgstr "Prochaines livraisons :"
+msgstr "Prochaines distributions :"
 
 #: commandes/templates/commandes/next_deliveries.html:10
 msgid "Place an order"
