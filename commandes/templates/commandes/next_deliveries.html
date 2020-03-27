@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block main %}
-<p>{% trans "Next deliveries:" %}</p>
-<ul>
-    {% for d in deliveries %}
-    <li>
-        {{ d.location.name }},
-        {{ d.slot_date }}.
-        <a href="{% url "new_cart" d.id %}">{% trans "Place an order" %}</a>.
-    </li>
-    {% endfor %}
-</ul>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
+{% for d in deliveries %}
+  <div class="col">
+    <div class="card mx-1 my-3">
+      <div class="card-header">{% trans "Upcoming delivery" %}</div>
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ d.location.name }}</h5>
+        <h6 class="card-subtitle mb-2">{{ d.slot_date }}</h6>
+        <a href="{% url "new_cart" d.id %}" class="btn btn-primary">{% trans "Place an order" %}</a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
 {% endblock %}

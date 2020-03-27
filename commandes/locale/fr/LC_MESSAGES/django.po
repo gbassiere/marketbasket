@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-26 23:00+0100\n"
+"POT-Creation-Date: 2020-03-27 15:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -130,11 +130,11 @@ msgstr "Aucune commande."
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
 
-#: commandes/templates/commandes/next_deliveries.html:4
-msgid "Next deliveries:"
-msgstr "Prochaines distributions :"
+#: commandes/templates/commandes/next_deliveries.html:8
+msgid "Upcoming delivery"
+msgstr "Distribution à venir"
 
-#: commandes/templates/commandes/next_deliveries.html:10
+#: commandes/templates/commandes/next_deliveries.html:12
 msgid "Place an order"
 msgstr "Commander"
 
