@@ -34,6 +34,9 @@ Install
     # Install 3rd-party python modules
     pip install -r requirements.txt
 
+    # Install 3rd-party front-end modules
+    npm install
+
     # Set instance-specific settings
     cp <project>/local_settings.py.example <project>/local_settings.py
     # edit <project>/local_settings.py

@@ -9,3 +9,6 @@ __pycache__/
 # Django --------------------------------------------------
 local_settings.py
 db.sqlite3
+
+# Front-end -----------------------------------------------
+node_modules/

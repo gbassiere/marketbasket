@@ -1,0 +1,12 @@
+{
+  "name": "potacommandes",
+  "version": "0.0.1",
+  "description": "Market pre-ordering system",
+  "scripts": {},
+  "author": "Gilles Bassière",
+  "private": "true",
+  "license": "",
+  "dependencies": {
+    "bootstrap": "^4.4.1"
+  }
+}
