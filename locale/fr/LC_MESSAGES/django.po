@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-30 18:53+0200\n"
+"POT-Creation-Date: 2020-03-30 22:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -141,6 +141,34 @@ msgstr "Commander"
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: templates/navbar.html:15
+#: templates/navbar.html:15 templates/registration/login.html:36
 msgid "Sign in"
 msgstr "S'identifier"
+
+#: templates/registration/login.html:8
+msgid "Your username and password didn't match. Please try again."
+msgstr "Vos identifiants ne correspondent pas. Merci de réessayer."
+
+#: templates/registration/login.html:13
+msgid ""
+"Your account doesn't have access to this page. To proceed, please login with "
+"an account that has access."
+msgstr ""
+"Vous n'avez pas accès à cette page. Pour poursuivre, merci de vous connecter "
+"avec un compte bénéficiant des autorisations nécessaires."
+
+#: templates/registration/login.html:16
+msgid "Please login to see this page."
+msgstr "Merci de vous connecter pour accéder à cette page."
+
+#: templates/registration/login.html:25
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: templates/registration/login.html:29
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/registration/login.html:41
+msgid "Lost password?"
+msgstr "Mot de passe oublié ?"
