@@ -1,5 +1,6 @@
 {% load i18n %}
-<nav class="navbar navbar-expand-md navbar-dark bg-primary">
+{% load static %}
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <a class="navbar-brand" href="/">{{ merchant }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -8,12 +9,24 @@
 
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
+      {% if user.is_authenticated %}
+      <li class="nav-item dropdown">
+        <span class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img class="user-placeholder" src="{% static "user-placeholder.svg" %}" width="28" height="28" alt="">
+          {{ user.get_full_name }}
+        </span>
+        <div class="dropdown-menu" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href="{% url "logout" %}">{% trans "Log out" %}</a>
+        </div>
+      </li>
+      {% else %}
       <li class="nav-item">
           <a class="nav-link" href="#">{% trans "Sign up" %}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url "login" %}">{% trans "Sign in" %}</a>
       </li>
+      {% endif %}
     </ul>
   </div>
 </nav>

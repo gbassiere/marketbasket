@@ -1,0 +1,17 @@
+.navbar .user-placeholder {
+  opacity: .5;
+  clip-path: padding-box circle(50%);
+  margin: 0 .3em;
+}
+
+@media (max-width: 575.98px) {
+  .navbar .nav-item + .nav-item {margin-left: 0;}
+  .navbar .dropdown {position: initial;}
+  .navbar .dropdown-menu {
+    position: initial;
+    z-index: initial;
+    float: initial;
+    border: initial;
+    border-radius: initial;
+  }
+}
