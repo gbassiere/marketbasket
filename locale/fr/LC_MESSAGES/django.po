@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-01 23:18+0200\n"
+"POT-Creation-Date: 2020-04-02 16:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -17,71 +17,71 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandes/models.py:7
+#: commandes/models.py:8
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: commandes/models.py:8
+#: commandes/models.py:9
 msgid "Kg"
 msgstr "Kg"
 
-#: commandes/models.py:12
+#: commandes/models.py:13
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:13 commandes/models.py:33
+#: commandes/models.py:14 commandes/models.py:34
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:14
+#: commandes/models.py:15
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:16
+#: commandes/models.py:17
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:25
+#: commandes/models.py:26
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:26
+#: commandes/models.py:27
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:38
+#: commandes/models.py:39
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:39
+#: commandes/models.py:40
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:49
+#: commandes/models.py:50
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:58
+#: commandes/models.py:61
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:59
+#: commandes/models.py:62
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:79 commandes/models.py:106
+#: commandes/models.py:83 commandes/models.py:110
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:80
+#: commandes/models.py:84
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:115
+#: commandes/models.py:119
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:116
+#: commandes/models.py:120
 msgid "items"
 msgstr "articles"
 
@@ -97,27 +97,23 @@ msgstr "Date :"
 msgid "Place:"
 msgstr "Lieu :"
 
-#: templates/commandes/cart.html:10 templates/commandes/cart.html:16
-msgid "Customer:"
-msgstr "Client :"
-
-#: templates/commandes/cart.html:27
+#: templates/commandes/cart.html:15
 msgid "Your order"
 msgstr "Votre commande"
 
-#: templates/commandes/cart.html:30
+#: templates/commandes/cart.html:18
 msgid "Article"
 msgstr "Article"
 
-#: templates/commandes/cart.html:30
+#: templates/commandes/cart.html:18
 msgid "Price"
 msgstr "Prix"
 
-#: templates/commandes/cart.html:41
+#: templates/commandes/cart.html:29
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/commandes/cart.html:46
+#: templates/commandes/cart.html:34
 msgid "Total price:"
 msgstr "Prix total :"
 

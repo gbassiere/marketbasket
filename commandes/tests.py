@@ -5,15 +5,18 @@ from django.http import Http404
 from django.urls import reverse
 from django.conf import settings
 from django.db.models.query import QuerySet
+from django.contrib.auth.models import User
 
 from .models import Delivery, DeliveryLocation, CartItem, Cart
-from .views import UserNameForm, CartItemForm
+from .views import CartItemForm
 
 class CartTests(TestCase):
+    fixtures = ['users.json']
 
     def test_get_total(self):
         """Ensure get_total return the total price for this basket"""
-        c = Cart()
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine)
         c.save()
         self.assertEqual(c.get_total(), 0)
         CartItem(cart=c, unit_price=2, quantity=2).save()
@@ -22,13 +25,15 @@ class CartTests(TestCase):
         self.assertEqual(c.get_total(), 5.25)
 
 class CartItemTests(TestCase):
+    fixtures = ['users.json']
 
     def test_custom_manager(self):
         """
         Ensure items are annotated with price computed from unit price x
         quantity
         """
-        c = Cart()
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine)
         c.save()
         CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
         i = c.items.first()
@@ -71,7 +76,7 @@ class ViewTests(TestCase):
         self.assertIn('deliveries', response.context)
         self.assertEqual(response.status_code, 200)
 
-    def test_new_cart_get(self):
+    def test_new_cart(self):
         path = reverse('new_cart', args=[self.delivery.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
         # anonymous user
@@ -79,32 +84,27 @@ class ViewTests(TestCase):
         self.assertRedirects(response, redirect_path)
         # authenticated user with permission (Francine is in Customer)
         self.client.login(username='francine', password='francine')
+        # Trying to GET non-existing delivery raises 404
+        response = self.client.get(reverse('new_cart', args=[0]))
+        self.assertEqual(response.status_code, 404)
+        # Trying to GET with valid params
         response = self.client.get(path)
-        self.assertIn('user_form', response.context)
-        self.assertIsInstance(response.context['user_form'], UserNameForm)
-        self.assertIn('cart', response.context)
-        self.assertEqual(response.status_code, 200)
-
-    def test_new_cart_post(self):
-        data = {'name': 'Johnny Haliday'}
-        path = reverse('new_cart', args=[self.delivery.id])
-        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
-        # anonymous user
-        response = self.client.post(path, data)
-        self.assertRedirects(response, redirect_path)
-        # authenticated user with permission (Francine is in Customer)
-        self.client.login(username='francine', password='francine')
-        response = self.client.post(path, data)
-        c = Cart.objects.get(user=data['name'], delivery=self.delivery)
-        self.assertRedirects(response, reverse('cart', args=[c.id]))
+        self.assertEqual(response.status_code, 302)
 
     def test_cart_get(self):
         self.client.login(username='francine', password='francine')
+        francine = User.objects.get(username='francine')
+        reda = User.objects.get(username='reda')
         # Trying to GET non-existing cart raises 404
         response = self.client.get(reverse('cart', args=[0]))
         self.assertEqual(response.status_code, 404)
+        # Trying to GET another user's cart
+        c = Cart(user=reda, delivery=self.delivery)
+        c.save()
+        response = self.client.get(reverse('cart', args=[c.id]))
+        self.assertEqual(response.status_code, 302)
         # Trying to GET a normal cart
-        c = Cart(user='Johnny Haliday', delivery=self.delivery)
+        c = Cart(user=francine, delivery=self.delivery)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.assertIn('item_form', response.context)
@@ -114,7 +114,8 @@ class ViewTests(TestCase):
 
     def test_cart_post(self):
         self.client.login(username='francine', password='francine')
-        c = Cart(user='Johnny Haliday', delivery=self.delivery)
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine, delivery=self.delivery)
         c.save()
         item_count = c.items.count()
         data = {'article': '1', 'quantity': '2.5'}

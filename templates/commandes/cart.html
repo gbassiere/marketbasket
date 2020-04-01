@@ -3,18 +3,6 @@
 {% block main %}
 <p>{% trans "Date:" %} {{ cart.delivery.slot_date }}</p>
 <p>{% trans "Place:" %} {{ cart.delivery.location.name }}</p>
-{% if user_form %}
-    <form action="" method="post">
-    {% csrf_token %}
-        <p>
-            {% trans "Customer:" %}
-            {{ user_form.name }}
-            <input type="submit" value="OK">
-        </p>
-    </form>
-{% else %}
-    <p>{% trans "Customer:" %} {{ cart.user }}</p>
-{% endif %}
 
 {% if item_form %}
 <form action="" method="post">

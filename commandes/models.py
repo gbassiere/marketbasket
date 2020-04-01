@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.formats import date_format
+from django.contrib.auth.models import User
 
 
 class UnitTypes(models.TextChoices):
@@ -68,8 +69,9 @@ class Delivery(models.Model):
 
 
 class Cart(models.Model):
-    # TODO refactor using Django auth module
-    user = models.CharField(max_length=127)
+    user = models.ForeignKey(
+            User,
+            on_delete=models.PROTECT)
     #status choices
     delivery = models.ForeignKey(
             Delivery,
@@ -89,7 +91,7 @@ class Cart(models.Model):
 
     def __str__(self):
         day = date_format(self.delivery.slot_date, 'SHORT_DATE_FORMAT')
-        user = self.user
+        user = self.user.get_full_name()
         items = self.items.count()
         return f'{day}: {user!s} ({items} items)'
 

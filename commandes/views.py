@@ -1,5 +1,6 @@
 import datetime
 from django.shortcuts import get_object_or_404, render
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Sum
@@ -43,25 +44,13 @@ def needed_quantities(request):
     return render(request, 'commandes/needed_quantities.html', context)
 
 
-class UserNameForm(forms.Form):
-    name = forms.CharField(max_length=127)
-
-
 @login_required
 def new_cart(request, id):
     """A buyer can start a new cart"""
-    d = Delivery.objects.get(id=id)
-    cart = Cart(delivery=d)
-    if request.method == 'POST':
-        form = UserNameForm(request.POST)
-        if form.is_valid():
-            cart.user = form.cleaned_data['name']
-            cart.save()
-            return HttpResponseRedirect(reverse('cart', args=[cart.id]))
-    else:
-        form = UserNameForm()
-
-    return render(request, 'commandes/cart.html', {'cart': cart, 'user_form': form})
+    delivery = get_object_or_404(Delivery, id=id)
+    cart = Cart(delivery=delivery, user=request.user)
+    cart.save()
+    return HttpResponseRedirect(reverse('cart', args=[cart.id]))
 
 
 class CartItemForm(forms.Form):
@@ -73,6 +62,10 @@ class CartItemForm(forms.Form):
 def cart(request, id):
     """A buyer can see or edit his orders"""
     cart = get_object_or_404(Cart, id=id)
+
+    if cart.user.id != request.user.id:
+        return HttpResponseRedirect(
+                '%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     if request.method == 'POST':
         form = CartItemForm(request.POST)
