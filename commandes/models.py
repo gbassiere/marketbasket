@@ -55,6 +55,8 @@ class Delivery(models.Model):
     # cart max count
 
     class Meta:
+        permissions = [('view_delivery_quantities',
+                        'View needed quantities for a delivery')]
         verbose_name = _('delivery')
         verbose_name_plural = _('deliveries')
 

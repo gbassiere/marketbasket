@@ -1,0 +1,68 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$YGr4EMhnPRr9$o51dugI2G7+mGQTSa6DjypoAcOwnbGbEDLfZz0PH8G4=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "jerome",
+            "first_name": "J\u00e9r\u00f4me",
+            "last_name": "Laplane",
+            "email": "laplane.jerome@test.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-04-01T11:03:20.269Z",
+            "groups": [
+                [
+                    "Merchant"
+                ]
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$hbkk6B9TNCse$urFwF6PK5O6eRry5NITFdCoQQ1dZTajyr5IKxrEjqP8=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "francine",
+            "first_name": "Francine",
+            "last_name": "Bouclette",
+            "email": "francine@test.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-04-01T11:03:47.484Z",
+            "groups": [
+                [
+                    "Customer"
+                ]
+            ],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 4,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$OkkENvGm15mD$N80hwrjySrZTg8teM7VGI0OfyUubmoR7SEnAcjokj9A=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "reda",
+            "first_name": "Reda",
+            "last_name": "L'abeille",
+            "email": "reda@test.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2020-04-01T11:04:10.305Z",
+            "groups": [
+                [
+                    "Packer"
+                ]
+            ],
+            "user_permissions": []
+        }
+    }
+]

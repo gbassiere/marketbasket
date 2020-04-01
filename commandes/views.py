@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Sum
+from django.contrib.auth.decorators import permission_required, login_required
 from django import forms
 
 from .models import Article, Delivery, Cart, CartItem, UnitTypes
@@ -17,6 +18,8 @@ def next_deliveries(request):
                   {'deliveries': deliveries})
 
 
+@login_required
+@permission_required('commandes.view_delivery_quantities')
 def needed_quantities(request):
     """Quantities needed for each delivery"""
     deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today()) \
@@ -37,7 +40,6 @@ def needed_quantities(request):
                                                'carts__items__unit_type') \
                                        .annotate(quantity=Sum('carts__items__quantity'))]})
 
-
     return render(request, 'commandes/needed_quantities.html', context)
 
 
@@ -45,6 +47,7 @@ class UserNameForm(forms.Form):
     name = forms.CharField(max_length=127)
 
 
+@login_required
 def new_cart(request, id):
     """A buyer can start a new cart"""
     d = Delivery.objects.get(id=id)
@@ -66,6 +69,7 @@ class CartItemForm(forms.Form):
     quantity = forms.DecimalField(max_digits=6, decimal_places=5)
 
 
+@login_required
 def cart(request, id):
     """A buyer can see or edit his orders"""
     cart = get_object_or_404(Cart, id=id)

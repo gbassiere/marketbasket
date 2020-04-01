@@ -3,6 +3,7 @@ import datetime
 from django.test import TestCase
 from django.http import Http404
 from django.urls import reverse
+from django.conf import settings
 from django.db.models.query import QuerySet
 
 from .models import Delivery, DeliveryLocation, CartItem, Cart
@@ -35,7 +36,7 @@ class CartItemTests(TestCase):
         self.assertEqual(i.price, 1.25)
 
 class ViewTests(TestCase):
-    fixtures = ['articles.json']
+    fixtures = ['articles.json', 'users.json']
 
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
@@ -54,12 +55,31 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_needed_quantities(self):
-        response = self.client.get(reverse('needed_quantities'))
+        path = reverse('needed_quantities')
+        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        # anonymous user
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        # authenticated user lacking permission (Francine is in Customer)
+        self.client.login(username='francine', password='francine')
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        self.client.logout()
+        # authenticated user with permission (Jerome is in Merchant)
+        self.client.login(username='jerome', password='jerome')
+        response = self.client.get(path)
         self.assertIn('deliveries', response.context)
         self.assertEqual(response.status_code, 200)
 
     def test_new_cart_get(self):
-        response = self.client.get(reverse('new_cart', args=[self.delivery.id]))
+        path = reverse('new_cart', args=[self.delivery.id])
+        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        # anonymous user
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        # authenticated user with permission (Francine is in Customer)
+        self.client.login(username='francine', password='francine')
+        response = self.client.get(path)
         self.assertIn('user_form', response.context)
         self.assertIsInstance(response.context['user_form'], UserNameForm)
         self.assertIn('cart', response.context)
@@ -67,11 +87,19 @@ class ViewTests(TestCase):
 
     def test_new_cart_post(self):
         data = {'name': 'Johnny Haliday'}
-        response = self.client.post(reverse('new_cart', args=[self.delivery.id]), data)
+        path = reverse('new_cart', args=[self.delivery.id])
+        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        # anonymous user
+        response = self.client.post(path, data)
+        self.assertRedirects(response, redirect_path)
+        # authenticated user with permission (Francine is in Customer)
+        self.client.login(username='francine', password='francine')
+        response = self.client.post(path, data)
         c = Cart.objects.get(user=data['name'], delivery=self.delivery)
         self.assertRedirects(response, reverse('cart', args=[c.id]))
 
     def test_cart_get(self):
+        self.client.login(username='francine', password='francine')
         # Trying to GET non-existing cart raises 404
         response = self.client.get(reverse('cart', args=[0]))
         self.assertEqual(response.status_code, 404)
@@ -85,6 +113,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_cart_post(self):
+        self.client.login(username='francine', password='francine')
         c = Cart(user='Johnny Haliday', delivery=self.delivery)
         c.save()
         item_count = c.items.count()
