@@ -4,6 +4,18 @@ from django.utils.formats import date_format
 from django.contrib.auth.models import User
 
 
+class CartStatuses(models.IntegerChoices):
+    # Customer placed an order online, not yet processed
+    RECEIVED = 10, _('received')
+    # A packer starts to put items together
+    PREPARING = 20, _('preparation in progress')
+    # Basket is waiting for pickup
+    PREPARED = 30, _('prepared')
+    # Over, customer got his basket
+    DELIVERED = 40, _('delivered')
+    # Over, but not delivered, for some reason...
+    ABANDONED = 50, _('abandoned')
+
 class UnitTypes(models.TextChoices):
     UNIT = 'U', _('unit(s)')
     WEIGHT = 'W', _('Kg')
@@ -72,12 +84,15 @@ class Cart(models.Model):
     user = models.ForeignKey(
             User,
             on_delete=models.PROTECT)
-    #status choices
     delivery = models.ForeignKey(
             Delivery,
             on_delete=models.SET_NULL,
             null=True,
             related_name='carts')
+    status = models.PositiveSmallIntegerField(
+            _('status'),
+            choices=CartStatuses.choices,
+            default=CartStatuses.RECEIVED)
 
     class Meta:
         verbose_name = _('cart')

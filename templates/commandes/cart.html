@@ -3,6 +3,7 @@
 {% block main %}
 <p>{% trans "Date:" %} {{ cart.delivery.slot_date }}</p>
 <p>{% trans "Place:" %} {{ cart.delivery.location.name }}</p>
+<p>{% trans "Status:" %} {{ cart.get_status_display }}</p>
 
 {% if item_form %}
 <form action="" method="post">

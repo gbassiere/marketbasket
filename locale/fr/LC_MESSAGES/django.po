@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-02 16:43+0200\n"
+"POT-Creation-Date: 2020-04-02 20:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -17,71 +17,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandes/models.py:8
+#: commandes/models.py:9
+msgid "received"
+msgstr "reçu"
+
+#: commandes/models.py:11
+msgid "preparation in progress"
+msgstr "préparation en cours"
+
+#: commandes/models.py:13
+msgid "prepared"
+msgstr "préparé"
+
+#: commandes/models.py:15
+msgid "delivered"
+msgstr "livré"
+
+#: commandes/models.py:17
+msgid "abandoned"
+msgstr "abandonné"
+
+#: commandes/models.py:20
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: commandes/models.py:9
+#: commandes/models.py:21
 msgid "Kg"
 msgstr "Kg"
 
-#: commandes/models.py:13
+#: commandes/models.py:25
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:14 commandes/models.py:34
+#: commandes/models.py:26 commandes/models.py:46
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:15
+#: commandes/models.py:27
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:17
+#: commandes/models.py:29
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:26
+#: commandes/models.py:38
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:27
+#: commandes/models.py:39
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:39
+#: commandes/models.py:51
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:40
+#: commandes/models.py:52
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:50
+#: commandes/models.py:62
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:61
+#: commandes/models.py:73
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:62
+#: commandes/models.py:74
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:83 commandes/models.py:110
+#: commandes/models.py:93
+msgid "status"
+msgstr "état"
+
+#: commandes/models.py:98 commandes/models.py:125
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:84
+#: commandes/models.py:99
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:119
+#: commandes/models.py:134
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:120
+#: commandes/models.py:135
 msgid "items"
 msgstr "articles"
 
@@ -97,23 +121,27 @@ msgstr "Date :"
 msgid "Place:"
 msgstr "Lieu :"
 
-#: templates/commandes/cart.html:15
+#: templates/commandes/cart.html:6
+msgid "Status:"
+msgstr "État :"
+
+#: templates/commandes/cart.html:16
 msgid "Your order"
 msgstr "Votre commande"
 
-#: templates/commandes/cart.html:18
+#: templates/commandes/cart.html:19
 msgid "Article"
 msgstr "Article"
 
-#: templates/commandes/cart.html:18
+#: templates/commandes/cart.html:19
 msgid "Price"
 msgstr "Prix"
 
-#: templates/commandes/cart.html:29
+#: templates/commandes/cart.html:30
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/commandes/cart.html:34
+#: templates/commandes/cart.html:35
 msgid "Total price:"
 msgstr "Prix total :"
 
