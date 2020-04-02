@@ -1,3 +1,27 @@
+/*
+ * FIXME: there must be a better way to override Bootstrap4 color scheme.
+ * Certainly using Sass.
+ */
+nav.navbar {
+  background-color: #7c0 !important;
+}
+nav.navbar .navbar-brand {
+  font-weight: bold;
+}
+nav.navbar .nav-item .nav-link, nav.navbar .navbar-brand {
+  color: #ffb;
+}
+nav.navbar .nav-item .nav-link:hover, nav.navbar .navbar-brand:hover {
+  color: #bf6;
+}
+nav.navbar .nav-item .btn-outline {
+  border-color: #ffb;
+}
+nav.navbar .nav-item .btn-outline:hover {
+  background-color: #ffb;
+  color: #7c0;
+}
+
 .navbar .user-placeholder {
   opacity: .5;
   clip-path: padding-box circle(50%);
@@ -14,4 +38,13 @@
     border: initial;
     border-radius: initial;
   }
+}
+
+.btn-primary {
+  background-color: #7c0;
+  border-color: #7c0;
+}
+.btn-primary:hover {
+  background-color: #6a0;
+  border-color: #6a0;
 }
