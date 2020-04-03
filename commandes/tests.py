@@ -7,7 +7,7 @@ from django.conf import settings
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 
-from .models import Delivery, DeliveryLocation, CartItem, Cart
+from .models import Delivery, DeliveryLocation, CartItem, Cart, CartStatuses
 from .views import CartItemForm
 
 class CartTests(TestCase):
@@ -146,3 +146,37 @@ class ViewTests(TestCase):
         response = self.client.get(path)
         self.assertIn('delivery', response.context)
         self.assertEqual(response.status_code, 200)
+
+    def test_prepare_basket(self):
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine, delivery=self.delivery)
+        c.save()
+        path = reverse('prepare_basket', args=[c.id])
+        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        # anonymous user
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        # authenticated user lacking permission (Francine is in Customer)
+        self.client.login(username='francine', password='francine')
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        self.client.logout()
+        # authenticated user with permission
+        self.client.login(username='reda', password='reda')
+        # Trying to GET non-existing delivery raises 404
+        response = self.client.get(reverse('prepare_basket', args=[0]))
+        self.assertEqual(response.status_code, 404)
+        # Trying to GET a normal delivery
+        response = self.client.get(path)
+        self.assertIn('basket', response.context)
+        self.assertEqual(c.status, CartStatuses.RECEIVED)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(path, {'start': ''})
+        self.assertIn('basket', response.context)
+        c.refresh_from_db()
+        self.assertEqual(c.status, CartStatuses.PREPARING)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(path, {'ready': ''})
+        c.refresh_from_db()
+        self.assertEqual(c.status, CartStatuses.PREPARED)
+        self.assertEqual(response.status_code, 302)

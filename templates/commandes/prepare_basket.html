@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block main %}
+
+{# Basket identification #}
+<h3 class="m-4 text-center">{% trans "Customer:" %} {{ basket.user.get_full_name }}</h3>
+
+{# Item list #}
+<table class="table table-stripped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Article" %}</th>
+      <th scope="col">{% trans "Quantity" %}</th>
+      <th scope="col">{% trans "Expected price" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in basket.items.all %}
+    <tr>
+      <td>{{ item.label }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{# Footer: Summary + actions #}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <p>
+        {% trans "Expected total price:" %} {{ basket.get_total }}<br>
+        {% trans "Article count:" %} {{ basket.items.count }}
+      </p>
+    </div>
+    <div class="col text-right">
+      <form action="" method="post">
+        {% csrf_token %}
+        {% if basket.status == statuses.PREPARING %}
+          <input type="submit"
+                 name="postpone"
+                 class="btn btn-primary"
+                 value="{% trans "Put off" %}">
+          <input type="submit"
+                 name="ready"
+                 class="btn btn-primary"
+                 value="{% trans "Basket ready" %}">
+        {% else %}
+          <input type="submit"
+                 name="start"
+                 class="btn btn-primary"
+                 value="{% trans "Start preparing" %}">
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

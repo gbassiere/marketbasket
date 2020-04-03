@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-03 17:37+0200\n"
+"POT-Creation-Date: 2020-04-03 22:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -129,7 +129,7 @@ msgstr "État :"
 msgid "Your order"
 msgstr "Votre commande"
 
-#: templates/commandes/cart.html:19
+#: templates/commandes/cart.html:19 templates/commandes/prepare_basket.html:12
 msgid "Article"
 msgstr "Article"
 
@@ -161,6 +161,38 @@ msgstr "Distribution à venir"
 msgid "Place an order"
 msgstr "Commander"
 
+#: templates/commandes/prepare_basket.html:6
+msgid "Customer:"
+msgstr "Client :"
+
+#: templates/commandes/prepare_basket.html:13
+msgid "Quantity"
+msgstr "Quantité"
+
+#: templates/commandes/prepare_basket.html:14
+msgid "Expected price"
+msgstr "Prix attendu"
+
+#: templates/commandes/prepare_basket.html:33
+msgid "Expected total price:"
+msgstr "Prix total attendu :"
+
+#: templates/commandes/prepare_basket.html:34
+msgid "Article count:"
+msgstr "Nombre d'article :"
+
+#: templates/commandes/prepare_basket.html:44
+msgid "Put off"
+msgstr "Remettre à plus tard"
+
+#: templates/commandes/prepare_basket.html:48
+msgid "Basket ready"
+msgstr "Panier prêt"
+
+#: templates/commandes/prepare_basket.html:53
+msgid "Start preparing"
+msgstr "Commencer à préparer"
+
 #: templates/commandes/prepare_baskets.html:21
 msgid "Customer"
 msgstr "Client"
@@ -177,7 +209,7 @@ msgstr "État"
 msgid "Action"
 msgstr "Action"
 
-#: templates/commandes/prepare_baskets.html:34
+#: templates/commandes/prepare_baskets.html:33
 msgid "Prepare"
 msgstr "Préparer"
 

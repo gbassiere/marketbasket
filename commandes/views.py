@@ -2,12 +2,12 @@ import datetime
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.db.models import Sum
 from django.contrib.auth.decorators import permission_required, login_required
 from django import forms
 
-from .models import Article, Delivery, Cart, CartItem, UnitTypes
+from .models import Article, Delivery, Cart, CartItem, UnitTypes, CartStatuses
 
 
 def next_deliveries(request):
@@ -50,7 +50,7 @@ def new_cart(request, id):
     delivery = get_object_or_404(Delivery, id=id)
     cart = Cart(delivery=delivery, user=request.user)
     cart.save()
-    return HttpResponseRedirect(reverse('cart', args=[cart.id]))
+    return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 
 class CartItemForm(forms.Form):
@@ -90,3 +90,28 @@ def prepare_baskets(request, id):
     delivery = get_object_or_404(Delivery, id=id)
     return render(request, 'commandes/prepare_baskets.html',
                                             {'delivery': delivery})
+
+
+@login_required
+@permission_required('commandes.prepare_basket')
+def prepare_basket(request, id):
+    """A packer view a basket to be prepared"""
+    basket = get_object_or_404(Cart, id=id)
+
+    if request.method == 'POST':
+        if 'ready' in request.POST:
+            basket.status = CartStatuses.PREPARED
+            basket.save()
+            return HttpResponseRedirect(reverse_lazy('prepare_baskets',
+                                                 args=[basket.delivery.id]))
+        elif 'postpone' in request.POST:
+            basket.status = CartStatuses.RECEIVED
+            basket.save()
+            return HttpResponseRedirect(reverse_lazy('prepare_baskets',
+                                                 args=[basket.delivery.id]))
+        elif 'start' in request.POST:
+            basket.status = CartStatuses.PREPARING
+            basket.save()
+
+    return render(request,'commandes/prepare_basket.html',
+                                 {'basket': basket, 'statuses': CartStatuses})
