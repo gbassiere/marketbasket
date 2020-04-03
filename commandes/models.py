@@ -73,6 +73,9 @@ class Delivery(models.Model):
         verbose_name = _('delivery')
         verbose_name_plural = _('deliveries')
 
+    def get_active_carts(self):
+        return self.carts.filter(status__lte=CartStatuses.PREPARED)
+
     def __str__(self):
         loc = self.location.name
         s_day = date_format(self.slot_date, 'SHORT_DATE_FORMAT')
@@ -95,6 +98,7 @@ class Cart(models.Model):
             default=CartStatuses.RECEIVED)
 
     class Meta:
+        permissions = [('prepare_basket', 'Prepare basket')]
         verbose_name = _('cart')
         verbose_name_plural = _('carts')
 

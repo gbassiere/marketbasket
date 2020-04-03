@@ -81,3 +81,12 @@ def cart(request, id):
         form = CartItemForm()
 
     return render(request, 'commandes/cart.html', {'cart': cart, 'item_form': form})
+
+
+@login_required
+@permission_required('commandes.prepare_basket')
+def prepare_baskets(request, id):
+    """A packer view baskets to be prepared"""
+    delivery = get_object_or_404(Delivery, id=id)
+    return render(request, 'commandes/prepare_baskets.html',
+                                            {'delivery': delivery})

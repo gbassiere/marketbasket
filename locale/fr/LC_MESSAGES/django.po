@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-02 20:30+0200\n"
+"POT-Creation-Date: 2020-04-03 17:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -89,23 +89,23 @@ msgstr "distribution"
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:93
+#: commandes/models.py:96
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:98 commandes/models.py:125
+#: commandes/models.py:102 commandes/models.py:129
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:99
+#: commandes/models.py:103
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:134
+#: commandes/models.py:138
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:135
+#: commandes/models.py:139
 msgid "items"
 msgstr "articles"
 
@@ -160,6 +160,26 @@ msgstr "Distribution à venir"
 #: templates/commandes/next_deliveries.html:12
 msgid "Place an order"
 msgstr "Commander"
+
+#: templates/commandes/prepare_baskets.html:21
+msgid "Customer"
+msgstr "Client"
+
+#: templates/commandes/prepare_baskets.html:22
+msgid "Items count"
+msgstr "Nombre d'article"
+
+#: templates/commandes/prepare_baskets.html:23
+msgid "Status"
+msgstr "État"
+
+#: templates/commandes/prepare_baskets.html:24
+msgid "Action"
+msgstr "Action"
+
+#: templates/commandes/prepare_baskets.html:34
+msgid "Prepare"
+msgstr "Préparer"
 
 #: templates/navbar.html:19
 msgid "Log out"

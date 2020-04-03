@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block main %}
+
+{# Delivery identification #}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3 class="m-4 text-right">{{ delivery.location }}</h3>
+    </div>
+    <div class="col">
+      <h3 class="m-4 text-left">{{ delivery.slot_date }}</h3>
+    </div>
+  </div>
+</div>
+
+{# This delivery's baskets #}
+<table class="table table-stripped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Customer" %}</th>
+      <th scope="col">{% trans "Items count" %}</th>
+      <th scope="col">{% trans "Status" %}</th>
+      <th scope="col">{% trans "Action" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cart in delivery.get_active_carts %}
+    <tr>
+      <td>{{ cart.user.get_full_name }}</td>
+      <td>{{ cart.items.count }}</td>
+      <td>{{ cart.get_status_display }}</td>
+      {# FIXME: get URL of detail view #}
+      <td><a href="#" class="btn btn-primary">{% trans "Prepare" %}</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

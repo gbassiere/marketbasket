@@ -125,3 +125,24 @@ class ViewTests(TestCase):
         self.assertIsInstance(response.context['item_form'], CartItemForm)
         self.assertIn('cart', response.context)
         self.assertEqual(response.status_code, 200)
+
+    def test_prepare_baskets(self):
+        path = reverse('prepare_baskets', args=[self.delivery.id])
+        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        # anonymous user
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        # authenticated user lacking permission (Francine is in Customer)
+        self.client.login(username='francine', password='francine')
+        response = self.client.get(path)
+        self.assertRedirects(response, redirect_path)
+        self.client.logout()
+        # authenticated user with permission
+        self.client.login(username='reda', password='reda')
+        # Trying to GET non-existing delivery raises 404
+        response = self.client.get(reverse('prepare_baskets', args=[0]))
+        self.assertEqual(response.status_code, 404)
+        # Trying to GET a normal delivery
+        response = self.client.get(path)
+        self.assertIn('delivery', response.context)
+        self.assertEqual(response.status_code, 200)
