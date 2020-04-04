@@ -24,6 +24,16 @@ class CartTests(TestCase):
         CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
         self.assertEqual(c.get_total(), 5.25)
 
+    def test_is_prepared(self):
+        """ True when cart.status is prepared, False otherwise """
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine)
+        self.assertFalse(c.is_prepared())
+        c.status = CartStatuses.PREPARED
+        self.assertTrue(c.is_prepared())
+        c.status = CartStatuses.DELIVERED
+        self.assertFalse(c.is_prepared())
+
 class CartItemTests(TestCase):
     fixtures = ['users.json']
 

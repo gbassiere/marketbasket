@@ -108,6 +108,9 @@ class Cart(models.Model):
             total = total + i.unit_price * i.quantity
         return total
 
+    def is_prepared(self):
+        return self.status == CartStatuses.PREPARED
+
     def __str__(self):
         day = date_format(self.delivery.slot_date, 'SHORT_DATE_FORMAT')
         user = self.user.get_full_name()
