@@ -1,39 +1,60 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load widget_tweaks %}
 {% block main %}
-<p>{% trans "Date:" %} {{ cart.delivery.slot_date }}</p>
-<p>{% trans "Place:" %} {{ cart.delivery.location.name }}</p>
-<p>{% trans "Status:" %} {{ cart.get_status_display }}</p>
 
+{# Delivery identification #}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3 class="m-4 text-right">{{ cart.delivery.location }}</h3>
+    </div>
+    <div class="col">
+      <h3 class="m-4 text-left">{{ cart.delivery.slot_date }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p>{% trans "Status:" %} {{ cart.get_status_display }}</p>
+    </div>
+  </div>
+</div>
+
+{# Add an item form #}
 {% if item_form %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{ item_form }}
-    <input type="submit" value="OK">
+<form action="" method="post" class="form-inline justify-content-center my-2">
+  {% csrf_token %}
+  <label class="mr-2" for="{{ item_form.article.id_for_label }}">{% trans "Article:" %}</label>
+  {{ item_form.article|add_class:"custom-select mr-2" }}
+  <label class="mr-2" for="{{ item_form.quantity.id_for_label }}">{% trans "Quantity:" %}</label>
+  {{ item_form.quantity|add_class:"form-control mr-2" }}
+  <input type="submit" value="{% trans "Add to cart" %}" class="btn btn-primary">
 </form>
 {% endif %}
-<table>
-    <caption>{% trans "Your order" %}</caption>
-    <thead>
-      <tr>
-          <th>{% trans "Article" %}</th><th>{% trans "Price" %}</th>
-      </tr>
-    </thead>
-    <tbody>
+
+{# Item list #}
+<table class="table table-stripped">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Article" %}</th>
+      <th scope="col">{% trans "Price" %}</th>
+    </tr>
+  </thead>
+  <tbody>
     {% if cart.items.count %}
     {% for i in cart.items.all %}
-      <tr>
-          <td>{{ i.label }}</td><td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td><td></td>
-      </tr>
+    <tr>
+      <td>{{ i.label }}</td><td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td><td></td>
+    </tr>
     {% endfor %}
     {% else %}
-        <td colspan="2">{% trans "Your basket is empty..." %}</td>
+    <tr><td colspan="2">{% trans "Your basket is empty..." %}</td></tr>
     {% endif %}
-    </tbody>
-    <tfoot>
-      <tr>
-          <td>{% trans "Total price:" %}</td><td>{{ cart.get_total|floatformat:2 }}€</td>
-      </tr>
-    </tfoot>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>{% trans "Total price:" %}</td><td>{{ cart.get_total|floatformat:2 }}€</td>
+    </tr>
+  </tfoot>
 </table>
 {% endblock %}

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-04 17:20+0200\n"
+"POT-Creation-Date: 2020-04-04 20:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -113,35 +113,35 @@ msgstr "articles"
 msgid "Market pre-ordering system"
 msgstr "Système de pré-commande de produits maraîchers"
 
-#: templates/commandes/cart.html:4
-msgid "Date:"
-msgstr "Date :"
-
-#: templates/commandes/cart.html:5
-msgid "Place:"
-msgstr "Lieu :"
-
-#: templates/commandes/cart.html:6
+#: templates/commandes/cart.html:18
 msgid "Status:"
 msgstr "État :"
 
-#: templates/commandes/cart.html:16
-msgid "Your order"
-msgstr "Votre commande"
+#: templates/commandes/cart.html:27
+msgid "Article:"
+msgstr "Article :"
 
-#: templates/commandes/cart.html:19 templates/commandes/prepare_basket.html:12
+#: templates/commandes/cart.html:29
+msgid "Quantity:"
+msgstr "Quantité :"
+
+#: templates/commandes/cart.html:31
+msgid "Add to cart"
+msgstr "Ajouter au panier"
+
+#: templates/commandes/cart.html:39 templates/commandes/prepare_basket.html:12
 msgid "Article"
 msgstr "Article"
 
-#: templates/commandes/cart.html:19
+#: templates/commandes/cart.html:40
 msgid "Price"
 msgstr "Prix"
 
-#: templates/commandes/cart.html:30
+#: templates/commandes/cart.html:51
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/commandes/cart.html:35
+#: templates/commandes/cart.html:56
 msgid "Total price:"
 msgstr "Prix total :"
 
