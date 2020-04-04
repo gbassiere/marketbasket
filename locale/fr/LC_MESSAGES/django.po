@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-03 22:43+0200\n"
+"POT-Creation-Date: 2020-04-04 17:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -93,7 +93,7 @@ msgstr "distributions"
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:102 commandes/models.py:129
+#: commandes/models.py:102 commandes/models.py:132
 msgid "cart"
 msgstr "panier"
 
@@ -101,11 +101,11 @@ msgstr "panier"
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:138
+#: commandes/models.py:141
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:139
+#: commandes/models.py:142
 msgid "items"
 msgstr "articles"
 
@@ -209,7 +209,11 @@ msgstr "État"
 msgid "Action"
 msgstr "Action"
 
-#: templates/commandes/prepare_baskets.html:33
+#: templates/commandes/prepare_baskets.html:38
+msgid "Deliver"
+msgstr "Livrer"
+
+#: templates/commandes/prepare_baskets.html:41
 msgid "Prepare"
 msgstr "Préparer"
 

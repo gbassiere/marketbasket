@@ -30,7 +30,17 @@
       <td>{{ cart.user.get_full_name }}</td>
       <td>{{ cart.items.count }}</td>
       <td>{{ cart.get_status_display }}</td>
-      <td><a href="{% url "prepare_basket" cart.id%}" class="btn btn-primary">{% trans "Prepare" %}</a></td>
+      <td>
+        {% if cart.is_prepared %}
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="delivered_cart" value="{{ cart.id }}">
+          <input type="submit" class="btn btn-primary" value="{% trans "Deliver" %}">
+        </form>
+        {% else %}
+        <a href="{% url "prepare_basket" cart.id%}" class="btn btn-primary">{% trans "Prepare" %}</a>
+        {% endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
