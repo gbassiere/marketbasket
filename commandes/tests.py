@@ -156,6 +156,15 @@ class ViewTests(TestCase):
         response = self.client.get(path)
         self.assertIn('delivery', response.context)
         self.assertEqual(response.status_code, 200)
+        # Trying to POST a delivered cart
+        francine = User.objects.get(username='francine')
+        c = Cart(user=francine, delivery=self.delivery)
+        c.save()
+        data = {'delivered_cart': c.id}
+        response = self.client.post(path, data)
+        c.refresh_from_db()
+        self.assertEqual(c.status, CartStatuses.DELIVERED)
+        self.assertEqual(response.status_code, 200)
 
     def test_prepare_basket(self):
         francine = User.objects.get(username='francine')

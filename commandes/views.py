@@ -88,6 +88,12 @@ def cart(request, id):
 def prepare_baskets(request, id):
     """A packer view baskets to be prepared"""
     delivery = get_object_or_404(Delivery, id=id)
+
+    if request.method == 'POST' and 'delivered_cart' in request.POST:
+        cart = get_object_or_404(Cart, id=request.POST['delivered_cart'])
+        cart.status = CartStatuses.DELIVERED
+        cart.save()
+
     return render(request, 'commandes/prepare_baskets.html',
                                             {'delivery': delivery})
 
