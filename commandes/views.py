@@ -13,7 +13,7 @@ from .models import Article, UnitTypes, \
                     Merchant, URLTypes
 
 
-def next_deliveries(request):
+def merchant(request):
     # FIXME: switch to multi-merchant app and remove hard-coded merchant id
     merchant = get_object_or_404(Merchant, id=1)
 
@@ -25,7 +25,7 @@ def next_deliveries(request):
     deliveries = Delivery.objects \
                             .filter(slot_date__gte=datetime.date.today()) \
                             .order_by('slot_date')
-    return render(request, 'commandes/next_deliveries.html', {
+    return render(request, 'commandes/merchant.html', {
                                             'merchant': merchant,
                                             'contacts': contacts,
                                             'deliveries': deliveries})

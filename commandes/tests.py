@@ -63,8 +63,8 @@ class ViewTests(TestCase):
                                  slot_to=datetime.time(10, 0))
         self.delivery.save()
 
-    def test_next_deliveries(self):
-        response = self.client.get(reverse('next_deliveries'))
+    def test_merchant(self):
+        response = self.client.get(reverse('merchant'))
         self.assertIn('deliveries', response.context)
         self.assertIn('contacts', response.context)
         self.assertIn('merchant', response.context)
