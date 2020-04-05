@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 import commandes.views
 
 urlpatterns = [
-    path('', commandes.views.next_deliveries, name='next_deliveries'),
+    path('', commandes.views.merchant, name='merchant'),
     path('delivery/<int:id>/order', commandes.views.new_cart, name='new_cart'),
     path('delivery/<int:id>/baskets',
                 commandes.views.prepare_baskets,

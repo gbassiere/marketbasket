@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 17:19+0200\n"
+"POT-Creation-Date: 2020-04-05 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -189,6 +189,18 @@ msgstr "Votre panier est vide..."
 msgid "Total price:"
 msgstr "Prix total :"
 
+#: templates/commandes/merchant.html:17
+msgid "Contacts:"
+msgstr "Contacts :"
+
+#: templates/commandes/merchant.html:30
+msgid "Upcoming delivery"
+msgstr "Distribution à venir"
+
+#: templates/commandes/merchant.html:34
+msgid "Place an order"
+msgstr "Commander"
+
 #: templates/commandes/needed_quantities.html:14
 msgid "No orders."
 msgstr "Aucune commande."
@@ -196,18 +208,6 @@ msgstr "Aucune commande."
 #: templates/commandes/needed_quantities.html:18
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
-
-#: templates/commandes/next_deliveries.html:17
-msgid "Contacts:"
-msgstr "Contacts :"
-
-#: templates/commandes/next_deliveries.html:30
-msgid "Upcoming delivery"
-msgstr "Distribution à venir"
-
-#: templates/commandes/next_deliveries.html:34
-msgid "Place an order"
-msgstr "Commander"
 
 #: templates/commandes/prepare_basket.html:6
 msgid "Customer:"
