@@ -7,16 +7,28 @@ from django.db.models import Sum
 from django.contrib.auth.decorators import permission_required, login_required
 from django import forms
 
-from .models import Article, Delivery, Cart, CartItem, UnitTypes, CartStatuses
+from .models import Article, UnitTypes, \
+                    Delivery, \
+                    Cart, CartItem, CartStatuses, \
+                    Merchant, URLTypes
 
 
 def next_deliveries(request):
+    # FIXME: switch to multi-merchant app and remove hard-coded merchant id
+    merchant = get_object_or_404(Merchant, id=1)
+
+    contacts = [(url.get_url_type_display(), url.address)
+                            for url in merchant.contact_details.all()]
+    contacts.append(
+                (merchant.owner.email, 'mailto:%s' % merchant.owner.email))
+
     deliveries = Delivery.objects \
                             .filter(slot_date__gte=datetime.date.today()) \
                             .order_by('slot_date')
-    return render(request,
-                  'commandes/next_deliveries.html',
-                  {'deliveries': deliveries})
+    return render(request, 'commandes/next_deliveries.html', {
+                                            'merchant': merchant,
+                                            'contacts': contacts,
+                                            'deliveries': deliveries})
 
 
 @login_required

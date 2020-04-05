@@ -1,6 +1,28 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block main %}
+<div class="row">
+  <div class="col text-center">
+    <h3 class="m-4">{{ merchant.name }}</h3>
+    {% if merchant.picture %}
+      {% with merchant.picture as p %}
+        <img src="{{ p.url }}" width="{{ p.width}}" height="{{ p.height }}" class="d-none d-sm-inline">
+      {% endwith %}
+    {% endif %}
+    {% if merchant.presentation %}
+      <p class="m-4">{{ merchant.presentation }}</p>
+    {% endif %}
+    {% if contacts|length %}
+      <p>
+        {% trans "Contacts:" %}
+        {% for contact in contacts %}
+          <a href="{{ contact.1 }}">{{ contact.0 }}</a>
+          {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+    {% endif %}
+  </div>
+</div>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3">
 {% for d in deliveries %}
   <div class="col">

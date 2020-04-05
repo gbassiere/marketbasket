@@ -20,6 +20,12 @@ class UnitTypes(models.TextChoices):
     UNIT = 'U', _('unit(s)')
     WEIGHT = 'W', _('Kg')
 
+class URLTypes(models.TextChoices):
+    FB = 'F', _('Facebook')
+    EMAIL = 'E', _('Email address')
+    PHONE = 'P', _('Phone number')
+    WEB = 'W', _('Website')
+
 
 class Article(models.Model):
     code = models.PositiveSmallIntegerField(_('code'), unique=True)
@@ -40,6 +46,48 @@ class Article(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class Merchant(models.Model):
+    name = models.CharField(_('name'), max_length=255)
+    owner = models.ForeignKey(User, on_delete=models.PROTECT,
+                                                verbose_name=_('owner'))
+    presentation = models.TextField(_('presentation'), blank=True, default='')
+    picture = models.ImageField(null=True, blank=True)
+    # Explicit ChoiceField for things like: organic or article categories?
+    #  -> the merchant can just mention it in `presentation`
+    # Payment method
+
+    class Meta:
+        verbose_name = _('merchant')
+        verbose_name_plural = _('merchants')
+
+    def __str__(self):
+        return self.name
+
+
+class URL(models.Model):
+    address = models.URLField(_('URL'), max_length=255)
+    url_type = models.CharField(
+            _('URL type'),
+            max_length=1,
+            choices=URLTypes.choices,
+            default=URLTypes.WEB)
+    merchant = models.ForeignKey(Merchant,
+                                 on_delete=models.CASCADE,
+                                 verbose_name=_('merchant'),
+                                 related_name='contact_details')
+
+    class Meta:
+        verbose_name = _('URL')
+        verbose_name_plural = _('URLs')
+
+    def __str__(self):
+        if len(self.address) > 40:
+            address = '%s...' % self.address[:37]
+        else:
+            address = self.address
+        return '%s: %s' % (self.get_url_type_display(), address)
 
 
 class DeliveryLocation(models.Model):

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-04 20:19+0200\n"
+"POT-Creation-Date: 2020-04-05 17:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -45,67 +45,111 @@ msgstr "unité(s)"
 msgid "Kg"
 msgstr "Kg"
 
+#: commandes/models.py:24
+msgid "Facebook"
+msgstr "Facebook"
+
 #: commandes/models.py:25
+msgid "Email address"
+msgstr "Adresse email"
+
+#: commandes/models.py:26
+msgid "Phone number"
+msgstr "Numéro de téléphone"
+
+#: commandes/models.py:27
+msgid "Website"
+msgstr "Site web"
+
+#: commandes/models.py:31
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:26 commandes/models.py:46
+#: commandes/models.py:32 commandes/models.py:52 commandes/models.py:94
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:27
+#: commandes/models.py:33
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:29
+#: commandes/models.py:35
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:38
+#: commandes/models.py:44
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:39
+#: commandes/models.py:45
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:51
+#: commandes/models.py:54
+msgid "owner"
+msgstr "propriétaire"
+
+#: commandes/models.py:55
+msgid "presentation"
+msgstr "présentation"
+
+#: commandes/models.py:62 commandes/models.py:78
+msgid "merchant"
+msgstr "marchand"
+
+#: commandes/models.py:63
+msgid "merchants"
+msgstr "marchands"
+
+#: commandes/models.py:70 commandes/models.py:82
+msgid "URL"
+msgstr "URL"
+
+#: commandes/models.py:72
+msgid "URL type"
+msgstr "type d'URL"
+
+#: commandes/models.py:83
+msgid "URLs"
+msgstr "URLs"
+
+#: commandes/models.py:99
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:52
+#: commandes/models.py:100
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:62
+#: commandes/models.py:110
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:73
+#: commandes/models.py:121
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:74
+#: commandes/models.py:122
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:96
+#: commandes/models.py:144
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:102 commandes/models.py:132
+#: commandes/models.py:150 commandes/models.py:180
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:103
+#: commandes/models.py:151
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:141
+#: commandes/models.py:189
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:142
+#: commandes/models.py:190
 msgid "items"
 msgstr "articles"
 
@@ -153,11 +197,15 @@ msgstr "Aucune commande."
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
 
-#: templates/commandes/next_deliveries.html:8
+#: templates/commandes/next_deliveries.html:17
+msgid "Contacts:"
+msgstr "Contacts :"
+
+#: templates/commandes/next_deliveries.html:30
 msgid "Upcoming delivery"
 msgstr "Distribution à venir"
 
-#: templates/commandes/next_deliveries.html:12
+#: templates/commandes/next_deliveries.html:34
 msgid "Place an order"
 msgstr "Commander"
 

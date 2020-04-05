@@ -51,7 +51,7 @@ class CartItemTests(TestCase):
         self.assertEqual(i.price, 1.25)
 
 class ViewTests(TestCase):
-    fixtures = ['articles.json', 'users.json']
+    fixtures = ['articles.json', 'users.json', 'merchants.json']
 
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
@@ -65,6 +65,9 @@ class ViewTests(TestCase):
 
     def test_next_deliveries(self):
         response = self.client.get(reverse('next_deliveries'))
+        self.assertIn('deliveries', response.context)
+        self.assertIn('contacts', response.context)
+        self.assertIn('merchant', response.context)
         self.assertIsInstance(response.context['deliveries'], QuerySet)
         self.assertIs(response.context['deliveries'].model, Delivery)
         self.assertEqual(response.status_code, 200)

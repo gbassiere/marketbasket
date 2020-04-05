@@ -1,0 +1,31 @@
+[
+    {
+        "model": "commandes.merchant",
+        "pk": 1,
+        "fields": {
+            "name": "EARL du Potag\u00e9r\u00f4me",
+            "owner": [
+                "jerome"
+            ],
+            "presentation": "Petite ferme mara\u00eech\u00e8re biologique sp\u00e9cialis\u00e9e dans la production de l\u00e9gumes, d\u2019\u0153ufs et de sorbets. Le si\u00e8ge se situe \u00e0 Roquevaire, dans les Bouches-du-Rh\u00f4ne, les terres cultiv\u00e9es s\u2019\u00e9tendent jusque sur la commune voisine, Aubagne"
+        }
+    },
+    {
+        "model": "commandes.url",
+        "pk": 1,
+        "fields": {
+            "address": "http://potagerome.e-monsite.com/",
+            "url_type": "W",
+            "merchant": 1
+        }
+    },
+    {
+        "model": "commandes.url",
+        "pk": 2,
+        "fields": {
+            "address": "https://fr-fr.facebook.com/EARL-du-Potagerome-1595402160674958/",
+            "url_type": "F",
+            "merchant": 1
+        }
+    }
+]
