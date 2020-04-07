@@ -7,7 +7,7 @@
           {% if d.orders %}
             <ul>
             {% for o in d.orders %}
-              <li>{{ o.label }} : {{ o.quantity }} {{ o.unit }}</li>
+              <li>{{ o.label }} : {{ o.quantity }} {{ o.unit_type }}</li>
             {% endfor %}
             </ul>
           {% else %}

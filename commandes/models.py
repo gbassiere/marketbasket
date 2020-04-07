@@ -124,6 +124,15 @@ class Delivery(models.Model):
     def get_active_carts(self):
         return self.carts.filter(status__lte=CartStatuses.PREPARED)
 
+    def get_needed_quantities(self):
+        """
+        Return a queryset of dict with article label, unit type and the
+        total quantity of this article ordered by customers for this delivery
+        """
+        return CartItem.objects.filter(cart__delivery__id=self.id) \
+                               .values('label', 'unit_type') \
+                               .annotate(quantity=models.Sum('quantity'))
+
     def __str__(self):
         loc = self.location.name
         s_day = date_format(self.slot_date, 'SHORT_DATE_FORMAT')
