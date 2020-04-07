@@ -51,3 +51,26 @@ Install
     python manage.py runserver
 
 
+Semantic versioning
+-------------------
+
+Version numbering is automated with `npm`. Just run this:
+
+    npm version major|minor|patch -m "Tag new version"
+
+Choose between `major`, `minor` and `patch` depending on the level of version
+increment you're after.
+
+Note that your repository needs to be clean for this to work. Please do commit,
+stash or ignore modified and untracked files.
+
+This command will:
+* update version number in `package.json`
+* update version number in `locale/[...]/django.po`
+* run `git commit` using message "Tag new version"
+* run `git tag` to mark this version in git history
+
+This command acts locally. Remember to ̀`push` with `--tags` when you want to
+share this version:
+
+    git push origin --tags
