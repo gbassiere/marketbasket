@@ -7,8 +7,55 @@ from django.conf import settings
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 
-from .models import Delivery, DeliveryLocation, CartItem, Cart, CartStatuses
+from .models import Delivery, DeliveryLocation, \
+                    UnitTypes, \
+                    CartItem, Cart, CartStatuses
 from .views import CartItemForm
+
+class DeliveryTests(TestCase):
+    fixtures = ['users.json']
+
+    def setUp(self):
+        l = DeliveryLocation(name='Somewhere')
+        l.save()
+        d = datetime.date.today() + datetime.timedelta(days=3)
+        self.delivery = Delivery(location=l,
+                                 slot_date=d,
+                                 slot_from=datetime.time(9, 0),
+                                 slot_to=datetime.time(10, 0))
+        self.delivery.save()
+
+    def test_get_needed_quantities(self):
+        francine = User.objects.get(username='francine')
+        reda = User.objects.get(username='reda')
+        # No data, should return an empty queryset
+        qs1 = self.delivery.get_needed_quantities()
+        self.assertEqual(qs1.count(), 0)
+        # A Cart exists but no CartItem, should return an empty queryset
+        c1 = Cart(user=francine, delivery=self.delivery)
+        c1.save()
+        qs2 = self.delivery.get_needed_quantities()
+        self.assertEqual(qs2.count(), 0)
+        # One cart exist with one cartItem
+        kwargs = {'cart': c1, 'label': 'xxx', 'unit_price': 2.5,
+                        'unit_type': UnitTypes.WEIGHT, 'quantity': 0.500}
+        CartItem(**kwargs).save()
+        qs3 = self.delivery.get_needed_quantities()
+        self.assertEqual(qs3.count(), 1)
+        self.assertEqual(qs3[0]['quantity'], 0.5)
+        # Two Cart with the same CartItem
+        c2 = Cart(user=reda, delivery=self.delivery)
+        c2.save()
+        kwargs['cart'] = c2
+        CartItem(**kwargs).save()
+        qs4 = self.delivery.get_needed_quantities()
+        self.assertEqual(qs4.count(), 1)
+        self.assertEqual(qs4[0]['quantity'], 1)
+        # Add a different CartItem
+        kwargs['label'] = 'yyy'
+        CartItem(**kwargs).save()
+        qs5 = self.delivery.get_needed_quantities()
+        self.assertEqual(qs5.count(), 2)
 
 class CartTests(TestCase):
     fixtures = ['users.json']

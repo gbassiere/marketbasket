@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.db.models import Sum
 from django.contrib.auth.decorators import permission_required, login_required
 from django import forms
 
@@ -35,23 +34,20 @@ def merchant(request):
 @permission_required('commandes.view_delivery_quantities')
 def needed_quantities(request):
     """Quantities needed for each delivery"""
-    deliveries = Delivery.objects.filter(slot_date__gte=datetime.date.today()) \
-                                 .values('location__name', 'slot_date') \
-                                 .order_by('slot_date') \
-                                 .distinct()
+    deliveries = Delivery.objects \
+                            .filter(slot_date__gte=datetime.date.today()) \
+                            .order_by('slot_date')
     context = {'deliveries': []}
     units = dict(UnitTypes.choices)
-    for d in deliveries:
+    for delivery in deliveries:
         context['deliveries'].append({
-            'location': d['location__name'],
-            'date': d['slot_date'],
-            'orders': [{'label': l, 'unit': units[u], 'quantity': q} for (l, u, q) in
-                       Delivery.objects.filter(location__name=d['location__name'],
-                                              slot_date=d['slot_date']) \
-                                       .exclude(carts__items__isnull=True) \
-                                       .values_list('carts__items__label',
-                                               'carts__items__unit_type') \
-                                       .annotate(quantity=Sum('carts__items__quantity'))]})
+            'location': delivery.location.name,
+            'date': delivery.slot_date,
+            'orders': [{
+                            'label': quant['label'],
+                            'unit_type': units[quant['unit_type']],
+                            'quantity': quant['quantity']
+                       } for quant in delivery.get_needed_quantities()]})
 
     return render(request, 'commandes/needed_quantities.html', context)
 
