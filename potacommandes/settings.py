@@ -108,6 +108,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
+# MESSAGING
+MESSAGE_TAGS = {
+    10: 'secondary', # Bootstrap integration
+    20: 'info',
+    25: 'success',
+    30: 'warning',
+    40: 'danger' # Bootstrap integration
+}
+
+
 # Import instance-specific settings
 try:
     from .local_settings import *

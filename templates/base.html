@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static "style.css" %}">
   </head>
   <body>
+    {% include "messages.html" %}
     {% include "navbar.html" with user=user merchant="Le potagérôme" %}
     <div class="container">
     {% block main %}{% endblock %}

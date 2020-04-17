@@ -48,3 +48,22 @@ nav.navbar .nav-item .btn-outline:hover {
   background-color: #6a0;
   border-color: #6a0;
 }
+
+/* Messaging */
+ul.messages {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  padding: 1em;
+}
+ul.messages li {
+  list-style: none;
+}
+@media (min-width: 576px) {
+  ul.messages li {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
