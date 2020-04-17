@@ -182,20 +182,26 @@ class ViewTests(TestCase):
         francine = User.objects.get(username='francine')
         c = Cart(user=francine, delivery=self.delivery)
         c.save()
+        path = reverse('cart', args=[c.id])
         # invalid post
         data = {'article': '1', 'quantity': '2.5'}
-        response = self.client.post(reverse('cart', args=[c.id]), data)
+        response = self.client.post(path, data)
         self.assertEqual(response.status_code, 400)
         # post an item
         item_count = c.items.count()
         data = {'article': '1', 'quantity': '2.5', 'item_submit': ''}
-        response = self.client.post(reverse('cart', args=[c.id]), data)
+        response = self.client.post(path, data)
         self.assertEqual(c.items.count(), item_count + 1)
+        self.cart_final_tests(response)
+        # post an item to be deleted
+        data = {'del_submit': c.items.first().id}
+        response = self.client.post(path, data)
+        self.assertEqual(c.items.count(), item_count)
         self.cart_final_tests(response)
         # post an annotation
         self.assertEqual(c.annotation, '')
         data = {'annotation': 'bla', 'annot_submit': ''}
-        response = self.client.post(reverse('cart', args=[c.id]), data)
+        response = self.client.post(path, data)
         c.refresh_from_db()
         self.assertEqual(c.annotation, 'bla')
         self.cart_final_tests(response)

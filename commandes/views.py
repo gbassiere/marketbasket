@@ -1,11 +1,13 @@
 import datetime
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib import messages
 from django import forms
 
 from .models import Article, UnitTypes, \
@@ -68,6 +70,9 @@ class AnnotationForm(forms.ModelForm):
         model = Cart
         fields = ['annotation']
 
+class DelItemForm(forms.Form):
+    del_submit = forms.IntegerField()
+
 class CartItemForm(forms.Form):
     article = forms.ModelChoiceField(queryset=Article.objects.all())
     quantity = forms.DecimalField(max_digits=6, decimal_places=5)
@@ -98,6 +103,17 @@ def cart(request, id):
                          unit_type=a.unit_type,
                          quantity=item_form.cleaned_data['quantity']
                          ).save()
+        elif 'del_submit' in request.POST:
+            form = DelItemForm(request.POST)
+            if form.is_valid():
+                item_id = form.cleaned_data['del_submit']
+                try:
+                    ci = cart.items.get(id=item_id)
+                except CartItem.DoesNotExist:
+                    raise SuspiciousOperation()
+                msg = _('Article "%(label)s" deleted') % {'label': ci.label}
+                ci.delete()
+                messages.success(request, msg)
         elif 'annot_submit' in request.POST:
             annot_form = AnnotationForm(request.POST, instance=cart)
             if annot_form.is_valid():

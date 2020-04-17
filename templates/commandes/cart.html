@@ -38,22 +38,32 @@
     <tr>
       <th scope="col">{% trans "Article" %}</th>
       <th scope="col">{% trans "Price" %}</th>
+      <th scope="col">{% trans "Action" %}</th>
     </tr>
   </thead>
   <tbody>
     {% if cart.items.count %}
     {% for i in cart.items.all %}
     <tr>
-      <td>{{ i.label }}</td><td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td><td></td>
+      <td>{{ i.label }}</td>
+      <td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td>
+      <td>
+        <form action="" method="post">
+          {% csrf_token %}
+          <button name="del_submit" value="{{ i.id }}" type="submit" class="trash"></button>
+        </form>
+      </td>
     </tr>
     {% endfor %}
     {% else %}
-    <tr><td colspan="2">{% trans "Your basket is empty..." %}</td></tr>
+    <tr><td colspan="3">{% trans "Your basket is empty..." %}</td></tr>
     {% endif %}
   </tbody>
   <tfoot>
     <tr>
-      <td>{% trans "Total price:" %}</td><td>{{ cart.get_total|floatformat:2 }}€</td>
+      <td>{% trans "Total price:" %}</td>
+      <td>{{ cart.get_total|floatformat:2 }}€</td>
+      <td></td>
     </tr>
   </tfoot>
 </table>

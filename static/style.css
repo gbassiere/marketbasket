@@ -67,3 +67,12 @@ ul.messages li {
     margin: 0 auto;
   }
 }
+
+.trash {
+  background: url(trash-2.svg) center right no-repeat;
+  padding: 0;
+  white-space: nowrap;
+  height: 24px;
+  width: 24px;
+  border: none;
+}

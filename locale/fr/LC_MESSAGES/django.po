@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 16:35+0200\n"
+"POT-Creation-Date: 2020-04-17 23:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -157,6 +157,11 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
+#: commandes/views.py:114
+#, python-format
+msgid "Article \"%(label)s\" deleted"
+msgstr "Article \"%(label)s\" supprimé"
+
 #: templates/base.html:9
 msgid "Market pre-ordering system"
 msgstr "Système de pré-commande de produits maraîchers"
@@ -185,23 +190,27 @@ msgstr "Article"
 msgid "Price"
 msgstr "Prix"
 
-#: templates/commandes/cart.html:51
+#: templates/commandes/cart.html:41 templates/commandes/prepare_baskets.html:24
+msgid "Action"
+msgstr "Action"
+
+#: templates/commandes/cart.html:59
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/commandes/cart.html:56
+#: templates/commandes/cart.html:64
 msgid "Total price:"
 msgstr "Prix total :"
 
-#: templates/commandes/cart.html:66
+#: templates/commandes/cart.html:76
 msgid "Note to the merchant"
 msgstr "Message au marchand"
 
-#: templates/commandes/cart.html:70
+#: templates/commandes/cart.html:80
 msgid "Save note"
 msgstr "Enregistrer le message"
 
-#: templates/commandes/cart.html:72
+#: templates/commandes/cart.html:83
 #, python-format
 msgid "Note saved on %(d)s at %(t)s."
 msgstr "Message enregistré le %(d)s à %(t)s."
@@ -273,10 +282,6 @@ msgstr "Nombre d'article"
 #: templates/commandes/prepare_baskets.html:23
 msgid "Status"
 msgstr "État"
-
-#: templates/commandes/prepare_baskets.html:24
-msgid "Action"
-msgstr "Action"
 
 #: templates/commandes/prepare_baskets.html:38
 msgid "Deliver"
