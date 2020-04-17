@@ -28,7 +28,7 @@
   {{ item_form.article|add_class:"custom-select mr-2" }}
   <label class="mr-2" for="{{ item_form.quantity.id_for_label }}">{% trans "Quantity:" %}</label>
   {{ item_form.quantity|add_class:"form-control mr-2" }}
-  <input type="submit" value="{% trans "Add to cart" %}" class="btn btn-primary">
+  <input type="submit" name="item_submit" value="{% trans "Add to cart" %}" class="btn btn-primary">
 </form>
 {% endif %}
 
@@ -57,4 +57,25 @@
     </tr>
   </tfoot>
 </table>
+
+{# Annotation form #}
+{% if annot_form %}
+<form action="" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label class="font-weight-bolder" for="{{ annot_form.annotation.id_for_label }}">{% trans "Note to the merchant" %}</label>
+    {{ annot_form.annotation|add_class:"form-control"|attr:"rows:3" }}
+  </div>
+  <div>
+    <input type="submit" name="annot_submit" value="{% trans "Save note" %}" class="btn btn-primary">
+    {% if annot_timestamp %}
+    <small class="text-muted ml-2">
+    {% blocktrans with d=annot_timestamp|date:"DATE_FORMAT" t=annot_timestamp|time:"TIME_FORMAT" trimmed %}
+    Note saved on {{ d }} at {{ t }}.
+    {% endblocktrans %}
+    </small>
+    {% endif %}
+  </div>
+</form>
+{% endif %}
 {% endblock %}

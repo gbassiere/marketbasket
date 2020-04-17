@@ -153,6 +153,10 @@ class Cart(models.Model):
             _('status'),
             choices=CartStatuses.choices,
             default=CartStatuses.RECEIVED)
+    annotation = models.TextField(
+            _('annotation'),
+            blank=True,
+            default='')
 
     class Meta:
         permissions = [('prepare_basket', 'Prepare basket')]

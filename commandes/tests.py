@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from .models import Delivery, DeliveryLocation, \
                     UnitTypes, \
                     CartItem, Cart, CartStatuses
-from .views import CartItemForm
+from .views import CartItemForm, AnnotationForm
 
 class DeliveryTests(TestCase):
     fixtures = ['users.json']
@@ -151,6 +151,14 @@ class ViewTests(TestCase):
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
 
+    def cart_final_tests(self, response):
+        self.assertIn('item_form', response.context)
+        self.assertIn('annot_form', response.context)
+        self.assertIsInstance(response.context['item_form'], CartItemForm)
+        self.assertIsInstance(response.context['annot_form'], AnnotationForm)
+        self.assertIn('cart', response.context)
+        self.assertEqual(response.status_code, 200)
+
     def test_cart_get(self):
         self.client.login(username='francine', password='francine')
         francine = User.objects.get(username='francine')
@@ -167,24 +175,30 @@ class ViewTests(TestCase):
         c = Cart(user=francine, delivery=self.delivery)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
-        self.assertIn('item_form', response.context)
-        self.assertIsInstance(response.context['item_form'], CartItemForm)
-        self.assertIn('cart', response.context)
-        self.assertEqual(response.status_code, 200)
+        self.cart_final_tests(response)
 
     def test_cart_post(self):
         self.client.login(username='francine', password='francine')
         francine = User.objects.get(username='francine')
         c = Cart(user=francine, delivery=self.delivery)
         c.save()
-        item_count = c.items.count()
+        # invalid post
         data = {'article': '1', 'quantity': '2.5'}
         response = self.client.post(reverse('cart', args=[c.id]), data)
+        self.assertEqual(response.status_code, 400)
+        # post an item
+        item_count = c.items.count()
+        data = {'article': '1', 'quantity': '2.5', 'item_submit': ''}
+        response = self.client.post(reverse('cart', args=[c.id]), data)
         self.assertEqual(c.items.count(), item_count + 1)
-        self.assertIn('item_form', response.context)
-        self.assertIsInstance(response.context['item_form'], CartItemForm)
-        self.assertIn('cart', response.context)
-        self.assertEqual(response.status_code, 200)
+        self.cart_final_tests(response)
+        # post an annotation
+        self.assertEqual(c.annotation, '')
+        data = {'annotation': 'bla', 'annot_submit': ''}
+        response = self.client.post(reverse('cart', args=[c.id]), data)
+        c.refresh_from_db()
+        self.assertEqual(c.annotation, 'bla')
+        self.cart_final_tests(response)
 
     def test_prepare_baskets(self):
         path = reverse('prepare_baskets', args=[self.delivery.id])

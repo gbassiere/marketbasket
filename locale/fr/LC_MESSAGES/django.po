@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-05 17:31+0200\n"
+"POT-Creation-Date: 2020-04-17 16:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -133,23 +133,27 @@ msgstr "distribution"
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:144
+#: commandes/models.py:153
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:150 commandes/models.py:180
+#: commandes/models.py:157
+msgid "annotation"
+msgstr "annotation"
+
+#: commandes/models.py:163 commandes/models.py:193
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:151
+#: commandes/models.py:164
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:189
+#: commandes/models.py:202
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:190
+#: commandes/models.py:203
 msgid "items"
 msgstr "articles"
 
@@ -189,6 +193,19 @@ msgstr "Votre panier est vide..."
 msgid "Total price:"
 msgstr "Prix total :"
 
+#: templates/commandes/cart.html:66
+msgid "Note to the merchant"
+msgstr "Message au marchand"
+
+#: templates/commandes/cart.html:70
+msgid "Save note"
+msgstr "Enregistrer le message"
+
+#: templates/commandes/cart.html:72
+#, python-format
+msgid "Note saved on %(d)s at %(t)s."
+msgstr "Message enregistré le %(d)s à %(t)s."
+
 #: templates/commandes/merchant.html:17
 msgid "Contacts:"
 msgstr "Contacts :"
@@ -222,22 +239,26 @@ msgid "Expected price"
 msgstr "Prix attendu"
 
 #: templates/commandes/prepare_basket.html:33
+msgid "Customer's note"
+msgstr "Message du client"
+
+#: templates/commandes/prepare_basket.html:41
 msgid "Expected total price:"
 msgstr "Prix total attendu :"
 
-#: templates/commandes/prepare_basket.html:34
+#: templates/commandes/prepare_basket.html:42
 msgid "Article count:"
 msgstr "Nombre d'article :"
 
-#: templates/commandes/prepare_basket.html:44
+#: templates/commandes/prepare_basket.html:52
 msgid "Put off"
 msgstr "Remettre à plus tard"
 
-#: templates/commandes/prepare_basket.html:48
+#: templates/commandes/prepare_basket.html:56
 msgid "Basket ready"
 msgstr "Panier prêt"
 
-#: templates/commandes/prepare_basket.html:53
+#: templates/commandes/prepare_basket.html:61
 msgid "Start preparing"
 msgstr "Commencer à préparer"
 

@@ -1,7 +1,9 @@
 import datetime
+from django.utils.timezone import now
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.http import HttpResponseRedirect
+from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from django import forms
@@ -61,6 +63,11 @@ def new_cart(request, id):
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 
+class AnnotationForm(forms.ModelForm):
+    class Meta:
+        model = Cart
+        fields = ['annotation']
+
 class CartItemForm(forms.Form):
     article = forms.ModelChoiceField(queryset=Article.objects.all())
     quantity = forms.DecimalField(max_digits=6, decimal_places=5)
@@ -75,20 +82,35 @@ def cart(request, id):
         return HttpResponseRedirect(
                 '%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    if request.method == 'POST':
-        form = CartItemForm(request.POST)
-        if form.is_valid():
-            a = form.cleaned_data['article']
-            CartItem(cart=cart,
-                     label=a.label,
-                     unit_price=a.unit_price,
-                     unit_type=a.unit_type,
-                     quantity=form.cleaned_data['quantity']
-                     ).save()
-    else:
-        form = CartItemForm()
+    # Default, for GET request or POST to the other form
+    item_form = CartItemForm()
+    annot_form = AnnotationForm(instance=cart)
+    annot_timestamp = None
 
-    return render(request, 'commandes/cart.html', {'cart': cart, 'item_form': form})
+    if request.method == 'POST':
+        if 'item_submit' in request.POST:
+            item_form = CartItemForm(request.POST)
+            if item_form.is_valid():
+                a = item_form.cleaned_data['article']
+                CartItem(cart=cart,
+                         label=a.label,
+                         unit_price=a.unit_price,
+                         unit_type=a.unit_type,
+                         quantity=item_form.cleaned_data['quantity']
+                         ).save()
+        elif 'annot_submit' in request.POST:
+            annot_form = AnnotationForm(request.POST, instance=cart)
+            if annot_form.is_valid():
+                annot_form.save()
+                annot_timestamp = now()
+        else:
+            raise SuspiciousOperation()
+
+    return render(request, 'commandes/cart.html', {
+                                    'cart': cart,
+                                    'annot_form': annot_form,
+                                    'annot_timestamp': annot_timestamp,
+                                    'item_form': item_form})
 
 
 @login_required

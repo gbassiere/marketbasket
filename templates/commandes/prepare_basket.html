@@ -27,6 +27,14 @@
 
 {# Footer: Summary + actions #}
 <div class="container">
+  {% if basket.annotation %}
+  <div class="row">
+    <div class="col">
+      <h5>{% trans "Customer's note" %}</h5>
+      <p>{{ basket.annotation }}</p>
+    </div>
+  </div>
+  {% endif %}
   <div class="row">
     <div class="col">
       <p>
