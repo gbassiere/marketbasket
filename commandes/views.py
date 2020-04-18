@@ -1,4 +1,3 @@
-import datetime
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
@@ -26,8 +25,8 @@ def merchant(request):
                 (merchant.owner.email, 'mailto:%s' % merchant.owner.email))
 
     deliveries = Delivery.objects \
-                            .filter(slot_date__gte=datetime.date.today()) \
-                            .order_by('slot_date')
+                            .filter(start__gte=now()) \
+                            .order_by('start')
     return render(request, 'commandes/merchant.html', {
                                             'merchant': merchant,
                                             'contacts': contacts,
@@ -39,14 +38,14 @@ def merchant(request):
 def needed_quantities(request):
     """Quantities needed for each delivery"""
     deliveries = Delivery.objects \
-                            .filter(slot_date__gte=datetime.date.today()) \
-                            .order_by('slot_date')
+                            .filter(start__gte=now()) \
+                            .order_by('start')
     context = {'deliveries': []}
     units = dict(UnitTypes.choices)
     for delivery in deliveries:
         context['deliveries'].append({
             'location': delivery.location.name,
-            'date': delivery.slot_date,
+            'date': delivery.start.date(),
             'orders': [{
                             'label': quant['label'],
                             'unit_type': units[quant['unit_type']],

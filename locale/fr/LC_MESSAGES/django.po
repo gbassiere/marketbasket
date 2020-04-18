@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 23:07+0200\n"
+"POT-Creation-Date: 2020-04-18 18:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -125,39 +125,47 @@ msgstr "points de distribution"
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:121
+#: commandes/models.py:111
+msgid "start at"
+msgstr "débute à"
+
+#: commandes/models.py:112
+msgid "end at"
+msgstr "fini à"
+
+#: commandes/models.py:119
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:122
+#: commandes/models.py:120
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:153
+#: commandes/models.py:151
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:157
+#: commandes/models.py:155
 msgid "annotation"
 msgstr "annotation"
 
-#: commandes/models.py:163 commandes/models.py:193
+#: commandes/models.py:161 commandes/models.py:191
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:164
+#: commandes/models.py:162
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:202
+#: commandes/models.py:200
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:203
+#: commandes/models.py:201
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:114
+#: commandes/views.py:113
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"

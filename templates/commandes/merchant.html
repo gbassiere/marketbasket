@@ -30,7 +30,7 @@
       <div class="card-header">{% trans "Upcoming delivery" %}</div>
       <div class="card-body text-center">
         <h5 class="card-title">{{ d.location.name }}</h5>
-        <h6 class="card-subtitle mb-2">{{ d.slot_date }}</h6>
+        <h6 class="card-subtitle mb-2">{{ d.start|date:"DATE_FORMAT" }}</h6>
         <a href="{% url "new_cart" d.id %}" class="btn btn-primary">{% trans "Place an order" %}</a>
       </div>
     </div>

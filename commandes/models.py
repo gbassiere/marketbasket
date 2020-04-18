@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.formats import date_format
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 
@@ -108,10 +109,8 @@ class Delivery(models.Model):
             DeliveryLocation,
             on_delete=models.PROTECT,
             verbose_name=_('location'))
-    # TODO: refactor using a FK to a DeliverySlot model
-    slot_date = models.DateField()
-    slot_from = models.TimeField()
-    slot_to = models.TimeField()
+    start = models.DateTimeField(_('start at'))
+    end = models.DateTimeField(_('end at'))
     # available article quantity
     # cart max count
 
@@ -134,10 +133,11 @@ class Delivery(models.Model):
                                .annotate(quantity=models.Sum('quantity'))
 
     def __str__(self):
+        start_dt = timezone.localtime(self.start)
         loc = self.location.name
-        s_day = date_format(self.slot_date, 'SHORT_DATE_FORMAT')
-        s_from = date_format(self.slot_from, 'TIME_FORMAT')
-        return f'{loc} ({s_day} {s_from})'
+        day = date_format(start_dt, 'SHORT_DATE_FORMAT')
+        hour = date_format(start_dt, 'TIME_FORMAT')
+        return f'{loc} ({day} {hour})'
 
 
 class Cart(models.Model):
@@ -173,7 +173,8 @@ class Cart(models.Model):
         return self.status == CartStatuses.PREPARED
 
     def __str__(self):
-        day = date_format(self.delivery.slot_date, 'SHORT_DATE_FORMAT')
+        day = date_format(timezone.localdate(self.delivery.start),
+                            'SHORT_DATE_FORMAT')
         user = self.user.get_full_name()
         items = self.items.count()
         return f'{day}: {user!s} ({items} items)'

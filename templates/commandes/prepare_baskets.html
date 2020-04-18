@@ -9,7 +9,7 @@
       <h3 class="m-4 text-right">{{ delivery.location }}</h3>
     </div>
     <div class="col">
-      <h3 class="m-4 text-left">{{ delivery.slot_date }}</h3>
+      <h3 class="m-4 text-left">{{ delivery.start|date:"DATE_FORMAT" }}</h3>
     </div>
   </div>
 </div>

@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from .models import Delivery, DeliveryLocation, \
                     UnitTypes, \
@@ -18,11 +19,12 @@ class DeliveryTests(TestCase):
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
         l.save()
-        d = datetime.date.today() + datetime.timedelta(days=3)
-        self.delivery = Delivery(location=l,
-                                 slot_date=d,
-                                 slot_from=datetime.time(9, 0),
-                                 slot_to=datetime.time(10, 0))
+        tz = timezone.get_default_timezone()
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(9, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=2)
+        self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
 
     def test_get_needed_quantities(self):
@@ -103,11 +105,12 @@ class ViewTests(TestCase):
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
         l.save()
-        d = datetime.date.today() + datetime.timedelta(days=3)
-        self.delivery = Delivery(location=l,
-                                 slot_date=d,
-                                 slot_from=datetime.time(9, 0),
-                                 slot_to=datetime.time(10, 0))
+        tz = timezone.get_default_timezone()
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(9, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=2)
+        self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
 
     def test_merchant(self):
