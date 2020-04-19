@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 
 class CartStatuses(models.IntegerChoices):
-    # Customer placed an order online, not yet processed
+    # Customer placed an order online, not yet processed
     RECEIVED = 10, _('received')
     # A packer starts to put items together
     PREPARING = 20, _('preparation in progress')
@@ -41,7 +41,7 @@ class Article(models.Model):
             default=UnitTypes.WEIGHT)
     # category: food vs non-food, etc. May be useful later to emit invoices or
     # to decide which payment method is allowed
-    # tax_rate: may be useful later to emit invoices
+    # tax_rate: may be useful later to emit invoices
 
     class Meta:
         verbose_name = _('article')

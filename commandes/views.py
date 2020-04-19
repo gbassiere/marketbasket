@@ -16,7 +16,7 @@ from .models import Article, UnitTypes, \
 
 
 def merchant(request):
-    # FIXME: switch to multi-merchant app and remove hard-coded merchant id
+    # FIXME: switch to multi-merchant app and remove hard-coded merchant id
     merchant = get_object_or_404(Merchant, id=1)
 
     contacts = [(url.get_url_type_display(), url.address)

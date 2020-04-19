@@ -41,7 +41,7 @@
         {% if cart.is_prepared %}
         <form action="" method="post">
           {% csrf_token %}
-          <input type="hidden" name="delivered_cart" value="{{ cart.id }}">
+          <input type="hidden" name="delivered_cart" value="{{ cart.id }}">
           <input type="submit" class="btn btn-primary" value="{% trans "Deliver" %}">
         </form>
         {% else %}
