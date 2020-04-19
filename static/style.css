@@ -76,3 +76,5 @@ ul.messages li {
   width: 24px;
   border: none;
 }
+
+.table td, .table th {vertical-align: middle;}
