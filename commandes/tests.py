@@ -1,4 +1,5 @@
 import datetime
+from functools import reduce
 
 from django.test import TestCase
 from django.http import Http404
@@ -26,6 +27,20 @@ class DeliveryTests(TestCase):
         d2 = d1 + datetime.timedelta(hours=2)
         self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
+
+    def test_get_active_carts_by_slot(self):
+        francine = User.objects.get(username='francine')
+        self.delivery.interval = 30
+        self.delivery.save()
+        for i in range(4): # 4 slots (30' within 2h)
+            for j in range(1 + i%2): # 1 or 2 carts by slots, 6 in total
+                delta = datetime.timedelta(minutes=i*self.delivery.interval)
+                Cart(user=francine,
+                      delivery=self.delivery,
+                      slot=self.delivery.start + delta).save()
+        res = self.delivery.get_active_carts_by_slot()
+        self.assertEqual(len(self.delivery.slots()), len(res))
+        self.assertEqual(6, reduce(lambda x, y: x+len(y['baskets']), res, 0))
 
     def test_slots(self):
         d = self.delivery

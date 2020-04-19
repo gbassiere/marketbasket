@@ -24,8 +24,15 @@
       <th scope="col">{% trans "Action" %}</th>
     </tr>
   </thead>
-  <tbody>
-    {% for cart in delivery.get_active_carts %}
+  {% for slot in delivery.get_active_carts_by_slot %}
+  {% if slot.baskets %}
+    <tbody>
+    <tr>
+      <th colspan="4">
+        {% blocktrans with start=slot.start|time end=slot.end|time %}Expected pick-up between {{ start }} and {{ end }}.{% endblocktrans %}
+      </th>
+    </tr>
+    {% for cart in slot.baskets %}
     <tr>
       <td>{{ cart.user.get_full_name }}</td>
       <td>{{ cart.items.count }}</td>
@@ -43,6 +50,8 @@
       </td>
     </tr>
     {% endfor %}
-  </tbody>
+    </tbody>
+  {% endif %}
+  {% endfor %}
 </table>
 {% endblock %}

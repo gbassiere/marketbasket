@@ -5,6 +5,11 @@
 {# Basket identification #}
 <h3 class="m-4 text-center">{% trans "Customer:" %} {{ basket.user.get_full_name }}</h3>
 
+{# Time slot #}
+{% with basket.slot_interval as slot %}
+<p>{% blocktrans with start=slot.start|time end=slot.end|time %}Expected pick-up between {{ start }} and {{ end }}.{% endblocktrans %}</p>
+{% endwith %}
+
 {# Item list #}
 <table class="table table-striped table-bordered">
   <thead class="thead-dark">

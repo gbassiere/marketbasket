@@ -137,6 +137,16 @@ class Delivery(models.Model):
                        self.start + timedelta(minutes=(i+1)*self.interval))}
             for i in range(slot_count)]
 
+    def get_active_carts_by_slot(self):
+        groups = self.slots()
+        for c in self.get_active_carts():
+            for s in groups:
+                if not 'baskets' in s:
+                    s['baskets'] = []
+                if c.slot >= s['start'] and c.slot< s['end']:
+                    s['baskets'].append(c)
+        return groups
+
     def get_active_carts(self):
         return self.carts.filter(status__lte=CartStatuses.PREPARED)
 
