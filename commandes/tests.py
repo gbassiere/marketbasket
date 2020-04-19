@@ -75,6 +75,30 @@ class DeliveryTests(TestCase):
 class CartTests(TestCase):
     fixtures = ['users.json']
 
+    def test_slot_interval(self):
+        francine = User.objects.get(username='francine')
+        l = DeliveryLocation(name='Somewhere')
+        l.save()
+        tz = timezone.get_default_timezone()
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(9, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=2)
+        d = Delivery(location=l, start=d1, end=d2, interval=0)
+        c = Cart(user=francine, delivery=d, slot=d1)
+        s = c.slot_interval()
+        self.assertEqual(s['start'], d1)
+        self.assertEqual(s['end'], d2)
+        d.interval = 30
+        d3 = d1 + datetime.timedelta(minutes=d.interval)
+        s = c.slot_interval()
+        self.assertEqual(s['start'], d1)
+        self.assertEqual(s['end'], d3)
+        c.slot = d3
+        s = c.slot_interval()
+        self.assertEqual(s['start'], d3)
+        self.assertEqual(s['end'], d3 + datetime.timedelta(minutes=d.interval))
+
     def test_get_total(self):
         """Ensure get_total return the total price for this basket"""
         francine = User.objects.get(username='francine')

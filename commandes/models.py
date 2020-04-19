@@ -181,6 +181,13 @@ class Cart(models.Model):
         verbose_name = _('cart')
         verbose_name_plural = _('carts')
 
+    def slot_interval(self):
+        slot_filtered = [s for s in self.delivery.slots()
+                           if self.slot >= s['start'] and self.slot< s['end']]
+        if len(slot_filtered) == 0:
+            return {'start': self.delivery.start, 'end': self.delivery.end}
+        return slot_filtered[0]
+
     def get_total(self):
         total = 0
         for i in self.items.all():
