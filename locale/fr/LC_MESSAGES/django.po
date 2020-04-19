@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-18 19:37+0200\n"
+"POT-Creation-Date: 2020-04-19 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -21,151 +21,159 @@ msgstr ""
 msgid "Delivery cannot end before it starts"
 msgstr "Les distributions ne peuvent finir avant de commencer"
 
-#: commandes/models.py:9
+#: commandes/models.py:12
 msgid "received"
 msgstr "reçu"
 
-#: commandes/models.py:11
+#: commandes/models.py:14
 msgid "preparation in progress"
 msgstr "préparation en cours"
 
-#: commandes/models.py:13
+#: commandes/models.py:16
 msgid "prepared"
 msgstr "préparé"
 
-#: commandes/models.py:15
+#: commandes/models.py:18
 msgid "delivered"
 msgstr "livré"
 
-#: commandes/models.py:17
+#: commandes/models.py:20
 msgid "abandoned"
 msgstr "abandonné"
 
-#: commandes/models.py:20
+#: commandes/models.py:23
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: commandes/models.py:21
+#: commandes/models.py:24
 msgid "Kg"
 msgstr "Kg"
 
-#: commandes/models.py:24
+#: commandes/models.py:27
 msgid "Facebook"
 msgstr "Facebook"
 
-#: commandes/models.py:25
+#: commandes/models.py:28
 msgid "Email address"
 msgstr "Adresse email"
 
-#: commandes/models.py:26
+#: commandes/models.py:29
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: commandes/models.py:27
+#: commandes/models.py:30
 msgid "Website"
 msgstr "Site web"
 
-#: commandes/models.py:31
+#: commandes/models.py:34
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:32 commandes/models.py:52 commandes/models.py:94
+#: commandes/models.py:35 commandes/models.py:55 commandes/models.py:97
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:33
+#: commandes/models.py:36
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:35
+#: commandes/models.py:38
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:44
+#: commandes/models.py:47
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:45
+#: commandes/models.py:48
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:54
+#: commandes/models.py:57
 msgid "owner"
 msgstr "propriétaire"
 
-#: commandes/models.py:55
+#: commandes/models.py:58
 msgid "presentation"
 msgstr "présentation"
 
-#: commandes/models.py:62 commandes/models.py:78
+#: commandes/models.py:65 commandes/models.py:81
 msgid "merchant"
 msgstr "marchand"
 
-#: commandes/models.py:63
+#: commandes/models.py:66
 msgid "merchants"
 msgstr "marchands"
 
-#: commandes/models.py:70 commandes/models.py:82
+#: commandes/models.py:73 commandes/models.py:85
 msgid "URL"
 msgstr "URL"
 
-#: commandes/models.py:72
+#: commandes/models.py:75
 msgid "URL type"
 msgstr "type d'URL"
 
-#: commandes/models.py:83
+#: commandes/models.py:86
 msgid "URLs"
 msgstr "URLs"
 
-#: commandes/models.py:99
+#: commandes/models.py:102
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:100
+#: commandes/models.py:103
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:110
+#: commandes/models.py:113
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:111
+#: commandes/models.py:114
 msgid "start at"
 msgstr "débute à"
 
-#: commandes/models.py:112
+#: commandes/models.py:115
 msgid "end at"
 msgstr "fini à"
 
-#: commandes/models.py:119
+#: commandes/models.py:117
+msgid "time slot"
+msgstr "créneau horaire"
+
+#: commandes/models.py:126
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:120
+#: commandes/models.py:127
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:151
+#: commandes/models.py:169
+msgid "chosen time slot"
+msgstr "créneau horaire choisi"
+
+#: commandes/models.py:171
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:155
+#: commandes/models.py:175
 msgid "annotation"
 msgstr "annotation"
 
-#: commandes/models.py:161 commandes/models.py:191
+#: commandes/models.py:181 commandes/models.py:212
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:162
+#: commandes/models.py:182
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:200
+#: commandes/models.py:221
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:201
+#: commandes/models.py:222
 msgid "items"
 msgstr "articles"
 

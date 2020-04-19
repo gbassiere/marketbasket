@@ -27,6 +27,17 @@ class DeliveryTests(TestCase):
         self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
 
+    def test_slots(self):
+        d = self.delivery
+        self.assertEqual(d.interval, 0)
+        self.assertEqual(len(d.slots()), 1)
+        d.interval = 60
+        self.assertEqual(len(d.slots()), 2)
+        d.interval = 45
+        self.assertEqual(len(d.slots()), 3)
+        d.interval = 40
+        self.assertEqual(len(d.slots()), 3)
+
     def test_get_needed_quantities(self):
         francine = User.objects.get(username='francine')
         reda = User.objects.get(username='reda')
@@ -34,7 +45,9 @@ class DeliveryTests(TestCase):
         qs1 = self.delivery.get_needed_quantities()
         self.assertEqual(qs1.count(), 0)
         # A Cart exists but no CartItem, should return an empty queryset
-        c1 = Cart(user=francine, delivery=self.delivery)
+        c1 = Cart(user=francine,
+                  delivery=self.delivery,
+                  slot=self.delivery.start)
         c1.save()
         qs2 = self.delivery.get_needed_quantities()
         self.assertEqual(qs2.count(), 0)
@@ -46,7 +59,7 @@ class DeliveryTests(TestCase):
         self.assertEqual(qs3.count(), 1)
         self.assertEqual(qs3[0]['quantity'], 0.5)
         # Two Cart with the same CartItem
-        c2 = Cart(user=reda, delivery=self.delivery)
+        c2 = Cart(user=reda, delivery=self.delivery, slot=self.delivery.start)
         c2.save()
         kwargs['cart'] = c2
         CartItem(**kwargs).save()
@@ -65,7 +78,7 @@ class CartTests(TestCase):
     def test_get_total(self):
         """Ensure get_total return the total price for this basket"""
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine)
+        c = Cart(user=francine, slot=timezone.localtime())
         c.save()
         self.assertEqual(c.get_total(), 0)
         CartItem(cart=c, unit_price=2, quantity=2).save()
@@ -76,7 +89,7 @@ class CartTests(TestCase):
     def test_is_prepared(self):
         """ True when cart.status is prepared, False otherwise """
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine)
+        c = Cart(user=francine, slot=timezone.localtime())
         self.assertFalse(c.is_prepared())
         c.status = CartStatuses.PREPARED
         self.assertTrue(c.is_prepared())
@@ -92,7 +105,7 @@ class CartItemTests(TestCase):
         quantity
         """
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine)
+        c = Cart(user=francine, slot=timezone.localtime())
         c.save()
         CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
         i = c.items.first()
@@ -170,12 +183,13 @@ class ViewTests(TestCase):
         response = self.client.get(reverse('cart', args=[0]))
         self.assertEqual(response.status_code, 404)
         # Trying to GET another user's cart
-        c = Cart(user=reda, delivery=self.delivery)
+        c = Cart(user=reda, delivery=self.delivery, slot=self.delivery.start)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.assertEqual(response.status_code, 302)
         # Trying to GET a normal cart
-        c = Cart(user=francine, delivery=self.delivery)
+        c = Cart(user=francine, delivery=self.delivery,
+                slot=self.delivery.start)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
@@ -183,7 +197,8 @@ class ViewTests(TestCase):
     def test_cart_post(self):
         self.client.login(username='francine', password='francine')
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery)
+        c = Cart(user=francine, delivery=self.delivery,
+                slot=self.delivery.start)
         c.save()
         path = reverse('cart', args=[c.id])
         # invalid post
@@ -231,7 +246,8 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Trying to POST a delivered cart
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery)
+        c = Cart(user=francine, delivery=self.delivery,
+                slot=self.delivery.start)
         c.save()
         data = {'delivered_cart': c.id}
         response = self.client.post(path, data)
@@ -241,7 +257,8 @@ class ViewTests(TestCase):
 
     def test_prepare_basket(self):
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery)
+        c = Cart(user=francine, delivery=self.delivery,
+                slot=self.delivery.start)
         c.save()
         path = reverse('prepare_basket', args=[c.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)

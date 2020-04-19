@@ -1,3 +1,5 @@
+import math
+from datetime import timedelta
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils.formats import date_format
@@ -111,6 +113,10 @@ class Delivery(models.Model):
             verbose_name=_('location'))
     start = models.DateTimeField(_('start at'))
     end = models.DateTimeField(_('end at'))
+    interval = models.PositiveSmallIntegerField(
+            _('time slot'),
+            help_text='Slots duration in minutes or 0 to disable slots.',
+            default=0)
     # available article quantity
     # cart max count
 
@@ -119,6 +125,17 @@ class Delivery(models.Model):
                         'View needed quantities for a delivery')]
         verbose_name = _('delivery')
         verbose_name_plural = _('deliveries')
+
+    def slots(self):
+        if self.interval == 0:
+            return [{'start': self.start, 'end': self.end}]
+        delta = self.end - self.start
+        slot_count = math.ceil(delta.seconds / 60 / self.interval)
+        return [{
+            'start': self.start + timedelta(minutes=i*self.interval),
+            'end': min(self.end,
+                       self.start + timedelta(minutes=(i+1)*self.interval))}
+            for i in range(slot_count)]
 
     def get_active_carts(self):
         return self.carts.filter(status__lte=CartStatuses.PREPARED)
@@ -149,6 +166,7 @@ class Cart(models.Model):
             on_delete=models.SET_NULL,
             null=True,
             related_name='carts')
+    slot = models.DateTimeField(_('chosen time slot'))
     status = models.PositiveSmallIntegerField(
             _('status'),
             choices=CartStatuses.choices,

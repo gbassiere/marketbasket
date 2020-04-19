@@ -59,7 +59,7 @@ def needed_quantities(request):
 def new_cart(request, id):
     """A buyer can start a new cart"""
     delivery = get_object_or_404(Delivery, id=id)
-    cart = Cart(delivery=delivery, user=request.user)
+    cart = Cart(delivery=delivery, user=request.user, slot=delivery.start)
     cart.save()
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
