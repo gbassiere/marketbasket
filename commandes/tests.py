@@ -20,10 +20,10 @@ class DeliveryTests(TestCase):
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
         l.save()
-        tz = timezone.get_default_timezone()
+        tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(9, 0, tzinfo=tz))
+                    datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
         self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
@@ -94,10 +94,10 @@ class CartTests(TestCase):
         francine = User.objects.get(username='francine')
         l = DeliveryLocation(name='Somewhere')
         l.save()
-        tz = timezone.get_default_timezone()
+        tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(9, 0, tzinfo=tz))
+                    datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
         d = Delivery(location=l, start=d1, end=d2, interval=0)
         c = Cart(user=francine, delivery=d, slot=d1)
@@ -117,7 +117,7 @@ class CartTests(TestCase):
     def test_get_total(self):
         """Ensure get_total return the total price for this basket"""
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.localtime())
+        c = Cart(user=francine, slot=timezone.now())
         c.save()
         self.assertEqual(c.get_total(), 0)
         CartItem(cart=c, unit_price=2, quantity=2).save()
@@ -128,7 +128,7 @@ class CartTests(TestCase):
     def test_is_prepared(self):
         """ True when cart.status is prepared, False otherwise """
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.localtime())
+        c = Cart(user=francine, slot=timezone.now())
         self.assertFalse(c.is_prepared())
         c.status = CartStatuses.PREPARED
         self.assertTrue(c.is_prepared())
@@ -144,7 +144,7 @@ class CartItemTests(TestCase):
         quantity
         """
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.localtime())
+        c = Cart(user=francine, slot=timezone.now())
         c.save()
         CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
         i = c.items.first()
@@ -157,10 +157,10 @@ class ViewTests(TestCase):
     def setUp(self):
         l = DeliveryLocation(name='Somewhere')
         l.save()
-        tz = timezone.get_default_timezone()
+        tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(9, 0, tzinfo=tz))
+                    datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
         self.delivery = Delivery(location=l, start=d1, end=d2)
         self.delivery.save()
