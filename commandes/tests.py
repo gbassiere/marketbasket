@@ -232,6 +232,13 @@ class ViewTests(TestCase):
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
+        # SlotForm not enabled when there's a single time slot
+        self.assertNotIn('slot_form', response.context)
+        self.delivery.interval = 30
+        self.delivery.save()
+        response = self.client.get(reverse('cart', args=[c.id]))
+        self.cart_final_tests(response)
+        self.assertIn('slot_form', response.context)
 
     def test_cart_post(self):
         self.client.login(username='francine', password='francine')
@@ -255,6 +262,15 @@ class ViewTests(TestCase):
         response = self.client.post(path, data)
         self.assertEqual(c.items.count(), item_count)
         self.cart_final_tests(response)
+        # post a time slot
+        self.delivery.interval = 30
+        self.delivery.save()
+        self.assertEqual(c.slot, self.delivery.start)
+        new_slot = self.delivery.slots()[2]['start']
+        data = {'slot': new_slot.isoformat(), 'slot_submit': ''}
+        response = self.client.post(path, data)
+        c.refresh_from_db()
+        self.assertEqual(new_slot, c.slot)
         # post an annotation
         self.assertEqual(c.annotation, '')
         data = {'annotation': 'bla', 'annot_submit': ''}

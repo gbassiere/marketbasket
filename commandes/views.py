@@ -1,4 +1,6 @@
-from django.utils.timezone import now
+from django.utils.timezone import now, localtime
+from django.utils.dateparse import parse_datetime
+from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
@@ -64,6 +66,21 @@ def new_cart(request, id):
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 
+class SlotForm(forms.Form):
+    slot = forms.TypedChoiceField(
+            choices=(),
+            coerce=parse_datetime)
+
+    def __init__(self, *args, **kwargs):
+        self.slots = kwargs.pop('slots')
+        super().__init__(*args, **kwargs)
+        self.fields['slot'].choices = [(
+            slot['start'].isoformat(),
+            'between %(start)s and %(end)s.' % {
+                'start': date_format(localtime(slot['start']), 'TIME_FORMAT'),
+                'end': date_format(localtime(slot['end']), 'TIME_FORMAT')}
+            )  for slot in self.slots]
+
 class AnnotationForm(forms.ModelForm):
     class Meta:
         model = Cart
@@ -86,11 +103,18 @@ def cart(request, id):
         return HttpResponseRedirect(
                 '%s?next=%s' % (settings.LOGIN_URL, request.path))
 
+    # SlotForm initialize params
+    slot_kwargs = {
+            'initial': {'slot': cart.slot_interval()['start'].isoformat()},
+            'slots': cart.delivery.slots()}
+
     # Default, for GET request or POST to the other form
+    slot_form = SlotForm(**slot_kwargs)
     item_form = CartItemForm()
     annot_form = AnnotationForm(instance=cart)
     annot_timestamp = None
 
+    # Process POSTed data
     if request.method == 'POST':
         if 'item_submit' in request.POST:
             item_form = CartItemForm(request.POST)
@@ -113,6 +137,11 @@ def cart(request, id):
                 msg = _('Article "%(label)s" deleted') % {'label': ci.label}
                 ci.delete()
                 messages.success(request, msg)
+        elif 'slot_submit' in request.POST:
+            slot_form = SlotForm(request.POST, **slot_kwargs)
+            if slot_form.is_valid():
+                cart.slot = slot_form.cleaned_data['slot']
+                cart.save()
         elif 'annot_submit' in request.POST:
             annot_form = AnnotationForm(request.POST, instance=cart)
             if annot_form.is_valid():
@@ -121,11 +150,16 @@ def cart(request, id):
         else:
             raise SuspiciousOperation()
 
-    return render(request, 'commandes/cart.html', {
-                                    'cart': cart,
-                                    'annot_form': annot_form,
-                                    'annot_timestamp': annot_timestamp,
-                                    'item_form': item_form})
+    # Build context object
+    context = {
+            'cart': cart,
+            'annot_form': annot_form,
+            'annot_timestamp': annot_timestamp,
+            'item_form': item_form}
+    if cart.delivery.interval > 0:
+        context['slot_form'] = slot_form
+
+    return render(request, 'commandes/cart.html', context)
 
 
 @login_required

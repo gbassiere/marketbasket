@@ -68,6 +68,18 @@
   </tfoot>
 </table>
 
+{# Time slot selection form #}
+{% if slot_form %}
+<p>
+  <form action="" method="post" class="form-inline">
+    {% csrf_token %}
+    <label class="font-weight-bolder mr-2" for="{{ slot_form.slot.id_for_label}}">{% trans "Basket collection time slot:" %}</label>
+    {{ slot_form.slot|add_class:"custom-select mr-sm-2" }}
+    <input type="submit" name="slot_submit" value="{% trans "Validate" %}" class="btn btn-primary">
+  </form>
+</p>
+{% endif %}
+
 {# Annotation form #}
 {% if annot_form %}
 <form action="" method="post">
