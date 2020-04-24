@@ -1,5 +1,4 @@
 from django.utils.timezone import now, localtime
-from django.utils.dateparse import parse_datetime
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
@@ -15,7 +14,7 @@ from django.db.models import Min
 from .models import Article, UnitTypes, \
                     Delivery, \
                     Cart, CartItem, CartStatuses, \
-                    Merchant, URLTypes
+                    Merchant
 
 
 def merchant(request):

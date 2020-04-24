@@ -2,7 +2,6 @@ import datetime
 from functools import reduce
 
 from django.test import TestCase
-from django.http import Http404
 from django.urls import reverse
 from django.conf import settings
 from django.db.models.query import QuerySet

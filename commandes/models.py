@@ -1,5 +1,3 @@
-import math
-from datetime import timedelta
 from django.db import models
 from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.formats import date_format

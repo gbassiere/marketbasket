@@ -32,7 +32,8 @@ Install
     cd <project dir>/
 
     # Install 3rd-party python modules
-    pip install -r requirements.txt
+    python3 -m pip install -r requirements.txt
+    python3 -m pip install -r requirements-dev.txt
 
     # Install 3rd-party front-end modules
     npm install
@@ -42,13 +43,13 @@ Install
     # edit <project>/local_settings.py
 
     # Create database schema
-    python manage.py migrate
+    python3 manage.py migrate
 
     # Run test suite
-    python manage.py test <app>
+    python3 manage.py test <app>
 
     # Run development server
-    python manage.py runserver
+    python3 manage.py runserver
 
 
 Semantic versioning
@@ -61,7 +62,7 @@ Version numbering is automated with `npm`. Just run this:
 Choose between `major`, `minor` and `patch` depending on the level of version
 increment you're after.
 
-Note that your repository needs to be clean for this to work. Please do commit,
+Note that your repository must be clean for this to work. Please do commit,
 stash or ignore modified and untracked files.
 
 This command will:
