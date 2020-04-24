@@ -138,6 +138,8 @@ def cart(request, id):
             if slot_form.is_valid():
                 cart.slot = slot_form.cleaned_data['slot']
                 cart.save()
+                msg = _('Time slot updated')
+                messages.success(request, msg)
         elif 'annot_submit' in request.POST:
             annot_form = AnnotationForm(request.POST, instance=cart)
             if annot_form.is_valid():
