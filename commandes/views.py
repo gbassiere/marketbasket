@@ -4,12 +4,13 @@ from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
 from django import forms
+from django.db.models import Min
 
 from .models import Article, UnitTypes, \
                     Delivery, \
@@ -26,7 +27,7 @@ def merchant(request):
     contacts.append(
                 (merchant.owner.email, 'mailto:%s' % merchant.owner.email))
 
-    deliveries = Delivery.objects \
+    deliveries = Delivery.objects.annotate(start=Min('slots__start')) \
                             .filter(start__gte=now()) \
                             .order_by('start')
     return render(request, 'commandes/merchant.html', {
@@ -39,7 +40,7 @@ def merchant(request):
 @permission_required('commandes.view_delivery_quantities')
 def needed_quantities(request):
     """Quantities needed for each delivery"""
-    deliveries = Delivery.objects \
+    deliveries = Delivery.objects.annotate(start=Min('slots__start')) \
                             .filter(start__gte=now()) \
                             .order_by('start')
     context = {'deliveries': []}
@@ -61,25 +62,25 @@ def needed_quantities(request):
 def new_cart(request, id):
     """A buyer can start a new cart"""
     delivery = get_object_or_404(Delivery, id=id)
-    cart = Cart(delivery=delivery, user=request.user, slot=delivery.start)
+    # Assign first slot as a default
+    slot = delivery.slots.order_by('start').first()
+    cart = Cart(user=request.user, slot=slot)
     cart.save()
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 
+class SlotChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return _('between %(start)s and %(end)s.') % {
+                'start': date_format(localtime(obj.start), 'TIME_FORMAT'),
+                'end': date_format(localtime(obj.end), 'TIME_FORMAT')}
+
 class SlotForm(forms.Form):
-    slot = forms.TypedChoiceField(
-            choices=(),
-            coerce=parse_datetime)
+    slot = SlotChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
-        self.slots = kwargs.pop('slots')
         super().__init__(*args, **kwargs)
-        self.fields['slot'].choices = [(
-            slot['start'].isoformat(),
-            'between %(start)s and %(end)s.' % {
-                'start': date_format(localtime(slot['start']), 'TIME_FORMAT'),
-                'end': date_format(localtime(slot['end']), 'TIME_FORMAT')}
-            )  for slot in self.slots]
+        self.fields['slot'].queryset = self.initial['slot'].delivery.slots.all()
 
 class AnnotationForm(forms.ModelForm):
     class Meta:
@@ -103,13 +104,8 @@ def cart(request, id):
         return HttpResponseRedirect(
                 '%s?next=%s' % (settings.LOGIN_URL, request.path))
 
-    # SlotForm initialize params
-    slot_kwargs = {
-            'initial': {'slot': cart.slot_interval()['start'].isoformat()},
-            'slots': cart.delivery.slots()}
-
     # Default, for GET request or POST to the other form
-    slot_form = SlotForm(**slot_kwargs)
+    slot_form = SlotForm(initial={'slot': cart.slot})
     item_form = CartItemForm()
     annot_form = AnnotationForm(instance=cart)
     annot_timestamp = None
@@ -138,7 +134,7 @@ def cart(request, id):
                 ci.delete()
                 messages.success(request, msg)
         elif 'slot_submit' in request.POST:
-            slot_form = SlotForm(request.POST, **slot_kwargs)
+            slot_form = SlotForm(request.POST, initial={'slot': cart.slot})
             if slot_form.is_valid():
                 cart.slot = slot_form.cleaned_data['slot']
                 cart.save()
@@ -156,7 +152,7 @@ def cart(request, id):
             'annot_form': annot_form,
             'annot_timestamp': annot_timestamp,
             'item_form': item_form}
-    if cart.delivery.interval > 0:
+    if cart.slot.delivery.slots.count() > 1:
         context['slot_form'] = slot_form
 
     return render(request, 'commandes/cart.html', context)
@@ -166,7 +162,10 @@ def cart(request, id):
 @permission_required('commandes.prepare_basket')
 def prepare_baskets(request, id):
     """A packer view baskets to be prepared"""
-    delivery = get_object_or_404(Delivery, id=id)
+    try:
+        delivery = Delivery.objects.annotate(start=Min('slots__start')).get(pk=id)
+    except Delivery.DoesNotExist:
+        raise Http404("No Delivery matches the given query.")
 
     if request.method == 'POST' and 'delivered_cart' in request.POST:
         cart = get_object_or_404(Cart, id=request.POST['delivered_cart'])
@@ -188,12 +187,12 @@ def prepare_basket(request, id):
             basket.status = CartStatuses.PREPARED
             basket.save()
             return HttpResponseRedirect(reverse_lazy('prepare_baskets',
-                                                 args=[basket.delivery.id]))
+                                             args=[basket.slot.delivery.id]))
         elif 'postpone' in request.POST:
             basket.status = CartStatuses.RECEIVED
             basket.save()
             return HttpResponseRedirect(reverse_lazy('prepare_baskets',
-                                                 args=[basket.delivery.id]))
+                                             args=[basket.slot.delivery.id]))
         elif 'start' in request.POST:
             basket.status = CartStatuses.PREPARING
             basket.save()

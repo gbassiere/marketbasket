@@ -1,7 +1,7 @@
 import math
 from datetime import timedelta
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.formats import date_format
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -111,12 +111,6 @@ class Delivery(models.Model):
             DeliveryLocation,
             on_delete=models.PROTECT,
             verbose_name=_('location'))
-    start = models.DateTimeField(_('start at'))
-    end = models.DateTimeField(_('end at'))
-    interval = models.PositiveSmallIntegerField(
-            _('time slot'),
-            help_text='Slots duration in minutes or 0 to disable slots.',
-            default=0)
     # available article quantity
     # cart max count
 
@@ -126,57 +120,72 @@ class Delivery(models.Model):
         verbose_name = _('delivery')
         verbose_name_plural = _('deliveries')
 
-    def slots(self):
-        if self.interval == 0:
-            return [{'start': self.start, 'end': self.end}]
-        delta = self.end - self.start
-        slot_count = math.ceil(delta.seconds / 60 / self.interval)
-        return [{
-            'start': self.start + timedelta(minutes=i*self.interval),
-            'end': min(self.end,
-                       self.start + timedelta(minutes=(i+1)*self.interval))}
-            for i in range(slot_count)]
-
     def get_active_carts_by_slot(self):
-        groups = self.slots()
+        groups = {}
         for c in self.get_active_carts():
-            for s in groups:
-                if not 'baskets' in s:
-                    s['baskets'] = []
-                if c.slot >= s['start'] and c.slot< s['end']:
-                    s['baskets'].append(c)
-        return groups
+            k = c.slot.id
+            if k not in groups:
+                groups[k] = {'start': c.slot.start,
+                             'end': c.slot.end,
+                             'baskets': []}
+            groups[k]['baskets'].append(c)
+        return list(groups.values())
 
     def get_active_carts(self):
-        return self.carts.filter(status__lte=CartStatuses.PREPARED)
+        return Cart.objects.filter(status__lte=CartStatuses.PREPARED,
+                            slot__delivery__id=self.id)
 
     def get_needed_quantities(self):
         """
         Return a queryset of dict with article label, unit type and the
         total quantity of this article ordered by customers for this delivery
         """
-        return CartItem.objects.filter(cart__delivery__id=self.id) \
+        return CartItem.objects.filter(cart__slot__delivery__id=self.id) \
                                .values('label', 'unit_type') \
                                .annotate(quantity=models.Sum('quantity'))
 
     def __str__(self):
-        start_dt = timezone.localtime(self.start)
         loc = self.location.name
-        day = date_format(start_dt, 'SHORT_DATE_FORMAT')
-        hour = date_format(start_dt, 'TIME_FORMAT')
-        return f'{loc} ({day} {hour})'
+        first_slot = self.slots.order_by('start').first()
+        if first_slot:
+            start_dt = timezone.localtime(first_slot.start)
+            day = date_format(start_dt, 'SHORT_DATE_FORMAT')
+            hour = date_format(start_dt, 'TIME_FORMAT')
+            return f'{loc} ({day} {hour})'
+        else:
+            return gettext('%(place)s (undefined time slots)' % {'place': loc})
+
+
+class DeliverySlot(models.Model):
+    start = models.DateTimeField(_('start at'))
+    end = models.DateTimeField(_('end at'))
+    delivery = models.ForeignKey(
+            Delivery,
+            related_name='slots',
+            verbose_name=_('delivery'),
+            on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('delivery time slot')
+        verbose_name_plural = _('delivery time slots')
+
+    def __str__(self):
+        day = date_format(self.start, 'SHORT_DATE_FORMAT')
+        start = date_format(timezone.localtime(self.start), 'TIME_FORMAT')
+        end = date_format(timezone.localtime(self.end), 'TIME_FORMAT')
+        return f'{day} ({start}-{end})'
 
 
 class Cart(models.Model):
     user = models.ForeignKey(
             User,
             on_delete=models.PROTECT)
-    delivery = models.ForeignKey(
-            Delivery,
+    slot = models.ForeignKey(
+            DeliverySlot,
             on_delete=models.SET_NULL,
             null=True,
+            verbose_name='slot',
             related_name='carts')
-    slot = models.DateTimeField(_('chosen time slot'))
     status = models.PositiveSmallIntegerField(
             _('status'),
             choices=CartStatuses.choices,
@@ -191,13 +200,6 @@ class Cart(models.Model):
         verbose_name = _('cart')
         verbose_name_plural = _('carts')
 
-    def slot_interval(self):
-        slot_filtered = [s for s in self.delivery.slots()
-                           if self.slot >= s['start'] and self.slot< s['end']]
-        if len(slot_filtered) == 0:
-            return {'start': self.delivery.start, 'end': self.delivery.end}
-        return slot_filtered[0]
-
     def get_total(self):
         total = 0
         for i in self.items.all():
@@ -208,7 +210,7 @@ class Cart(models.Model):
         return self.status == CartStatuses.PREPARED
 
     def __str__(self):
-        day = date_format(timezone.localdate(self.delivery.start),
+        day = date_format(timezone.localdate(self.slot.start),
                             'SHORT_DATE_FORMAT')
         user = self.user.get_full_name()
         items = self.items.count()

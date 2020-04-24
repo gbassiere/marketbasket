@@ -9,7 +9,7 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from .models import Delivery, DeliveryLocation, \
+from .models import Delivery, DeliveryLocation, DeliverySlot, \
                     UnitTypes, \
                     CartItem, Cart, CartStatuses
 from .views import CartItemForm, AnnotationForm
@@ -18,40 +18,40 @@ class DeliveryTests(TestCase):
     fixtures = ['users.json']
 
     def setUp(self):
+        # Create a delivery place
         l = DeliveryLocation(name='Somewhere')
         l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
         tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
                     datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
-        self.delivery = Delivery(location=l, start=d1, end=d2)
-        self.delivery.save()
+        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        self.slot.save()
 
     def test_get_active_carts_by_slot(self):
         francine = User.objects.get(username='francine')
-        self.delivery.interval = 30
-        self.delivery.save()
+        interval = 30
+        start = self.slot.start
+        kwargs = {'delivery': self.delivery}
+        self.slot.delete()
+        cart_count = 0
         for i in range(4): # 4 slots (30' within 2h)
+            kwargs['start'] = start + datetime.timedelta(minutes=i*interval)
+            kwargs['end'] = start + datetime.timedelta(minutes=(i+1)*interval)
+            s = DeliverySlot(**kwargs)
+            s.save()
             for j in range(1 + i%2): # 1 or 2 carts by slots, 6 in total
-                delta = datetime.timedelta(minutes=i*self.delivery.interval)
-                Cart(user=francine,
-                      delivery=self.delivery,
-                      slot=self.delivery.start + delta).save()
+                Cart(user=francine, slot=s).save()
+                cart_count += 1
         res = self.delivery.get_active_carts_by_slot()
-        self.assertEqual(len(self.delivery.slots()), len(res))
-        self.assertEqual(6, reduce(lambda x, y: x+len(y['baskets']), res, 0))
-
-    def test_slots(self):
-        d = self.delivery
-        self.assertEqual(d.interval, 0)
-        self.assertEqual(len(d.slots()), 1)
-        d.interval = 60
-        self.assertEqual(len(d.slots()), 2)
-        d.interval = 45
-        self.assertEqual(len(d.slots()), 3)
-        d.interval = 40
-        self.assertEqual(len(d.slots()), 3)
+        self.assertEqual(self.delivery.slots.count(), len(res))
+        self.assertEqual(cart_count,
+                         reduce(lambda x, y: x+len(y['baskets']), res, 0))
 
     def test_get_needed_quantities(self):
         francine = User.objects.get(username='francine')
@@ -60,9 +60,7 @@ class DeliveryTests(TestCase):
         qs1 = self.delivery.get_needed_quantities()
         self.assertEqual(qs1.count(), 0)
         # A Cart exists but no CartItem, should return an empty queryset
-        c1 = Cart(user=francine,
-                  delivery=self.delivery,
-                  slot=self.delivery.start)
+        c1 = Cart(user=francine, slot=self.slot)
         c1.save()
         qs2 = self.delivery.get_needed_quantities()
         self.assertEqual(qs2.count(), 0)
@@ -74,7 +72,7 @@ class DeliveryTests(TestCase):
         self.assertEqual(qs3.count(), 1)
         self.assertEqual(qs3[0]['quantity'], 0.5)
         # Two Cart with the same CartItem
-        c2 = Cart(user=reda, delivery=self.delivery, slot=self.delivery.start)
+        c2 = Cart(user=reda, slot=self.slot)
         c2.save()
         kwargs['cart'] = c2
         CartItem(**kwargs).save()
@@ -90,64 +88,75 @@ class DeliveryTests(TestCase):
 class CartTests(TestCase):
     fixtures = ['users.json']
 
-    def test_slot_interval(self):
-        francine = User.objects.get(username='francine')
+    def setUp(self):
+        # Retrieve Francine
+        self.francine = User.objects.get(username='francine')
+        # Create a delivery place
         l = DeliveryLocation(name='Somewhere')
         l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
         tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
                     datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
-        d = Delivery(location=l, start=d1, end=d2, interval=0)
-        c = Cart(user=francine, delivery=d, slot=d1)
-        s = c.slot_interval()
-        self.assertEqual(s['start'], d1)
-        self.assertEqual(s['end'], d2)
-        d.interval = 30
-        d3 = d1 + datetime.timedelta(minutes=d.interval)
-        s = c.slot_interval()
-        self.assertEqual(s['start'], d1)
-        self.assertEqual(s['end'], d3)
-        c.slot = d3
-        s = c.slot_interval()
-        self.assertEqual(s['start'], d3)
-        self.assertEqual(s['end'], d3 + datetime.timedelta(minutes=d.interval))
+        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        self.slot.save()
+        # then a cart on this slot for Francine
+        self.cart = Cart(user=self.francine, slot=self.slot)
+        self.cart.save()
 
     def test_get_total(self):
         """Ensure get_total return the total price for this basket"""
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.now())
-        c.save()
-        self.assertEqual(c.get_total(), 0)
-        CartItem(cart=c, unit_price=2, quantity=2).save()
-        self.assertEqual(c.get_total(), 4)
-        CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
-        self.assertEqual(c.get_total(), 5.25)
+        self.assertEqual(self.cart.get_total(), 0)
+        CartItem(cart=self.cart, unit_price=2, quantity=2).save()
+        self.assertEqual(self.cart.get_total(), 4)
+        CartItem(cart=self.cart, unit_price=2.5, quantity=0.500).save()
+        self.assertEqual(self.cart.get_total(), 5.25)
 
     def test_is_prepared(self):
         """ True when cart.status is prepared, False otherwise """
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.now())
-        self.assertFalse(c.is_prepared())
-        c.status = CartStatuses.PREPARED
-        self.assertTrue(c.is_prepared())
-        c.status = CartStatuses.DELIVERED
-        self.assertFalse(c.is_prepared())
+        self.cart = Cart(user=self.francine, slot=self.slot)
+        self.assertFalse(self.cart.is_prepared())
+        self.cart.status = CartStatuses.PREPARED
+        self.assertTrue(self.cart.is_prepared())
+        self.cart.status = CartStatuses.DELIVERED
+        self.assertFalse(self.cart.is_prepared())
 
 class CartItemTests(TestCase):
     fixtures = ['users.json']
+
+    def setUp(self):
+        # Retrieve Francine
+        francine = User.objects.get(username='francine')
+        # Create a delivery place
+        l = DeliveryLocation(name='Somewhere')
+        l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
+        tz = timezone.utc
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(7, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=2)
+        s = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        s.save()
+        # then a cart on this slot for Francine
+        self.cart = Cart(user=francine, slot=s)
+        self.cart.save()
 
     def test_custom_manager(self):
         """
         Ensure items are annotated with price computed from unit price x
         quantity
         """
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=timezone.now())
-        c.save()
-        CartItem(cart=c, unit_price=2.5, quantity=0.500).save()
-        i = c.items.first()
+        CartItem(cart=self.cart, unit_price=2.5, quantity=0.500).save()
+        i = self.cart.items.first()
         self.assertTrue(hasattr(i, 'price'))
         self.assertEqual(i.price, 1.25)
 
@@ -155,15 +164,20 @@ class ViewTests(TestCase):
     fixtures = ['articles.json', 'users.json', 'merchants.json']
 
     def setUp(self):
+        # Create a delivery place
         l = DeliveryLocation(name='Somewhere')
         l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
         tz = timezone.utc
         d1 = datetime.datetime.combine(
                     datetime.date.today() + datetime.timedelta(days=3),
                     datetime.time(7, 0, tzinfo=tz))
         d2 = d1 + datetime.timedelta(hours=2)
-        self.delivery = Delivery(location=l, start=d1, end=d2)
-        self.delivery.save()
+        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        self.slot.save()
 
     def test_merchant(self):
         response = self.client.get(reverse('merchant'))
@@ -222,20 +236,19 @@ class ViewTests(TestCase):
         response = self.client.get(reverse('cart', args=[0]))
         self.assertEqual(response.status_code, 404)
         # Trying to GET another user's cart
-        c = Cart(user=reda, delivery=self.delivery, slot=self.delivery.start)
+        c = Cart(user=reda, slot=self.slot)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.assertEqual(response.status_code, 302)
         # Trying to GET a normal cart
-        c = Cart(user=francine, delivery=self.delivery,
-                slot=self.delivery.start)
+        c = Cart(user=francine, slot=self.slot)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
         # SlotForm not enabled when there's a single time slot
         self.assertNotIn('slot_form', response.context)
-        self.delivery.interval = 30
-        self.delivery.save()
+        DeliverySlot(delivery=self.delivery, start=self.slot.end,
+                    end=self.slot.end + datetime.timedelta(minutes=30)).save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
         self.assertIn('slot_form', response.context)
@@ -243,8 +256,7 @@ class ViewTests(TestCase):
     def test_cart_post(self):
         self.client.login(username='francine', password='francine')
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery,
-                slot=self.delivery.start)
+        c = Cart(user=francine, slot=self.slot)
         c.save()
         path = reverse('cart', args=[c.id])
         # invalid post
@@ -263,11 +275,13 @@ class ViewTests(TestCase):
         self.assertEqual(c.items.count(), item_count)
         self.cart_final_tests(response)
         # post a time slot
-        self.delivery.interval = 30
-        self.delivery.save()
-        self.assertEqual(c.slot, self.delivery.start)
-        new_slot = self.delivery.slots()[2]['start']
-        data = {'slot': new_slot.isoformat(), 'slot_submit': ''}
+        self.slot.end = self.slot.start + datetime.timedelta(minutes=30)
+        self.slot.save()
+        self.assertEqual(c.slot, self.slot)
+        new_slot =  DeliverySlot(delivery=self.delivery, start=self.slot.end,
+                    end=self.slot.end + datetime.timedelta(minutes=30))
+        new_slot.save()
+        data = {'slot': new_slot.id, 'slot_submit': ''}
         response = self.client.post(path, data)
         c.refresh_from_db()
         self.assertEqual(new_slot, c.slot)
@@ -301,8 +315,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Trying to POST a delivered cart
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery,
-                slot=self.delivery.start)
+        c = Cart(user=francine, slot=self.slot)
         c.save()
         data = {'delivered_cart': c.id}
         response = self.client.post(path, data)
@@ -312,8 +325,7 @@ class ViewTests(TestCase):
 
     def test_prepare_basket(self):
         francine = User.objects.get(username='francine')
-        c = Cart(user=francine, delivery=self.delivery,
-                slot=self.delivery.start)
+        c = Cart(user=francine, slot=self.slot)
         c.save()
         path = reverse('prepare_basket', args=[c.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)

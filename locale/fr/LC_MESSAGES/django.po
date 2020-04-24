@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-19 19:52+0200\n"
+"POT-Creation-Date: 2020-04-24 16:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandes/admin.py:14
-msgid "Delivery cannot end before it starts"
-msgstr "Les distributions ne peuvent finir avant de commencer"
+#: commandes/admin.py:15
+msgid "Delivery slot cannot end before it starts"
+msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
 #: commandes/models.py:12
 msgid "received"
@@ -129,55 +129,65 @@ msgstr "points de distribution"
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:114
-msgid "start at"
-msgstr "débute à"
-
-#: commandes/models.py:115
-msgid "end at"
-msgstr "fini à"
-
-#: commandes/models.py:117
-msgid "time slot"
-msgstr "créneau horaire"
-
-#: commandes/models.py:126
+#: commandes/models.py:120 commandes/models.py:165
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:127
+#: commandes/models.py:121
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:179
-msgid "chosen time slot"
-msgstr "créneau horaire choisi"
+#: commandes/models.py:156
+#, python-format
+msgid "%(place)s (undefined time slots)"
+msgstr "%(place)s (créneaux horaire non définis)"
 
-#: commandes/models.py:181
+#: commandes/models.py:160
+msgid "start at"
+msgstr "débute à"
+
+#: commandes/models.py:161
+msgid "end at"
+msgstr "fini à"
+
+#: commandes/models.py:169
+msgid "delivery time slot"
+msgstr "créneau de distribution"
+
+#: commandes/models.py:170
+msgid "delivery time slots"
+msgstr "créneaux de distribution"
+
+#: commandes/models.py:190
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:185
+#: commandes/models.py:194
 msgid "annotation"
 msgstr "annotation"
 
-#: commandes/models.py:191 commandes/models.py:229
+#: commandes/models.py:200 commandes/models.py:231
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:192
+#: commandes/models.py:201
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:238
+#: commandes/models.py:240
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:239
+#: commandes/models.py:241
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:113
+#: commandes/views.py:74
+#, python-format
+msgid "between %(start)s and %(end)s."
+msgstr "entre %(start)s et %(end)s."
+
+#: commandes/views.py:133
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"
@@ -202,7 +212,7 @@ msgstr "Quantité :"
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
-#: templates/commandes/cart.html:39 templates/commandes/prepare_basket.html:17
+#: templates/commandes/cart.html:39 templates/commandes/prepare_basket.html:15
 msgid "Article"
 msgstr "Article"
 
@@ -223,14 +233,22 @@ msgid "Total price:"
 msgstr "Prix total :"
 
 #: templates/commandes/cart.html:76
+msgid "Basket collection time slot:"
+msgstr "Créneau horaire de retrait du panier:"
+
+#: templates/commandes/cart.html:78
+msgid "Validate"
+msgstr "Valider"
+
+#: templates/commandes/cart.html:88
 msgid "Note to the merchant"
 msgstr "Message au marchand"
 
-#: templates/commandes/cart.html:80
+#: templates/commandes/cart.html:92
 msgid "Save note"
 msgstr "Enregistrer le message"
 
-#: templates/commandes/cart.html:83
+#: templates/commandes/cart.html:95
 #, python-format
 msgid "Note saved on %(d)s at %(t)s."
 msgstr "Message enregistré le %(d)s à %(t)s."
@@ -259,41 +277,41 @@ msgstr "Aucune distribution planifiée."
 msgid "Customer:"
 msgstr "Client :"
 
-#: templates/commandes/prepare_basket.html:10
+#: templates/commandes/prepare_basket.html:9
 #: templates/commandes/prepare_baskets.html:32
 #, python-format
 msgid "Expected pick-up between %(start)s and %(end)s."
 msgstr "Retrait prévu entre %(start)s et %(end)s."
 
-#: templates/commandes/prepare_basket.html:18
+#: templates/commandes/prepare_basket.html:16
 msgid "Quantity"
 msgstr "Quantité"
 
-#: templates/commandes/prepare_basket.html:19
+#: templates/commandes/prepare_basket.html:17
 msgid "Expected price"
 msgstr "Prix attendu"
 
-#: templates/commandes/prepare_basket.html:38
+#: templates/commandes/prepare_basket.html:36
 msgid "Customer's note"
 msgstr "Message du client"
 
-#: templates/commandes/prepare_basket.html:46
+#: templates/commandes/prepare_basket.html:44
 msgid "Expected total price:"
 msgstr "Prix total attendu :"
 
-#: templates/commandes/prepare_basket.html:47
+#: templates/commandes/prepare_basket.html:45
 msgid "Article count:"
 msgstr "Nombre d'article :"
 
-#: templates/commandes/prepare_basket.html:57
+#: templates/commandes/prepare_basket.html:55
 msgid "Put off"
 msgstr "Remettre à plus tard"
 
-#: templates/commandes/prepare_basket.html:61
+#: templates/commandes/prepare_basket.html:59
 msgid "Basket ready"
 msgstr "Panier prêt"
 
-#: templates/commandes/prepare_basket.html:66
+#: templates/commandes/prepare_basket.html:64
 msgid "Start preparing"
 msgstr "Commencer à préparer"
 
@@ -356,3 +374,6 @@ msgstr "Mot de passe"
 #: templates/registration/login.html:41
 msgid "Lost password?"
 msgstr "Mot de passe oublié ?"
+
+#~ msgid "time slot"
+#~ msgstr "créneau horaire"
