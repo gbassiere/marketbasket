@@ -1,1 +1,140 @@
-[{"model": "commandes.delivery", "pk": 1, "fields": {"location": 1, "slot_date": "2020-05-20", "slot_from": "09:00:00", "slot_to": "09:30:00"}}, {"model": "commandes.delivery", "pk": 2, "fields": {"location": 1, "slot_date": "2020-05-06", "slot_from": "09:30:00", "slot_to": "10:00:00"}}, {"model": "commandes.delivery", "pk": 3, "fields": {"location": 1, "slot_date": "2020-05-13", "slot_from": "10:00:00", "slot_to": "10:30:00"}}]
+[
+    {
+        "model": "commandes.delivery",
+        "pk": 1,
+        "fields": {
+            "location": 1
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 1,
+        "fields": {
+            "start": "2020-05-06T07:00:00Z",
+            "end": "2020-05-06T10:00:00Z",
+            "delivery": 1
+        }
+    },
+
+
+
+
+    {
+        "model": "commandes.delivery",
+        "pk": 2,
+        "fields": {
+            "location": 1
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 2,
+        "fields": {
+            "start": "2020-05-13T07:00:00Z",
+            "end": "2020-05-13T07:30:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 3,
+        "fields": {
+            "start": "2020-05-13T07:30:00Z",
+            "end": "2020-05-13T08:00:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 4,
+        "fields": {
+            "start": "2020-05-13T08:00:00Z",
+            "end": "2020-05-13T08:30:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 5,
+        "fields": {
+            "start": "2020-05-13T08:30:00Z",
+            "end": "2020-05-13T09:00:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 6,
+        "fields": {
+            "start": "2020-05-13T09:00:00Z",
+            "end": "2020-05-13T09:30:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 7,
+        "fields": {
+            "start": "2020-05-13T09:30:00Z",
+            "end": "2020-05-13T10:00:00Z",
+            "delivery": 2
+        }
+    },
+    {
+        "model": "commandes.delivery",
+        "pk": 3,
+        "fields": {
+            "location": 1
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 8,
+        "fields": {
+            "start": "2020-05-20T07:00:00Z",
+            "end": "2020-05-20T10:00:00Z",
+            "delivery": 3
+        }
+    },
+    {
+        "model": "commandes.delivery",
+        "pk": 4,
+        "fields": {
+            "location": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 9,
+        "fields": {
+            "start": "2020-05-15T12:00:00Z",
+            "end": "2020-05-15T14:00:00Z",
+            "delivery": 4
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 10,
+        "fields": {
+            "start": "2020-05-15T14:00:00Z",
+            "end": "2020-05-15T17:00:00Z",
+            "delivery": 4
+        }
+    },
+    {
+        "model": "commandes.delivery",
+        "pk": 5,
+        "fields": {
+            "location": 2
+        }
+    },
+    {
+        "model": "commandes.deliveryslot",
+        "pk": 11,
+        "fields": {
+            "start": "2020-05-08T12:00:00Z",
+            "end": "2020-05-08T17:00:00Z",
+            "delivery": 5
+        }
+    }
+]
