@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
 from django import forms
-from django.db.models import Min
+from django.db.models import Min, Count
 
 from .models import Article, UnitTypes, \
                     Delivery, \
@@ -60,11 +60,28 @@ def needed_quantities(request):
 @login_required
 def new_cart(request, id):
     """A buyer can start a new cart"""
+    # Retrieve delivery
     delivery = get_object_or_404(Delivery, id=id)
-    # Assign first slot as a default
-    slot = delivery.slots.order_by('start').first()
+
+    if delivery.max_per_slot> 0:
+        # Retrieve first slot not having reached max_per_slot
+        slot = delivery.slots.annotate(cart_count=Count('carts')) \
+                              .filter(cart_count__lt=delivery.max_per_slot) \
+                              .order_by('start').first()
+    else:
+        # Retrieve first slot (cart limit being disabled)
+        slot = delivery.slots.order_by('start').first()
+
+    # No free time slot, return with an error message
+    if slot is None:
+        msg = _('This delivery is full and does not accept any new order.')
+        messages.error(request, msg)
+        return HttpResponseRedirect(reverse_lazy('merchant'))
+
+    # Actually create cart
     cart = Cart(user=request.user, slot=slot)
     cart.save()
+
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 

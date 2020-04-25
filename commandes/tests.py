@@ -207,6 +207,7 @@ class ViewTests(TestCase):
     def test_new_cart(self):
         path = reverse('new_cart', args=[self.delivery.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        error_path = reverse('merchant')
         # anonymous user
         response = self.client.get(path)
         self.assertRedirects(response, redirect_path)
@@ -215,9 +216,20 @@ class ViewTests(TestCase):
         # Trying to GET non-existing delivery raises 404
         response = self.client.get(reverse('new_cart', args=[0]))
         self.assertEqual(response.status_code, 404)
-        # Trying to GET with valid params
+        # Trying to GET with valid params (cart limit disabled)
         response = self.client.get(path)
         self.assertEqual(response.status_code, 302)
+        self.assertNotEqual(response.url, error_path)
+        # Trying to GET with valid params (cart limit enabled)
+        self.delivery.max_per_slot = 2 # 1 slot with 1 cart created above
+        self.delivery.save()
+        response = self.client.get(path) # second cart should pass
+        self.assertEqual(response.status_code, 302)
+        self.assertNotEqual(response.url, error_path)
+        response = self.client.get(path) # third cart should fail
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, error_path)
+
 
     def cart_final_tests(self, response):
         self.assertIn('item_form', response.context)
