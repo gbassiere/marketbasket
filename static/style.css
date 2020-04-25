@@ -44,7 +44,12 @@ nav.navbar .nav-item .btn-outline:hover {
   background-color: #7c0;
   border-color: #7c0;
 }
-.btn-primary:hover {
+.btn-primary:not(:disabled):not(.disabled):hover, .btn-primary:not(:disabled):not(.disabled):active {
+  background-color: #6a0;
+  border-color: #6a0;
+}
+.btn-primary.focus, .btn-primary:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus {
+  box-shadow: 0 0 0 .2rem rgb(102, 170, 0, .5);
   background-color: #6a0;
   border-color: #6a0;
 }
