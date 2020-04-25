@@ -29,9 +29,13 @@
     <div class="card mx-1 my-3">
       <div class="card-header">{% trans "Upcoming delivery" %}</div>
       <div class="card-body text-center">
-        <h5 class="card-title">{{ d.location.name }}</h5>
+        <h5 class="card-title">{{ d.location_name }}</h5>
         <h6 class="card-subtitle mb-2">{{ d.start|date:"DATE_FORMAT" }}</h6>
-        <a href="{% url "new_cart" d.id %}" class="btn btn-primary">{% trans "Place an order" %}</a>
+        {% if d.is_full %}
+          <button type="button" class="btn btn-primary" disabled>{% trans "Delivery is full" %}</button>
+        {% else %}
+          <a href="{% url "new_cart" d.id %}" class="btn btn-primary">{% trans "Place an order" %}</a>
+        {% endif %}
       </div>
     </div>
   </div>

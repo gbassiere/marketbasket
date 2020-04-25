@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-25 12:08+0200\n"
+"POT-Creation-Date: 2020-04-25 18:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -190,21 +190,22 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:77
+#: commandes/views.py:92
 msgid "This delivery is full and does not accept any new order."
-msgstr "Cette distribution est complète et n'accepte plus de nouvelles commandes."
+msgstr ""
+"Cette distribution est complète et n'accepte plus de nouvelles commandes."
 
-#: commandes/views.py:90
+#: commandes/views.py:105
 #, python-format
 msgid "between %(start)s and %(end)s."
 msgstr "entre %(start)s et %(end)s."
 
-#: commandes/views.py:149
+#: commandes/views.py:164
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"
 
-#: commandes/views.py:157
+#: commandes/views.py:172
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 
@@ -277,7 +278,11 @@ msgstr "Contacts :"
 msgid "Upcoming delivery"
 msgstr "Distribution à venir"
 
-#: templates/commandes/merchant.html:34
+#: templates/commandes/merchant.html:35
+msgid "Delivery is full"
+msgstr "Distribution complète"
+
+#: templates/commandes/merchant.html:37
 msgid "Place an order"
 msgstr "Commander"
 

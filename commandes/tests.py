@@ -4,7 +4,6 @@ from functools import reduce
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
-from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -179,13 +178,21 @@ class ViewTests(TestCase):
         self.slot.save()
 
     def test_merchant(self):
+        # response context has necessary data (cart limit disabled)
         response = self.client.get(reverse('merchant'))
         self.assertIn('deliveries', response.context)
         self.assertIn('contacts', response.context)
         self.assertIn('merchant', response.context)
-        self.assertIsInstance(response.context['deliveries'], QuerySet)
-        self.assertIs(response.context['deliveries'].model, Delivery)
         self.assertEqual(response.status_code, 200)
+        # enable cart limit and test is_full proper computation
+        self.delivery.max_per_slot = 1
+        self.delivery.save()
+        response = self.client.get(reverse('merchant'))
+        self.assertFalse(response.context['deliveries'][0]['is_full'])
+        Cart(user=User.objects.get(username='francine'), slot=self.slot).save()
+        response = self.client.get(reverse('merchant'))
+        self.assertTrue(response.context['deliveries'][0]['is_full'])
+
 
     def test_needed_quantities(self):
         path = reverse('needed_quantities')

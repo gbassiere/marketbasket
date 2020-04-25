@@ -1,3 +1,5 @@
+from functools import reduce
+
 from django.utils.timezone import now, localtime
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
@@ -9,10 +11,10 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
 from django import forms
-from django.db.models import Min, Count
+from django.db.models import Min, Count, Prefetch
 
 from .models import Article, UnitTypes, \
-                    Delivery, \
+                    Delivery, DeliverySlot, \
                     Cart, CartItem, CartStatuses, \
                     Merchant
 
@@ -26,9 +28,22 @@ def merchant(request):
     contacts.append(
                 (merchant.owner.email, 'mailto:%s' % merchant.owner.email))
 
-    deliveries = Delivery.objects.annotate(start=Min('slots__start')) \
-                            .filter(start__gte=now()) \
-                            .order_by('start')
+    # Can't find a way to annotate deliveries with an is_full field which would
+    # be True when all slot have reached max_per_slot... Hence filtering and
+    # computing on Python side.
+    slots = DeliverySlot.objects.annotate(cart_count=Count('carts'))
+    qs = Delivery.objects.annotate(start=Min('slots__start')) \
+                        .filter(start__gte=now()) \
+                        .prefetch_related(Prefetch('slots', queryset=slots)) \
+                        .order_by('start')
+    deliveries = [{
+            'id': d.id,
+            'loc_name': d.location.name,
+            'start': d.start,
+            'is_full': d.max_per_slot > 0 and reduce(
+                        lambda x, y: x and y.cart_count >= d.max_per_slot,
+                        d.slots.all(), True)
+            } for d in qs]
     return render(request, 'commandes/merchant.html', {
                                             'merchant': merchant,
                                             'contacts': contacts,
