@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-24 18:59+0200\n"
+"POT-Creation-Date: 2020-04-25 11:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -21,178 +21,186 @@ msgstr ""
 msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
-#: commandes/models.py:12
+#: commandes/models.py:10
 msgid "received"
 msgstr "reçu"
 
-#: commandes/models.py:14
+#: commandes/models.py:12
 msgid "preparation in progress"
 msgstr "préparation en cours"
 
-#: commandes/models.py:16
+#: commandes/models.py:14
 msgid "prepared"
 msgstr "préparé"
 
-#: commandes/models.py:18
+#: commandes/models.py:16
 msgid "delivered"
 msgstr "livré"
 
-#: commandes/models.py:20
+#: commandes/models.py:18
 msgid "abandoned"
 msgstr "abandonné"
 
-#: commandes/models.py:23
+#: commandes/models.py:21
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: commandes/models.py:24
+#: commandes/models.py:22
 msgid "Kg"
 msgstr "Kg"
 
-#: commandes/models.py:27
+#: commandes/models.py:25
 msgid "Facebook"
 msgstr "Facebook"
 
-#: commandes/models.py:28
+#: commandes/models.py:26
 msgid "Email address"
 msgstr "Adresse email"
 
-#: commandes/models.py:29
+#: commandes/models.py:27
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: commandes/models.py:30
+#: commandes/models.py:28
 msgid "Website"
 msgstr "Site web"
 
-#: commandes/models.py:34
+#: commandes/models.py:32
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:35 commandes/models.py:55 commandes/models.py:97
+#: commandes/models.py:33 commandes/models.py:53 commandes/models.py:95
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:36
+#: commandes/models.py:34
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:38
+#: commandes/models.py:36
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:47
+#: commandes/models.py:45
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:48
+#: commandes/models.py:46
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:57
+#: commandes/models.py:55
 msgid "owner"
 msgstr "propriétaire"
 
-#: commandes/models.py:58
+#: commandes/models.py:56
 msgid "presentation"
 msgstr "présentation"
 
-#: commandes/models.py:65 commandes/models.py:81
+#: commandes/models.py:63 commandes/models.py:79
 msgid "merchant"
 msgstr "marchand"
 
-#: commandes/models.py:66
+#: commandes/models.py:64
 msgid "merchants"
 msgstr "marchands"
 
-#: commandes/models.py:73 commandes/models.py:85
+#: commandes/models.py:71 commandes/models.py:83
 msgid "URL"
 msgstr "URL"
 
-#: commandes/models.py:75
+#: commandes/models.py:73
 msgid "URL type"
 msgstr "type d'URL"
 
-#: commandes/models.py:86
+#: commandes/models.py:84
 msgid "URLs"
 msgstr "URLs"
 
-#: commandes/models.py:102
+#: commandes/models.py:100
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:103
+#: commandes/models.py:101
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:113
+#: commandes/models.py:111
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:120 commandes/models.py:165
+#: commandes/models.py:113
+msgid "maximum number of baskets per slot"
+msgstr "nombre maximum de panier par créneau"
+
+#: commandes/models.py:114
+msgid "Set 0 for unlimited carts per slot"
+msgstr "Mettre 0 pour ne pas limiter le nombre de panier"
+
+#: commandes/models.py:121 commandes/models.py:166
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:121
+#: commandes/models.py:122
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:156
+#: commandes/models.py:157
 #, python-format
 msgid "%(place)s (undefined time slots)"
 msgstr "%(place)s (créneaux horaire non définis)"
 
-#: commandes/models.py:160
+#: commandes/models.py:161
 msgid "start at"
 msgstr "débute à"
 
-#: commandes/models.py:161
+#: commandes/models.py:162
 msgid "end at"
 msgstr "fini à"
 
-#: commandes/models.py:169
+#: commandes/models.py:170
 msgid "delivery time slot"
 msgstr "créneau de distribution"
 
-#: commandes/models.py:170
+#: commandes/models.py:171
 msgid "delivery time slots"
 msgstr "créneaux de distribution"
 
-#: commandes/models.py:190
+#: commandes/models.py:191
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:194
+#: commandes/models.py:195
 msgid "annotation"
 msgstr "annotation"
 
-#: commandes/models.py:200 commandes/models.py:231
+#: commandes/models.py:201 commandes/models.py:232
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:201
+#: commandes/models.py:202
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:240
+#: commandes/models.py:241
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:241
+#: commandes/models.py:242
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:74
+#: commandes/views.py:73
 #, python-format
 msgid "between %(start)s and %(end)s."
 msgstr "entre %(start)s et %(end)s."
 
-#: commandes/views.py:133
+#: commandes/views.py:132
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"
 
-#: commandes/views.py:141
+#: commandes/views.py:140
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 

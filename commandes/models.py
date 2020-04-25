@@ -109,8 +109,11 @@ class Delivery(models.Model):
             DeliveryLocation,
             on_delete=models.PROTECT,
             verbose_name=_('location'))
+    max_per_slot = models.PositiveSmallIntegerField(
+            _('maximum number of baskets per slot'),
+            help_text=_('Set 0 for unlimited carts per slot'),
+            default=0)
     # available article quantity
-    # cart max count
 
     class Meta:
         permissions = [('view_delivery_quantities',
