@@ -11,6 +11,10 @@ class DeliverySlotForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
+        super().clean()
+        if self.instance.carts.count() > 0:
+            msg = _('Modifying this slot is not possible since customers have already placed orders')
+            raise forms.ValidationError(msg, code='frozen')
         if self.cleaned_data.get('start') > self.cleaned_data.get('end'):
             msg = _('Delivery slot cannot end before it starts')
             raise forms.ValidationError(msg, code='invalid')

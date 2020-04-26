@@ -12,6 +12,7 @@ from .models import Delivery, DeliveryLocation, DeliverySlot, \
                     CartItem, Cart, CartStatuses
 from .views import CartItemForm, AnnotationForm
 from .views import SlotSelect, SlotForm
+from .admin import DeliverySlotForm
 
 class SlotSelectTests(TestCase):
     def test_create_option(self):
@@ -96,6 +97,37 @@ class SlotFormTests(TestCase):
         slot = field.queryset.filter(id=self.slot1.id).first() # QS refresh
         lbl = field.label_from_instance(slot)
         self.assertTrue(lbl.endswith('[*]'))
+
+
+class SlotFormTests(TestCase):
+    fixtures = ['users.json']
+
+    def setUp(self):
+        self.francine = User.objects.get(username='francine')
+        # Create a delivery place
+        l = DeliveryLocation(name='Somewhere')
+        l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
+        tz = timezone.utc
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(7, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=1)
+        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        self.slot.save()
+        self.data = {'start': d1, 'end': d2, 'delivery': self.delivery}
+
+    def test_clean(self):
+        s = self.slot
+        self.data['end'] -= datetime.timedelta(hours=2)
+        self.assertFalse(DeliverySlotForm(self.data, instance=s).is_valid())
+        self.data['end'] += datetime.timedelta(hours=3)
+        self.assertTrue(DeliverySlotForm(self.data, instance=s).is_valid())
+        Cart(user=self.francine, slot=s).save()
+        self.assertFalse(DeliverySlotForm(self.data, instance=s).is_valid())
 
 
 class DeliveryTests(TestCase):

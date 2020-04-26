@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-26 21:42+0200\n"
+"POT-Creation-Date: 2020-04-26 22:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -17,7 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandes/admin.py:15
+#: commandes/admin.py:16
+msgid ""
+"Modifying this slot is not possible since customers have already placed "
+"orders"
+msgstr ""
+"Il n'est plus possible d'éditer ce créneau car des clients y ont déjà "
+"commandé"
+
+#: commandes/admin.py:19
 msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
