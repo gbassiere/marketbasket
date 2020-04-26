@@ -11,6 +11,92 @@ from .models import Delivery, DeliveryLocation, DeliverySlot, \
                     UnitTypes, \
                     CartItem, Cart, CartStatuses
 from .views import CartItemForm, AnnotationForm
+from .views import SlotSelect, SlotForm
+
+class SlotSelectTests(TestCase):
+    def test_create_option(self):
+        w = SlotSelect()
+        lbl = 'label'
+        opt = w.create_option('name', 1, lbl, False, 1, None, {})
+        self.assertEqual(lbl, opt['label'])
+        self.assertNotIn('disabled', opt['attrs'])
+        opt = w.create_option('name', 1, lbl+'[*]', False, 1, None, {})
+        self.assertEqual(lbl, opt['label'])
+        self.assertIn('disabled', opt['attrs'])
+
+class SlotFormTests(TestCase):
+    fixtures = ['users.json']
+
+    def setUp(self):
+        self.francine = User.objects.get(username='francine')
+        # Create a delivery place
+        l = DeliveryLocation(name='Somewhere')
+        l.save()
+        # then the delivery itself
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+        # then a time slot for this delivery
+        tz = timezone.utc
+        d1 = datetime.datetime.combine(
+                    datetime.date.today() + datetime.timedelta(days=3),
+                    datetime.time(7, 0, tzinfo=tz))
+        d2 = d1 + datetime.timedelta(hours=1)
+        d3 = d2 + datetime.timedelta(hours=1)
+        self.slot1 = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
+        self.slot1.save()
+        self.slot2 = DeliverySlot(delivery=self.delivery, start=d2, end=d3)
+        self.slot2.save()
+
+    def test_form_init(self):
+        f = SlotForm(initial={'slot': self.slot1})
+        slot = f.fields['slot'].queryset.first()
+        self.assertTrue(hasattr(slot, 'cart_count'))
+
+    def test_clean_slot(self):
+        data = {'slot': self.slot1.id, 'slot_submit': ''}
+        # max_per_slot = 0 (disabled) and cart_count = 0, no ValidationError
+        f = SlotForm(data, initial={'slot': self.slot1})
+        f.is_valid()
+        self.assertEqual(f.clean_slot(), self.slot1)
+        data['slot'] = self.slot2.id
+        f = SlotForm(data, initial={'slot': self.slot1})
+        f.is_valid()
+        self.assertEqual(f.clean_slot(), self.slot2)
+        # max_per_slot = 1 and cart_count = 0, no ValidationError
+        self.delivery.max_per_slot = 1
+        f = SlotForm(data, initial={'slot': self.slot1})
+        f.is_valid()
+        self.assertEqual(f.clean_slot(), self.slot2)
+        data['slot'] = self.slot1.id
+        f = SlotForm(data, initial={'slot': self.slot1})
+        f.is_valid()
+        self.assertEqual(f.clean_slot(), self.slot1)
+        # max_per_slot = 1 and cart_count = 1, ValidationError!
+        Cart(user=self.francine, slot=self.slot1).save()
+        Cart(user=self.francine, slot=self.slot2).save()
+        f = SlotForm(data, initial={'slot': self.slot1})
+        self.assertTrue(f.is_valid()) # True because data == initial
+        data['slot'] = self.slot2.id
+        f = SlotForm(data, initial={'slot': self.slot1})
+        self.assertFalse(f.is_valid())
+
+    def test_label_from_instance(self):
+        f = SlotForm(initial={'slot': self.slot1})
+        field = f.fields['slot']
+        # max_per_slot = 0 (disabled) and cart_count = 0
+        slot = field.queryset.first()
+        lbl = field.label_from_instance(slot)
+        self.assertFalse(lbl.endswith('[*]'))
+        # max_per_slot = 1 and cart_count = 0
+        self.delivery.max_per_slot = 1
+        lbl = field.label_from_instance(slot)
+        self.assertFalse(lbl.endswith('[*]'))
+        # max_per_slot = 1 and cart_count = 1
+        Cart(user=self.francine, slot=self.slot1).save()
+        slot = field.queryset.filter(id=self.slot1.id).first() # QS refresh
+        lbl = field.label_from_instance(slot)
+        self.assertTrue(lbl.endswith('[*]'))
+
 
 class DeliveryTests(TestCase):
     fixtures = ['users.json']
