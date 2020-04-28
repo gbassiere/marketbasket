@@ -1,6 +1,5 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2020 Gilles Bassière
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the MarketBasket package.
 # Gilles Bassière <gbassiere@gmail.com>, 2020.
 #
 msgid ""

@@ -1,5 +1,5 @@
 """
-Django main settings for potacommandes project.
+Django main settings for MarketBasket project.
 """
 
 import os
@@ -32,7 +32,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'potacommandes.urls'
+ROOT_URLCONF = 'marketbasket.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +50,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'potacommandes.wsgi.application'
+WSGI_APPLICATION = 'marketbasket.wsgi.application'
 
 
 # Auth settings

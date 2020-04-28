@@ -1,5 +1,5 @@
 """
-Django instance-specific settings for potacommandes project.
+Django instance-specific settings for MarketBasket project.
 
 When deploying a new instance, copy this file and name it 'local_settings.py',
 then set appropriate values for each of the following settings.
