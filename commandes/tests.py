@@ -10,8 +10,7 @@ from django.utils import timezone
 from .models import Delivery, DeliveryLocation, DeliverySlot, \
                     UnitTypes, \
                     CartItem, Cart, CartStatuses
-from .views import CartItemForm, AnnotationForm
-from .views import SlotSelect, SlotForm
+from .forms import CartItemForm, AnnotationForm, SlotSelect, SlotForm
 from .admin import DeliverySlotForm
 
 class SlotSelectTests(TestCase):

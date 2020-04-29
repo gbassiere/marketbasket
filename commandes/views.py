@@ -1,7 +1,6 @@
 from functools import reduce
 
-from django.utils.timezone import now, localtime
-from django.utils.formats import date_format
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
@@ -10,13 +9,13 @@ from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
-from django import forms
 from django.db.models import Min, Count, Prefetch
 
-from .models import Article, UnitTypes, \
+from .models import UnitTypes, \
                     Delivery, DeliverySlot, \
                     Cart, CartItem, CartStatuses, \
                     Merchant
+from .forms import SlotForm, AnnotationForm, DelItemForm, CartItemForm
 
 
 def merchant(request):
@@ -100,58 +99,6 @@ def new_cart(request, id):
     return HttpResponseRedirect(reverse_lazy('cart', args=[cart.id]))
 
 
-class SlotSelect(forms.Select):
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        opt = super().create_option(name, value, label, selected, index, subindex, attrs)
-        if label.endswith('[*]'):
-            opt['label'] = opt['label'][0:-3]
-            opt['attrs']['disabled'] = True
-        return opt
-
-class SlotChoiceField(forms.ModelChoiceField):
-    widget = SlotSelect
-
-    def label_from_instance(self, obj):
-        lbl = _('between %(start)s and %(end)s') % {
-                'start': date_format(localtime(obj.start), 'TIME_FORMAT'),
-                'end': date_format(localtime(obj.end), 'TIME_FORMAT')}
-        limit = obj.delivery.max_per_slot
-        if limit > 0 and obj.cart_count >= limit:
-            lbl = _('%(slot)s (full)' % {'slot': lbl})
-            # Mark label as disabled (i18n-independant)
-            # This is ugly but I have not found any better way to pass the
-            # information to widget.create_option.
-            lbl += '[*]'
-        return lbl
-
-class SlotForm(forms.Form):
-    slot = SlotChoiceField(queryset=None)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['slot'].queryset = self.initial['slot'].delivery.slots \
-                                        .annotate(cart_count=Count('carts'))
-
-    def clean_slot(self):
-        slot = self.cleaned_data['slot']
-        limit = slot.delivery.max_per_slot
-        if limit > 0 and slot.id != self.initial['slot'].id and \
-                                                   slot.cart_count >= limit:
-            raise forms.ValidationError(
-                        _('This delivery slot is full.'), code='full')
-        return slot
-
-class AnnotationForm(forms.ModelForm):
-    class Meta:
-        model = Cart
-        fields = ['annotation']
-
-class DelItemForm(forms.Form):
-    del_submit = forms.IntegerField()
-
-class CartItemForm(forms.Form):
-    article = forms.ModelChoiceField(queryset=Article.objects.all())
-    quantity = forms.DecimalField(max_digits=6, decimal_places=5)
 
 
 @login_required

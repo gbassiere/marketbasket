@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-26 22:26+0200\n"
+"POT-Creation-Date: 2020-04-29 16:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -27,6 +27,20 @@ msgstr ""
 #: commandes/admin.py:19
 msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
+
+#: commandes/forms.py:22
+#, python-format
+msgid "between %(start)s and %(end)s"
+msgstr "entre %(start)s et %(end)s"
+
+#: commandes/forms.py:27
+#, python-format
+msgid "%(slot)s (full)"
+msgstr "%(slot)s (complet)"
+
+#: commandes/forms.py:48
+msgid "This delivery slot is full."
+msgstr "Ce créneau de distribution est complet."
 
 #: commandes/models.py:10
 msgid "received"
@@ -197,31 +211,17 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:92
+#: commandes/views.py:91
 msgid "This delivery is full and does not accept any new order."
 msgstr ""
 "Cette distribution est complète et n'accepte plus de nouvelles commandes."
 
-#: commandes/views.py:115
-#, python-format
-msgid "between %(start)s and %(end)s"
-msgstr "entre %(start)s et %(end)s"
-
-#: commandes/views.py:120
-#, python-format
-msgid "%(slot)s (full)"
-msgstr "%(slot)s (complet)"
-
-#: commandes/views.py:141
-msgid "This delivery slot is full."
-msgstr "Ce créneau de distribution est complet."
-
-#: commandes/views.py:192
+#: commandes/views.py:139
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"
 
-#: commandes/views.py:201
+#: commandes/views.py:148
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 
