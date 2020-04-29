@@ -13,46 +13,86 @@ from .models import Delivery, DeliveryLocation, DeliverySlot, \
 from .forms import CartItemForm, AnnotationForm, SlotSelect, SlotForm
 from .admin import DeliverySlotForm
 
+
+class BasketTestCase(TestCase):
+    """
+    Base class testing MarketBasket code. Does not hold any test case. Only
+    code that is shared across test cases (initialization code).
+    """
+
+    fixtures = ['users.json']
+
+    def install_user(self, username):
+        "Retrieve a testing user from database"
+        setattr(self, username, User.objects.get(username=username))
+
+    def install_delivery(self, where='Somewhere'):
+        "Create testing instance of DeliveryLocation and Delivery"
+        l = DeliveryLocation(name=where)
+        l.save()
+        self.delivery = Delivery(location=l)
+        self.delivery.save()
+
+    def install_slots(self, delta_days, start, interval, number):
+        """
+        Create as many slots as specified:
+        - delta_days (int): start that many days after (or before if
+          negative) today
+        - start (int): first slot will start at that hour
+        - interval (int): each slot last that many minutes
+        - number (int): create that many slots
+        """
+        tz = timezone.utc
+        d = datetime.datetime.combine(
+                   datetime.date.today() + datetime.timedelta(days=delta_days),
+                   datetime.time(start, 0, tzinfo=tz))
+        for i in range(number):
+            ds = d + datetime.timedelta(minutes=i*interval)
+            de = d + datetime.timedelta(minutes=(i+1)*interval)
+            s = DeliverySlot(delivery=self.delivery, start=ds, end=de)
+            s.save()
+            setattr(self, 'slot%d' % (i+1), s)
+
+
 class SlotSelectTests(TestCase):
+    """
+    Test case for SlotSelect which a Select widget with special behaviour for
+    disabled options
+    """
+
     def test_create_option(self):
         w = SlotSelect()
         lbl = 'label'
+        # if label doesn't end with '[*]', a normal option is created
         opt = w.create_option('name', 1, lbl, False, 1, None, {})
         self.assertEqual(lbl, opt['label'])
         self.assertNotIn('disabled', opt['attrs'])
+        # if label ends with '[*]' the created option is disabled
         opt = w.create_option('name', 1, lbl+'[*]', False, 1, None, {})
         self.assertEqual(lbl, opt['label'])
         self.assertIn('disabled', opt['attrs'])
 
-class SlotFormTests(TestCase):
-    fixtures = ['users.json']
+
+class SlotFormTests(BasketTestCase):
+    """
+    Test case for SlotForm which let a user choose his delivery slot.
+    """
 
     def setUp(self):
-        self.francine = User.objects.get(username='francine')
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=1)
-        d3 = d2 + datetime.timedelta(hours=1)
-        self.slot1 = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        self.slot1.save()
-        self.slot2 = DeliverySlot(delivery=self.delivery, start=d2, end=d3)
-        self.slot2.save()
+        self.install_user('francine')
+        self.install_delivery()
+        self.install_slots(3, 7, 60, 2)
 
     def test_form_init(self):
         f = SlotForm(initial={'slot': self.slot1})
+        # queryset should be properly annotated
         slot = f.fields['slot'].queryset.first()
         self.assertTrue(hasattr(slot, 'cart_count'))
 
     def test_clean_slot(self):
+        # Ensure cart_count <= max_per_slot if max_per_slot > 0
+        # The form should not behave exactly the same way when post data is
+        # initial data, this case is alse explicitly tested.
         data = {'slot': self.slot1.id, 'slot_submit': ''}
         # max_per_slot = 0 (disabled) and cart_count = 0, no ValidationError
         f = SlotForm(data, initial={'slot': self.slot1})
@@ -98,70 +138,49 @@ class SlotFormTests(TestCase):
         self.assertTrue(lbl.endswith('[*]'))
 
 
-class SlotFormTests(TestCase):
-    fixtures = ['users.json']
+class SlotFormTests(BasketTestCase):
+    """
+    Test case for SlotForm (admin form), provide custom validation
+    """
 
     def setUp(self):
-        self.francine = User.objects.get(username='francine')
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=1)
-        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        self.slot.save()
-        self.data = {'start': d1, 'end': d2, 'delivery': self.delivery}
+        self.install_user('francine')
+        self.install_delivery()
+        self.install_slots(3, 7, 60, 1)
 
     def test_clean(self):
-        s = self.slot
-        self.data['end'] -= datetime.timedelta(hours=2)
-        self.assertFalse(DeliverySlotForm(self.data, instance=s).is_valid())
-        self.data['end'] += datetime.timedelta(hours=3)
-        self.assertTrue(DeliverySlotForm(self.data, instance=s).is_valid())
+        s = self.slot1
+        valid_end = s.end + datetime.timedelta(hours=1)
+        invalid_end = s.start - datetime.timedelta(hours=1)
+        # test with invalid end (end < start)
+        data = {'start': s.start, 'end': invalid_end, 'delivery': self.delivery}
+        self.assertFalse(DeliverySlotForm(data, instance=s).is_valid())
+        # test with valid end (end >= start)
+        data['end'] = valid_end
+        self.assertTrue(DeliverySlotForm(data, instance=s).is_valid())
+        # editing a slot which already have carts should not be possible
         Cart(user=self.francine, slot=s).save()
-        self.assertFalse(DeliverySlotForm(self.data, instance=s).is_valid())
+        self.assertFalse(DeliverySlotForm(data, instance=s).is_valid())
 
 
-class DeliveryTests(TestCase):
-    fixtures = ['users.json']
+class DeliveryTests(BasketTestCase):
+    """
+    Test case for Delivery model.
+    """
 
     def setUp(self):
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=2)
-        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        self.slot.save()
+        self.install_user('francine')
+        self.install_user('reda')
+        self.install_delivery()
 
     def test_get_active_carts_by_slot(self):
-        francine = User.objects.get(username='francine')
-        interval = 30
-        start = self.slot.start
         kwargs = {'delivery': self.delivery}
-        self.slot.delete()
         cart_count = 0
-        for i in range(4): # 4 slots (30' within 2h)
-            kwargs['start'] = start + datetime.timedelta(minutes=i*interval)
-            kwargs['end'] = start + datetime.timedelta(minutes=(i+1)*interval)
-            s = DeliverySlot(**kwargs)
-            s.save()
+        self.install_slots(3, 7, 30, 4) # 4 slots (30' within 2h)
+        for i in range(4):
+            s = getattr(self, 'slot%d' % (i+1))
             for j in range(1 + i%2): # 1 or 2 carts by slots, 6 in total
-                Cart(user=francine, slot=s).save()
+                Cart(user=self.francine, slot=s).save()
                 cart_count += 1
         res = self.delivery.get_active_carts_by_slot()
         self.assertEqual(self.delivery.slots.count(), len(res))
@@ -169,13 +188,12 @@ class DeliveryTests(TestCase):
                          reduce(lambda x, y: x+len(y['baskets']), res, 0))
 
     def test_get_needed_quantities(self):
-        francine = User.objects.get(username='francine')
-        reda = User.objects.get(username='reda')
+        self.install_slots(3, 7, 120, 1)
         # No data, should return an empty queryset
         qs1 = self.delivery.get_needed_quantities()
         self.assertEqual(qs1.count(), 0)
         # A Cart exists but no CartItem, should return an empty queryset
-        c1 = Cart(user=francine, slot=self.slot)
+        c1 = Cart(user=self.francine, slot=self.slot1)
         c1.save()
         qs2 = self.delivery.get_needed_quantities()
         self.assertEqual(qs2.count(), 0)
@@ -187,7 +205,7 @@ class DeliveryTests(TestCase):
         self.assertEqual(qs3.count(), 1)
         self.assertEqual(qs3[0]['quantity'], 0.5)
         # Two Cart with the same CartItem
-        c2 = Cart(user=reda, slot=self.slot)
+        c2 = Cart(user=self.reda, slot=self.slot1)
         c2.save()
         kwargs['cart'] = c2
         CartItem(**kwargs).save()
@@ -200,32 +218,20 @@ class DeliveryTests(TestCase):
         qs5 = self.delivery.get_needed_quantities()
         self.assertEqual(qs5.count(), 2)
 
-class CartTests(TestCase):
-    fixtures = ['users.json']
+class CartTests(BasketTestCase):
+    """
+    Test case for Cart model.
+    """
 
     def setUp(self):
-        # Retrieve Francine
-        self.francine = User.objects.get(username='francine')
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=2)
-        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        self.slot.save()
-        # then a cart on this slot for Francine
-        self.cart = Cart(user=self.francine, slot=self.slot)
+        self.install_user('francine')
+        self.install_delivery()
+        self.install_slots(3, 7, 120, 1)
+        self.cart = Cart(user=self.francine, slot=self.slot1)
         self.cart.save()
 
     def test_get_total(self):
-        """Ensure get_total return the total price for this basket"""
+        """ Ensure get_total return the total price for this basket """
         self.assertEqual(self.cart.get_total(), 0)
         CartItem(cart=self.cart, unit_price=2, quantity=2).save()
         self.assertEqual(self.cart.get_total(), 4)
@@ -234,35 +240,22 @@ class CartTests(TestCase):
 
     def test_is_prepared(self):
         """ True when cart.status is prepared, False otherwise """
-        self.cart = Cart(user=self.francine, slot=self.slot)
         self.assertFalse(self.cart.is_prepared())
         self.cart.status = CartStatuses.PREPARED
         self.assertTrue(self.cart.is_prepared())
         self.cart.status = CartStatuses.DELIVERED
         self.assertFalse(self.cart.is_prepared())
 
-class CartItemTests(TestCase):
-    fixtures = ['users.json']
+class CartItemTests(BasketTestCase):
+    """
+    Test case for CartItem model.
+    """
 
     def setUp(self):
-        # Retrieve Francine
-        francine = User.objects.get(username='francine')
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=2)
-        s = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        s.save()
-        # then a cart on this slot for Francine
-        self.cart = Cart(user=francine, slot=s)
+        self.install_user('francine')
+        self.install_delivery()
+        self.install_slots(3, 7, 120, 1)
+        self.cart = Cart(user=self.francine, slot=self.slot1)
         self.cart.save()
 
     def test_custom_manager(self):
@@ -275,26 +268,22 @@ class CartItemTests(TestCase):
         self.assertTrue(hasattr(i, 'price'))
         self.assertEqual(i.price, 1.25)
 
-class ViewTests(TestCase):
+class ViewTests(BasketTestCase):
+    """
+    Test case for views
+    """
     fixtures = ['articles.json', 'users.json', 'merchants.json']
 
     def setUp(self):
-        # Create a delivery place
-        l = DeliveryLocation(name='Somewhere')
-        l.save()
-        # then the delivery itself
-        self.delivery = Delivery(location=l)
-        self.delivery.save()
-        # then a time slot for this delivery
-        tz = timezone.utc
-        d1 = datetime.datetime.combine(
-                    datetime.date.today() + datetime.timedelta(days=3),
-                    datetime.time(7, 0, tzinfo=tz))
-        d2 = d1 + datetime.timedelta(hours=2)
-        self.slot = DeliverySlot(delivery=self.delivery, start=d1, end=d2)
-        self.slot.save()
+        self.install_user('francine')
+        self.install_user('reda')
+        self.install_delivery()
+        self.install_slots(3, 7, 120, 1)
 
     def test_merchant(self):
+        """
+        Merchant view
+        """
         # response context has necessary data (cart limit disabled)
         response = self.client.get(reverse('merchant'))
         self.assertIn('deliveries', response.context)
@@ -306,12 +295,15 @@ class ViewTests(TestCase):
         self.delivery.save()
         response = self.client.get(reverse('merchant'))
         self.assertFalse(response.context['deliveries'][0]['is_full'])
-        Cart(user=User.objects.get(username='francine'), slot=self.slot).save()
+        Cart(user=self.francine, slot=self.slot1).save()
         response = self.client.get(reverse('merchant'))
         self.assertTrue(response.context['deliveries'][0]['is_full'])
 
 
     def test_needed_quantities(self):
+        """
+        Needed quantities view
+        """
         path = reverse('needed_quantities')
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
         # anonymous user
@@ -329,6 +321,9 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_new_cart(self):
+        """
+        New cart view
+        """
         path = reverse('new_cart', args=[self.delivery.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
         error_path = reverse('merchant')
@@ -356,6 +351,7 @@ class ViewTests(TestCase):
 
 
     def cart_final_tests(self, response):
+        """ Helper method for testing context returned by cart view """
         self.assertIn('item_form', response.context)
         self.assertIn('annot_form', response.context)
         self.assertIsInstance(response.context['item_form'], CartItemForm)
@@ -364,34 +360,36 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_cart_get(self):
+        """
+        Cart view (called with GET method)
+        """
         self.client.login(username='francine', password='francine')
-        francine = User.objects.get(username='francine')
-        reda = User.objects.get(username='reda')
         # Trying to GET non-existing cart raises 404
         response = self.client.get(reverse('cart', args=[0]))
         self.assertEqual(response.status_code, 404)
         # Trying to GET another user's cart
-        c = Cart(user=reda, slot=self.slot)
+        c = Cart(user=self.reda, slot=self.slot1)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.assertEqual(response.status_code, 302)
         # Trying to GET a normal cart
-        c = Cart(user=francine, slot=self.slot)
+        c = Cart(user=self.francine, slot=self.slot1)
         c.save()
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
         # SlotForm not enabled when there's a single time slot
         self.assertNotIn('slot_form', response.context)
-        DeliverySlot(delivery=self.delivery, start=self.slot.end,
-                    end=self.slot.end + datetime.timedelta(minutes=30)).save()
+        self.install_slots(3, 9, 120, 1)
         response = self.client.get(reverse('cart', args=[c.id]))
         self.cart_final_tests(response)
         self.assertIn('slot_form', response.context)
 
     def test_cart_post(self):
+        """
+        Cart view (called with POST method)
+        """
         self.client.login(username='francine', password='francine')
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=self.slot)
+        c = Cart(user=self.francine, slot=self.slot1)
         c.save()
         path = reverse('cart', args=[c.id])
         # invalid post
@@ -410,12 +408,10 @@ class ViewTests(TestCase):
         self.assertEqual(c.items.count(), item_count)
         self.cart_final_tests(response)
         # post a time slot
-        self.slot.end = self.slot.start + datetime.timedelta(minutes=30)
-        self.slot.save()
-        self.assertEqual(c.slot, self.slot)
-        new_slot =  DeliverySlot(delivery=self.delivery, start=self.slot.end,
-                    end=self.slot.end + datetime.timedelta(minutes=30))
-        new_slot.save()
+        old_slot = self.slot1
+        self.assertEqual(c.slot, old_slot)
+        self.install_slots(3, 9, 120, 1)
+        new_slot = self.slot1
         data = {'slot': new_slot.id, 'slot_submit': ''}
         response = self.client.post(path, data)
         c.refresh_from_db()
@@ -429,6 +425,9 @@ class ViewTests(TestCase):
         self.cart_final_tests(response)
 
     def test_prepare_baskets(self):
+        """
+        Prepare baskets view (list all baskets to be prepared)
+        """
         path = reverse('prepare_baskets', args=[self.delivery.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
         # anonymous user
@@ -449,8 +448,7 @@ class ViewTests(TestCase):
         self.assertIn('delivery', response.context)
         self.assertEqual(response.status_code, 200)
         # Trying to POST a delivered cart
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=self.slot)
+        c = Cart(user=self.francine, slot=self.slot1)
         c.save()
         data = {'delivered_cart': c.id}
         response = self.client.post(path, data)
@@ -459,8 +457,10 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_prepare_basket(self):
-        francine = User.objects.get(username='francine')
-        c = Cart(user=francine, slot=self.slot)
+        """
+        Prepare basket view (show one basket to be prepared)
+        """
+        c = Cart(user=self.francine, slot=self.slot1)
         c.save()
         path = reverse('prepare_basket', args=[c.id])
         redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
