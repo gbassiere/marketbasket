@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0001_initial'),
+        ('baskets', '0001_initial'),
     ]
 
     operations = [
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('slot_date', models.DateField()),
                 ('slot_from', models.TimeField()),
                 ('slot_to', models.TimeField()),
-                ('location', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='commandes.DeliveryLocation')),
+                ('location', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='baskets.DeliveryLocation')),
             ],
             options={
                 'verbose_name_plural': 'deliveries',
@@ -46,12 +46,12 @@ class Migration(migrations.Migration):
                 ('unit_price', models.DecimalField(decimal_places=2, max_digits=5)),
                 ('unit_type', models.CharField(choices=[('U', 'unit(s)'), ('W', 'Kg')], max_length=1)),
                 ('quantity', models.DecimalField(decimal_places=3, max_digits=6)),
-                ('cart', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='commandes.Cart')),
+                ('cart', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='baskets.Cart')),
             ],
         ),
         migrations.AddField(
             model_name='cart',
             name='delivery',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='carts', to='commandes.Delivery'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='carts', to='baskets.Delivery'),
         ),
     ]

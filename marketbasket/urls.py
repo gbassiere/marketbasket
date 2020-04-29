@@ -17,19 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-import commandes.views
+import baskets.views
 
 urlpatterns = [
-    path('', commandes.views.merchant, name='merchant'),
-    path('delivery/<int:id>/order', commandes.views.new_cart, name='new_cart'),
+    path('', baskets.views.merchant, name='merchant'),
+    path('delivery/<int:id>/order', baskets.views.new_cart, name='new_cart'),
     path('delivery/<int:id>/baskets',
-                commandes.views.prepare_baskets,
+                baskets.views.prepare_baskets,
                 name='prepare_baskets'),
     path('order/<int:id>/prepare',
-                commandes.views.prepare_basket,
+                baskets.views.prepare_basket,
                 name='prepare_basket'),
-    path('order/<int:id>', commandes.views.cart, name='cart'),
-    path('deliveries', commandes.views.needed_quantities, name='needed_quantities'),
+    path('order/<int:id>', baskets.views.cart, name='cart'),
+    path('deliveries', baskets.views.needed_quantities, name='needed_quantities'),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

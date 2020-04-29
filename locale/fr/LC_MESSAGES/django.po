@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandes/admin.py:16
+#: baskets/admin.py:16
 msgid ""
 "Modifying this slot is not possible since customers have already placed "
 "orders"
@@ -24,204 +24,204 @@ msgstr ""
 "Il n'est plus possible d'éditer ce créneau car des clients y ont déjà "
 "commandé"
 
-#: commandes/admin.py:19
+#: baskets/admin.py:19
 msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
-#: commandes/forms.py:22
+#: baskets/forms.py:22
 #, python-format
 msgid "between %(start)s and %(end)s"
 msgstr "entre %(start)s et %(end)s"
 
-#: commandes/forms.py:27
+#: baskets/forms.py:27
 #, python-format
 msgid "%(slot)s (full)"
 msgstr "%(slot)s (complet)"
 
-#: commandes/forms.py:48
+#: baskets/forms.py:48
 msgid "This delivery slot is full."
 msgstr "Ce créneau de distribution est complet."
 
-#: commandes/models.py:10
+#: baskets/models.py:10
 msgid "received"
 msgstr "reçu"
 
-#: commandes/models.py:12
+#: baskets/models.py:12
 msgid "preparation in progress"
 msgstr "préparation en cours"
 
-#: commandes/models.py:14
+#: baskets/models.py:14
 msgid "prepared"
 msgstr "préparé"
 
-#: commandes/models.py:16
+#: baskets/models.py:16
 msgid "delivered"
 msgstr "livré"
 
-#: commandes/models.py:18
+#: baskets/models.py:18
 msgid "abandoned"
 msgstr "abandonné"
 
-#: commandes/models.py:21
+#: baskets/models.py:21
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: commandes/models.py:22
+#: baskets/models.py:22
 msgid "Kg"
 msgstr "Kg"
 
-#: commandes/models.py:25
+#: baskets/models.py:25
 msgid "Facebook"
 msgstr "Facebook"
 
-#: commandes/models.py:26
+#: baskets/models.py:26
 msgid "Email address"
 msgstr "Adresse email"
 
-#: commandes/models.py:27
+#: baskets/models.py:27
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: commandes/models.py:28
+#: baskets/models.py:28
 msgid "Website"
 msgstr "Site web"
 
-#: commandes/models.py:32
+#: baskets/models.py:32
 msgid "code"
 msgstr "code"
 
-#: commandes/models.py:33 commandes/models.py:53 commandes/models.py:95
+#: baskets/models.py:33 baskets/models.py:53 baskets/models.py:95
 msgid "name"
 msgstr "nom"
 
-#: commandes/models.py:34
+#: baskets/models.py:34
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: commandes/models.py:36
+#: baskets/models.py:36
 msgid "unit type"
 msgstr "type d'unité"
 
-#: commandes/models.py:45
+#: baskets/models.py:45
 msgid "article"
 msgstr "article"
 
-#: commandes/models.py:46
+#: baskets/models.py:46
 msgid "articles"
 msgstr "articles"
 
-#: commandes/models.py:55
+#: baskets/models.py:55
 msgid "owner"
 msgstr "propriétaire"
 
-#: commandes/models.py:56
+#: baskets/models.py:56
 msgid "presentation"
 msgstr "présentation"
 
-#: commandes/models.py:63 commandes/models.py:79
+#: baskets/models.py:63 baskets/models.py:79
 msgid "merchant"
 msgstr "marchand"
 
-#: commandes/models.py:64
+#: baskets/models.py:64
 msgid "merchants"
 msgstr "marchands"
 
-#: commandes/models.py:71 commandes/models.py:83
+#: baskets/models.py:71 baskets/models.py:83
 msgid "URL"
 msgstr "URL"
 
-#: commandes/models.py:73
+#: baskets/models.py:73
 msgid "URL type"
 msgstr "type d'URL"
 
-#: commandes/models.py:84
+#: baskets/models.py:84
 msgid "URLs"
 msgstr "URLs"
 
-#: commandes/models.py:100
+#: baskets/models.py:100
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: commandes/models.py:101
+#: baskets/models.py:101
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: commandes/models.py:111
+#: baskets/models.py:111
 msgid "location"
 msgstr "lieu"
 
-#: commandes/models.py:113
+#: baskets/models.py:113
 msgid "maximum number of baskets per slot"
 msgstr "nombre maximum de panier par créneau"
 
-#: commandes/models.py:114
+#: baskets/models.py:114
 msgid "Set 0 for unlimited carts per slot"
 msgstr "Mettre 0 pour ne pas limiter le nombre de panier"
 
-#: commandes/models.py:121 commandes/models.py:166
+#: baskets/models.py:121 baskets/models.py:166
 msgid "delivery"
 msgstr "distribution"
 
-#: commandes/models.py:122
+#: baskets/models.py:122
 msgid "deliveries"
 msgstr "distributions"
 
-#: commandes/models.py:157
+#: baskets/models.py:157
 #, python-format
 msgid "%(place)s (undefined time slots)"
 msgstr "%(place)s (créneaux horaire non définis)"
 
-#: commandes/models.py:161
+#: baskets/models.py:161
 msgid "start at"
 msgstr "débute à"
 
-#: commandes/models.py:162
+#: baskets/models.py:162
 msgid "end at"
 msgstr "fini à"
 
-#: commandes/models.py:170
+#: baskets/models.py:170
 msgid "delivery time slot"
 msgstr "créneau de distribution"
 
-#: commandes/models.py:171
+#: baskets/models.py:171
 msgid "delivery time slots"
 msgstr "créneaux de distribution"
 
-#: commandes/models.py:191
+#: baskets/models.py:191
 msgid "status"
 msgstr "état"
 
-#: commandes/models.py:195
+#: baskets/models.py:195
 msgid "annotation"
 msgstr "annotation"
 
-#: commandes/models.py:201 commandes/models.py:232
+#: baskets/models.py:201 baskets/models.py:232
 msgid "cart"
 msgstr "panier"
 
-#: commandes/models.py:202
+#: baskets/models.py:202
 msgid "carts"
 msgstr "paniers"
 
-#: commandes/models.py:241
+#: baskets/models.py:241
 msgid "item"
 msgstr "article"
 
-#: commandes/models.py:242
+#: baskets/models.py:242
 msgid "items"
 msgstr "articles"
 
-#: commandes/views.py:91
+#: baskets/views.py:91
 msgid "This delivery is full and does not accept any new order."
 msgstr ""
 "Cette distribution est complète et n'accepte plus de nouvelles commandes."
 
-#: commandes/views.py:139
+#: baskets/views.py:139
 #, python-format
 msgid "Article \"%(label)s\" deleted"
 msgstr "Article \"%(label)s\" supprimé"
 
-#: commandes/views.py:148
+#: baskets/views.py:148
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 
@@ -229,146 +229,146 @@ msgstr "Créneau horaire mis à jour"
 msgid "Market pre-ordering system"
 msgstr "Système de pré-commande de produits maraîchers"
 
-#: templates/commandes/cart.html:18
+#: templates/baskets/cart.html:18
 msgid "Status:"
 msgstr "État :"
 
-#: templates/commandes/cart.html:27
+#: templates/baskets/cart.html:27
 msgid "Article:"
 msgstr "Article :"
 
-#: templates/commandes/cart.html:29
+#: templates/baskets/cart.html:29
 msgid "Quantity:"
 msgstr "Quantité :"
 
-#: templates/commandes/cart.html:31
+#: templates/baskets/cart.html:31
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
-#: templates/commandes/cart.html:39 templates/commandes/prepare_basket.html:15
+#: templates/baskets/cart.html:39 templates/baskets/prepare_basket.html:15
 msgid "Article"
 msgstr "Article"
 
-#: templates/commandes/cart.html:40
+#: templates/baskets/cart.html:40
 msgid "Price"
 msgstr "Prix"
 
-#: templates/commandes/cart.html:41 templates/commandes/prepare_baskets.html:24
+#: templates/baskets/cart.html:41 templates/baskets/prepare_baskets.html:24
 msgid "Action"
 msgstr "Action"
 
-#: templates/commandes/cart.html:59
+#: templates/baskets/cart.html:59
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/commandes/cart.html:64
+#: templates/baskets/cart.html:64
 msgid "Total price:"
 msgstr "Prix total :"
 
-#: templates/commandes/cart.html:76
+#: templates/baskets/cart.html:76
 msgid "Basket collection time slot:"
 msgstr "Créneau horaire de retrait du panier:"
 
-#: templates/commandes/cart.html:78
+#: templates/baskets/cart.html:78
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/commandes/cart.html:88
+#: templates/baskets/cart.html:88
 msgid "Note to the merchant"
 msgstr "Message au marchand"
 
-#: templates/commandes/cart.html:92
+#: templates/baskets/cart.html:92
 msgid "Save note"
 msgstr "Enregistrer le message"
 
-#: templates/commandes/cart.html:95
+#: templates/baskets/cart.html:95
 #, python-format
 msgid "Note saved on %(d)s at %(t)s."
 msgstr "Message enregistré le %(d)s à %(t)s."
 
-#: templates/commandes/merchant.html:17
+#: templates/baskets/merchant.html:17
 msgid "Contacts:"
 msgstr "Contacts :"
 
-#: templates/commandes/merchant.html:30
+#: templates/baskets/merchant.html:30
 msgid "Upcoming delivery"
 msgstr "Distribution à venir"
 
-#: templates/commandes/merchant.html:35
+#: templates/baskets/merchant.html:35
 msgid "Delivery is full"
 msgstr "Distribution complète"
 
-#: templates/commandes/merchant.html:37
+#: templates/baskets/merchant.html:37
 msgid "Place an order"
 msgstr "Commander"
 
-#: templates/commandes/needed_quantities.html:14
+#: templates/baskets/needed_quantities.html:14
 msgid "No orders."
 msgstr "Aucune commande."
 
-#: templates/commandes/needed_quantities.html:18
+#: templates/baskets/needed_quantities.html:18
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
 
-#: templates/commandes/prepare_basket.html:6
+#: templates/baskets/prepare_basket.html:6
 msgid "Customer:"
 msgstr "Client :"
 
-#: templates/commandes/prepare_basket.html:9
-#: templates/commandes/prepare_baskets.html:32
+#: templates/baskets/prepare_basket.html:9
+#: templates/baskets/prepare_baskets.html:32
 #, python-format
 msgid "Expected pick-up between %(start)s and %(end)s."
 msgstr "Retrait prévu entre %(start)s et %(end)s."
 
-#: templates/commandes/prepare_basket.html:16
+#: templates/baskets/prepare_basket.html:16
 msgid "Quantity"
 msgstr "Quantité"
 
-#: templates/commandes/prepare_basket.html:17
+#: templates/baskets/prepare_basket.html:17
 msgid "Expected price"
 msgstr "Prix attendu"
 
-#: templates/commandes/prepare_basket.html:36
+#: templates/baskets/prepare_basket.html:36
 msgid "Customer's note"
 msgstr "Message du client"
 
-#: templates/commandes/prepare_basket.html:44
+#: templates/baskets/prepare_basket.html:44
 msgid "Expected total price:"
 msgstr "Prix total attendu :"
 
-#: templates/commandes/prepare_basket.html:45
+#: templates/baskets/prepare_basket.html:45
 msgid "Article count:"
 msgstr "Nombre d'article :"
 
-#: templates/commandes/prepare_basket.html:55
+#: templates/baskets/prepare_basket.html:55
 msgid "Put off"
 msgstr "Remettre à plus tard"
 
-#: templates/commandes/prepare_basket.html:59
+#: templates/baskets/prepare_basket.html:59
 msgid "Basket ready"
 msgstr "Panier prêt"
 
-#: templates/commandes/prepare_basket.html:64
+#: templates/baskets/prepare_basket.html:64
 msgid "Start preparing"
 msgstr "Commencer à préparer"
 
-#: templates/commandes/prepare_baskets.html:21
+#: templates/baskets/prepare_baskets.html:21
 msgid "Customer"
 msgstr "Client"
 
-#: templates/commandes/prepare_baskets.html:22
+#: templates/baskets/prepare_baskets.html:22
 msgid "Items count"
 msgstr "Nombre d'article"
 
-#: templates/commandes/prepare_baskets.html:23
+#: templates/baskets/prepare_baskets.html:23
 msgid "Status"
 msgstr "État"
 
-#: templates/commandes/prepare_baskets.html:45
+#: templates/baskets/prepare_baskets.html:45
 msgid "Deliver"
 msgstr "Livrer"
 
-#: templates/commandes/prepare_baskets.html:48
+#: templates/baskets/prepare_baskets.html:48
 msgid "Prepare"
 msgstr "Préparer"
 

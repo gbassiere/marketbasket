@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('commandes', '0009_group_permission_data'),
+        ('baskets', '0009_group_permission_data'),
     ]
 
     operations = [
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('address', models.URLField(max_length=255, verbose_name='URL')),
                 ('url_type', models.CharField(choices=[('F', 'Facebook'), ('E', 'Email address'), ('P', 'Phone number'), ('W', 'Website')], default='W', max_length=1, verbose_name='URL type')),
-                ('merchant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contact_details', to='commandes.Merchant', verbose_name='merchant')),
+                ('merchant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contact_details', to='baskets.Merchant', verbose_name='merchant')),
             ],
             options={
                 'verbose_name': 'URL',

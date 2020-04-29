@@ -7,8 +7,8 @@ from django.db.models import IntegerField, ExpressionWrapper, F, Min, Max
 
 
 def copy_slots(apps, schema_editor):
-    Delivery = apps.get_model('commandes', 'Delivery')
-    DeliverySlot = apps.get_model('commandes', 'DeliverySlot')
+    Delivery = apps.get_model('baskets', 'Delivery')
+    DeliverySlot = apps.get_model('baskets', 'DeliverySlot')
     # Models return by get_model are built from migration data and lack
     # custom class methods. Hence the remake of Delivery.slots():
     for d in Delivery.objects.all():
@@ -33,13 +33,13 @@ def copy_slots(apps, schema_editor):
 
 def copy_slots_reverse(apps, schema_editor):
     # detach carts
-    Cart = apps.get_model('commandes', 'Cart')
+    Cart = apps.get_model('baskets', 'Cart')
     for c in Cart.objects.all():
         c.delivery = c.slot.delivery
         c.start = c.slot.start
         c.save()
     # retrieve interval, start and end from slots
-    Delivery = apps.get_model('commandes', 'Delivery')
+    Delivery = apps.get_model('baskets', 'Delivery')
     expr_interval = ExpressionWrapper(
                         (F('end')-F('start'))/10**6/60,
                         output_field=IntegerField())
@@ -56,7 +56,7 @@ def copy_slots_reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0013_add_delivery_slots'),
+        ('baskets', '0013_add_delivery_slots'),
     ]
 
     operations = [
@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                                 on_delete=django.db.models.deletion.CASCADE,
                                 related_name='slots',
                                 verbose_name='delivery',
-                                to='commandes.Delivery')),
+                                to='baskets.Delivery')),
             ],
             options={
                 'verbose_name': 'delivery time slot',
@@ -112,7 +112,7 @@ class Migration(migrations.Migration):
                             on_delete=django.db.models.deletion.SET_NULL,
                             related_name='carts',
                             verbose_name='slot',
-                            to='commandes.DeliverySlot'),
+                            to='baskets.DeliverySlot'),
         ),
         # copy data
         migrations.RunPython(code=copy_slots,

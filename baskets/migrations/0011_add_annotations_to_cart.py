@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0010_add_a_merchant_model'),
+        ('baskets', '0010_add_a_merchant_model'),
     ]
 
     operations = [

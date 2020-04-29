@@ -43,14 +43,14 @@ def merchant(request):
                         lambda x, y: x and y.cart_count >= d.max_per_slot,
                         d.slots.all(), True)
             } for d in qs]
-    return render(request, 'commandes/merchant.html', {
+    return render(request, 'baskets/merchant.html', {
                                             'merchant': merchant,
                                             'contacts': contacts,
                                             'deliveries': deliveries})
 
 
 @login_required
-@permission_required('commandes.view_delivery_quantities')
+@permission_required('baskets.view_delivery_quantities')
 def needed_quantities(request):
     """Quantities needed for each delivery"""
     deliveries = Delivery.objects.annotate(start=Min('slots__start')) \
@@ -68,7 +68,7 @@ def needed_quantities(request):
                             'quantity': quant['quantity']
                        } for quant in delivery.get_needed_quantities()]})
 
-    return render(request, 'commandes/needed_quantities.html', context)
+    return render(request, 'baskets/needed_quantities.html', context)
 
 
 @login_required
@@ -167,11 +167,11 @@ def cart(request, id):
     if cart.slot.delivery.slots.count() > 1:
         context['slot_form'] = slot_form
 
-    return render(request, 'commandes/cart.html', context)
+    return render(request, 'baskets/cart.html', context)
 
 
 @login_required
-@permission_required('commandes.prepare_basket')
+@permission_required('baskets.prepare_basket')
 def prepare_baskets(request, id):
     """A packer view baskets to be prepared"""
     try:
@@ -184,12 +184,12 @@ def prepare_baskets(request, id):
         cart.status = CartStatuses.DELIVERED
         cart.save()
 
-    return render(request, 'commandes/prepare_baskets.html',
+    return render(request, 'baskets/prepare_baskets.html',
                                             {'delivery': delivery})
 
 
 @login_required
-@permission_required('commandes.prepare_basket')
+@permission_required('baskets.prepare_basket')
 def prepare_basket(request, id):
     """A packer view a basket to be prepared"""
     basket = get_object_or_404(Cart, id=id)
@@ -209,5 +209,5 @@ def prepare_basket(request, id):
             basket.status = CartStatuses.PREPARING
             basket.save()
 
-    return render(request,'commandes/prepare_basket.html',
+    return render(request,'baskets/prepare_basket.html',
                                  {'basket': basket, 'statuses': CartStatuses})

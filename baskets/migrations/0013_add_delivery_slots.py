@@ -2,7 +2,7 @@ from django.db import migrations, models
 
 
 def set_default_slots(apps, schema_editor):
-    Cart = apps.get_model('commandes', 'Cart')
+    Cart = apps.get_model('baskets', 'Cart')
     for cart in Cart.objects.all():
         # Default to first slot for older data
         cart.slot = cart.delivery.start
@@ -11,7 +11,7 @@ def set_default_slots(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0012_refactor_delivery_dates'),
+        ('baskets', '0012_refactor_delivery_dates'),
     ]
 
     operations = [

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0007_cart_status'),
+        ('baskets', '0007_cart_status'),
     ]
 
     operations = [

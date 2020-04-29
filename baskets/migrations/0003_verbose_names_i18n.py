@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0002_initial_cart_and_delivery'),
+        ('baskets', '0002_initial_cart_and_delivery'),
     ]
 
     operations = [
@@ -54,12 +54,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cartitem',
             name='cart',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='commandes.Cart', verbose_name='cart'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='baskets.Cart', verbose_name='cart'),
         ),
         migrations.AlterField(
             model_name='delivery',
             name='location',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='commandes.DeliveryLocation', verbose_name='location'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='baskets.DeliveryLocation', verbose_name='location'),
         ),
         migrations.AlterField(
             model_name='deliverylocation',

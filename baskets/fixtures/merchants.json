@@ -1,6 +1,6 @@
 [
     {
-        "model": "commandes.merchant",
+        "model": "baskets.merchant",
         "pk": 1,
         "fields": {
             "name": "EARL du Potag\u00e9r\u00f4me",
@@ -11,7 +11,7 @@
         }
     },
     {
-        "model": "commandes.url",
+        "model": "baskets.url",
         "pk": 1,
         "fields": {
             "address": "http://potagerome.e-monsite.com/",
@@ -20,7 +20,7 @@
         }
     },
     {
-        "model": "commandes.url",
+        "model": "baskets.url",
         "pk": 2,
         "fields": {
             "address": "https://fr-fr.facebook.com/EARL-du-Potagerome-1595402160674958/",

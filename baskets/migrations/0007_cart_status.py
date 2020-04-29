@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0006_bind_cart_to_user'),
+        ('baskets', '0006_bind_cart_to_user'),
     ]
 
     operations = [

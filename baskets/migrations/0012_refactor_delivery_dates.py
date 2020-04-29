@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 def copy_dates(apps, schema_editor):
-    Delivery = apps.get_model('commandes', 'Delivery')
+    Delivery = apps.get_model('baskets', 'Delivery')
     tz = timezone.utc
     for deliv in Delivery.objects.all():
         deliv.start = timezone.make_aware(
@@ -14,7 +14,7 @@ def copy_dates(apps, schema_editor):
         deliv.save()
 
 def copy_dates_reverse(apps, schema_editor):
-    Delivery = apps.get_model('commandes', 'Delivery')
+    Delivery = apps.get_model('baskets', 'Delivery')
     for deliv in Delivery.objects.all():
         deliv.slot_date = deliv.start.date()
         deliv.slot_from = deliv.start.time()
@@ -25,7 +25,7 @@ def copy_dates_reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('commandes', '0011_add_annotations_to_cart'),
+        ('baskets', '0011_add_annotations_to_cart'),
     ]
 
     operations = [

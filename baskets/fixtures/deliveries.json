@@ -1,13 +1,13 @@
 [
     {
-        "model": "commandes.delivery",
+        "model": "baskets.delivery",
         "pk": 1,
         "fields": {
             "location": 1
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 1,
         "fields": {
             "start": "2020-05-06T07:00:00Z",
@@ -20,14 +20,14 @@
 
 
     {
-        "model": "commandes.delivery",
+        "model": "baskets.delivery",
         "pk": 2,
         "fields": {
             "location": 1
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 2,
         "fields": {
             "start": "2020-05-13T07:00:00Z",
@@ -36,7 +36,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 3,
         "fields": {
             "start": "2020-05-13T07:30:00Z",
@@ -45,7 +45,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 4,
         "fields": {
             "start": "2020-05-13T08:00:00Z",
@@ -54,7 +54,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 5,
         "fields": {
             "start": "2020-05-13T08:30:00Z",
@@ -63,7 +63,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 6,
         "fields": {
             "start": "2020-05-13T09:00:00Z",
@@ -72,7 +72,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 7,
         "fields": {
             "start": "2020-05-13T09:30:00Z",
@@ -81,14 +81,14 @@
         }
     },
     {
-        "model": "commandes.delivery",
+        "model": "baskets.delivery",
         "pk": 3,
         "fields": {
             "location": 1
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 8,
         "fields": {
             "start": "2020-05-20T07:00:00Z",
@@ -97,14 +97,14 @@
         }
     },
     {
-        "model": "commandes.delivery",
+        "model": "baskets.delivery",
         "pk": 4,
         "fields": {
             "location": 2
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 9,
         "fields": {
             "start": "2020-05-15T12:00:00Z",
@@ -113,7 +113,7 @@
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 10,
         "fields": {
             "start": "2020-05-15T14:00:00Z",
@@ -122,14 +122,14 @@
         }
     },
     {
-        "model": "commandes.delivery",
+        "model": "baskets.delivery",
         "pk": 5,
         "fields": {
             "location": 2
         }
     },
     {
-        "model": "commandes.deliveryslot",
+        "model": "baskets.deliveryslot",
         "pk": 11,
         "fields": {
             "start": "2020-05-08T12:00:00Z",

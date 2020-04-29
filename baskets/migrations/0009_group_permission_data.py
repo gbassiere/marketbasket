@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('contenttypes', '__latest__'),
-        ('commandes', '0008_add_a_model_permission'),
+        ('baskets', '0008_add_a_model_permission'),
     ]
 
     operations = [

@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('commandes', '0005_group_permission_data'),
+        ('baskets', '0005_group_permission_data'),
     ]
 
     operations = [
