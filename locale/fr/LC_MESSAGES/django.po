@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-02 14:47+0200\n"
+"POT-Creation-Date: 2020-05-01 16:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -253,39 +253,47 @@ msgstr "Ajouter au panier"
 msgid "Article"
 msgstr "Article"
 
-#: templates/baskets/cart.html:40
+#: templates/baskets/cart.html:40 templates/baskets/prepare_basket.html:16
+msgid "Quantity"
+msgstr "Quantité"
+
+#: templates/baskets/cart.html:41
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+#: templates/baskets/cart.html:42
 msgid "Price"
 msgstr "Prix"
 
-#: templates/baskets/cart.html:41 templates/baskets/prepare_baskets.html:24
+#: templates/baskets/cart.html:43 templates/baskets/prepare_baskets.html:24
 msgid "Action"
 msgstr "Action"
 
-#: templates/baskets/cart.html:59
+#: templates/baskets/cart.html:63
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/baskets/cart.html:64
+#: templates/baskets/cart.html:68
 msgid "Total price:"
 msgstr "Prix total :"
 
-#: templates/baskets/cart.html:76
+#: templates/baskets/cart.html:80
 msgid "Basket collection time slot:"
 msgstr "Créneau horaire de retrait du panier:"
 
-#: templates/baskets/cart.html:78
+#: templates/baskets/cart.html:82
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/baskets/cart.html:88
+#: templates/baskets/cart.html:92
 msgid "Note to the merchant"
 msgstr "Message au marchand"
 
-#: templates/baskets/cart.html:92
+#: templates/baskets/cart.html:96
 msgid "Save note"
 msgstr "Enregistrer le message"
 
-#: templates/baskets/cart.html:95
+#: templates/baskets/cart.html:99
 #, python-format
 msgid "Note saved on %(d)s at %(t)s."
 msgstr "Message enregistré le %(d)s à %(t)s."
@@ -323,10 +331,6 @@ msgstr "Client :"
 #, python-format
 msgid "Expected pick-up between %(start)s and %(end)s."
 msgstr "Retrait prévu entre %(start)s et %(end)s."
-
-#: templates/baskets/prepare_basket.html:16
-msgid "Quantity"
-msgstr "Quantité"
 
 #: templates/baskets/prepare_basket.html:17
 msgid "Expected price"

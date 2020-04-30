@@ -37,8 +37,10 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">{% trans "Article" %}</th>
-      <th scope="col">{% trans "Price" %}</th>
-      <th scope="col">{% trans "Action" %}</th>
+      <th scope="col" class="text-center">{% trans "Quantity" %}</th>
+      <th scope="col" class="text-center">{% trans "Unit price" %}</th>
+      <th scope="col" class="text-center">{% trans "Price" %}</th>
+      <th scope="col" class="text-center">{% trans "Action" %}</th>
     </tr>
   </thead>
   <tbody>
@@ -46,8 +48,10 @@
     {% for i in cart.items.all %}
     <tr>
       <td>{{ i.label }}</td>
-      <td>{{ i.quantity }} x {{ i.unit_price }} = {{ i.price }}€</td>
-      <td>
+      <td class="text-center">{{ i.hr_quantity }}</td>
+      <td class="text-center">{{ i.unit_price|floatformat:2 }}€</td>
+      <td class="text-center">{{ i.price|floatformat:2 }}€</td>
+      <td class="text-center">
         <form action="" method="post">
           {% csrf_token %}
           <button name="del_submit" value="{{ i.id }}" type="submit" class="trash"></button>
@@ -56,13 +60,13 @@
     </tr>
     {% endfor %}
     {% else %}
-    <tr><td colspan="3">{% trans "Your basket is empty..." %}</td></tr>
+    <tr><td colspan="5">{% trans "Your basket is empty..." %}</td></tr>
     {% endif %}
   </tbody>
   <tfoot>
     <tr>
-      <td>{% trans "Total price:" %}</td>
-      <td>{{ cart.get_total|floatformat:2 }}€</td>
+      <td colspan="3" class="text-right font-weight-bold">{% trans "Total price:" %}</td>
+      <td class="text-center font-weight-bold">{{ cart.get_total|floatformat:2 }}€</td>
       <td></td>
     </tr>
   </tfoot>
