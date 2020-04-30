@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-29 16:38+0200\n"
+"POT-Creation-Date: 2020-05-02 14:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -42,172 +42,176 @@ msgstr "%(slot)s (complet)"
 msgid "This delivery slot is full."
 msgstr "Ce créneau de distribution est complet."
 
-#: baskets/models.py:10
+#: baskets/models.py:11
 msgid "received"
 msgstr "reçu"
 
-#: baskets/models.py:12
+#: baskets/models.py:13
 msgid "preparation in progress"
 msgstr "préparation en cours"
 
-#: baskets/models.py:14
+#: baskets/models.py:15
 msgid "prepared"
 msgstr "préparé"
 
-#: baskets/models.py:16
+#: baskets/models.py:17
 msgid "delivered"
 msgstr "livré"
 
-#: baskets/models.py:18
+#: baskets/models.py:19
 msgid "abandoned"
 msgstr "abandonné"
 
-#: baskets/models.py:21
+#: baskets/models.py:22
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: baskets/models.py:22
+#: baskets/models.py:23 baskets/models.py:44
 msgid "Kg"
 msgstr "Kg"
 
-#: baskets/models.py:25
+#: baskets/models.py:39
+msgid "g"
+msgstr "g"
+
+#: baskets/models.py:52
 msgid "Facebook"
 msgstr "Facebook"
 
-#: baskets/models.py:26
+#: baskets/models.py:53
 msgid "Email address"
 msgstr "Adresse email"
 
-#: baskets/models.py:27
+#: baskets/models.py:54
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: baskets/models.py:28
+#: baskets/models.py:55
 msgid "Website"
 msgstr "Site web"
 
-#: baskets/models.py:32
+#: baskets/models.py:59
 msgid "code"
 msgstr "code"
 
-#: baskets/models.py:33 baskets/models.py:53 baskets/models.py:95
+#: baskets/models.py:60 baskets/models.py:80 baskets/models.py:122
 msgid "name"
 msgstr "nom"
 
-#: baskets/models.py:34
+#: baskets/models.py:61
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: baskets/models.py:36
+#: baskets/models.py:63
 msgid "unit type"
 msgstr "type d'unité"
 
-#: baskets/models.py:45
+#: baskets/models.py:72
 msgid "article"
 msgstr "article"
 
-#: baskets/models.py:46
+#: baskets/models.py:73
 msgid "articles"
 msgstr "articles"
 
-#: baskets/models.py:55
+#: baskets/models.py:82
 msgid "owner"
 msgstr "propriétaire"
 
-#: baskets/models.py:56
+#: baskets/models.py:83
 msgid "presentation"
 msgstr "présentation"
 
-#: baskets/models.py:63 baskets/models.py:79
+#: baskets/models.py:90 baskets/models.py:106
 msgid "merchant"
 msgstr "marchand"
 
-#: baskets/models.py:64
+#: baskets/models.py:91
 msgid "merchants"
 msgstr "marchands"
 
-#: baskets/models.py:71 baskets/models.py:83
+#: baskets/models.py:98 baskets/models.py:110
 msgid "URL"
 msgstr "URL"
 
-#: baskets/models.py:73
+#: baskets/models.py:100
 msgid "URL type"
 msgstr "type d'URL"
 
-#: baskets/models.py:84
+#: baskets/models.py:111
 msgid "URLs"
 msgstr "URLs"
 
-#: baskets/models.py:100
+#: baskets/models.py:127
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: baskets/models.py:101
+#: baskets/models.py:128
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: baskets/models.py:111
+#: baskets/models.py:138
 msgid "location"
 msgstr "lieu"
 
-#: baskets/models.py:113
+#: baskets/models.py:140
 msgid "maximum number of baskets per slot"
 msgstr "nombre maximum de panier par créneau"
 
-#: baskets/models.py:114
+#: baskets/models.py:141
 msgid "Set 0 for unlimited carts per slot"
 msgstr "Mettre 0 pour ne pas limiter le nombre de panier"
 
-#: baskets/models.py:121 baskets/models.py:166
+#: baskets/models.py:148 baskets/models.py:193
 msgid "delivery"
 msgstr "distribution"
 
-#: baskets/models.py:122
+#: baskets/models.py:149
 msgid "deliveries"
 msgstr "distributions"
 
-#: baskets/models.py:157
+#: baskets/models.py:184
 #, python-format
 msgid "%(place)s (undefined time slots)"
 msgstr "%(place)s (créneaux horaire non définis)"
 
-#: baskets/models.py:161
+#: baskets/models.py:188
 msgid "start at"
 msgstr "débute à"
 
-#: baskets/models.py:162
+#: baskets/models.py:189
 msgid "end at"
 msgstr "fini à"
 
-#: baskets/models.py:170
+#: baskets/models.py:197
 msgid "delivery time slot"
 msgstr "créneau de distribution"
 
-#: baskets/models.py:171
+#: baskets/models.py:198
 msgid "delivery time slots"
 msgstr "créneaux de distribution"
 
-#: baskets/models.py:191
+#: baskets/models.py:218
 msgid "status"
 msgstr "état"
 
-#: baskets/models.py:195
+#: baskets/models.py:222
 msgid "annotation"
 msgstr "annotation"
 
-#: baskets/models.py:201 baskets/models.py:232
+#: baskets/models.py:228 baskets/models.py:259
 msgid "cart"
 msgstr "panier"
 
-#: baskets/models.py:202
+#: baskets/models.py:229
 msgid "carts"
 msgstr "paniers"
 
-#: baskets/models.py:241
+#: baskets/models.py:268
 msgid "item"
 msgstr "article"
 
-#: baskets/models.py:242
+#: baskets/models.py:269
 msgid "items"
 msgstr "articles"
 

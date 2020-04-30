@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 from functools import reduce
 
 from django.test import TestCase
@@ -52,6 +53,25 @@ class BasketTestCase(TestCase):
             s = DeliverySlot(delivery=self.delivery, start=ds, end=de)
             s.save()
             setattr(self, 'slot%d' % (i+1), s)
+
+
+class UnitTypesTests(TestCase):
+    """
+    Test case for UnitTypes which is a mere TextChoices but have a custom
+    method.
+    """
+    def test_hr_quantity(self):
+        with self.assertRaises(ValueError):
+            UnitTypes.UNIT.hr_quantity('a string')
+        values = (1, 1.0, 3, 3.0, Decimal(1.0), Decimal(3))
+        for value in values:
+            self.assertRegex(UnitTypes.UNIT.hr_quantity(value), r'^\d+')
+        for value in values + (1.5, 5.43, Decimal(1.555)):
+            self.assertRegex(UnitTypes.WEIGHT.hr_quantity(value),
+                                                            r'^\d+\.?\d* ')
+        for value in (0.555, Decimal(.6), .7):
+            self.assertRegex(UnitTypes.WEIGHT.hr_quantity(value),
+                                                            r'^\d{3} ')
 
 
 class SlotSelectTests(TestCase):

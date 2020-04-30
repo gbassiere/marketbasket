@@ -1,3 +1,4 @@
+import numbers
 from django.db import models
 from django.utils.translation import gettext_lazy as _, gettext
 from django.utils.formats import date_format
@@ -20,6 +21,32 @@ class CartStatuses(models.IntegerChoices):
 class UnitTypes(models.TextChoices):
     UNIT = 'U', _('unit(s)')
     WEIGHT = 'W', _('Kg')
+
+    def hr_quantity(self, quantity):
+        """
+        Return human-readable quantity with pluralized and localised unit
+        """
+
+        # non-numeric quantity would not make sense
+        if not isinstance(quantity, numbers.Number):
+            raise ValueError('A `quantity` should be numeric')
+
+        if self.value == self.UNIT:
+            return '{0:n}'.format(int(quantity))
+        elif self.value == self.WEIGHT:
+            if 0 < quantity < 1:
+                # Display weight in grams
+                return '{0:.0f} {1}'.format(quantity*1000, gettext('g'))
+            else:
+                # Display weight in kilograms
+                # Trailing 0 are not properly removed on `Decimal` instances...
+                quantity = float(quantity)
+                return '{0:n} {1}'.format(quantity, gettext('Kg'))
+        else:
+            # This is actually a misuse of this filter but sending back value
+            # almost untouched seems like a reasonable fallback (cast to `str`
+            # for consistency
+            return str(quantity)
 
 class URLTypes(models.TextChoices):
     FB = 'F', _('Facebook')
@@ -243,6 +270,9 @@ class CartItem(models.Model):
 
     # Manager with prices computed automatically annotated
     objects = CartItemManager()
+
+    def hr_quantity(self):
+        return UnitTypes(self.unit_type).hr_quantity(self.quantity)
 
     def __str__(self):
         q = self.quantity
