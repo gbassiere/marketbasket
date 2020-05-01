@@ -11,8 +11,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
 from django.db.models import Min, Count, Prefetch
 
-from .models import UnitTypes, \
-                    Delivery, DeliverySlot, \
+from .models import Delivery, DeliverySlot, \
                     Cart, CartItem, CartStatuses, \
                     Merchant
 from .forms import SlotForm, AnnotationForm, DelItemForm, CartItemForm
@@ -56,19 +55,9 @@ def needed_quantities(request):
     deliveries = Delivery.objects.annotate(start=Min('slots__start')) \
                             .filter(start__gte=now()) \
                             .order_by('start')
-    context = {'deliveries': []}
-    units = dict(UnitTypes.choices)
-    for delivery in deliveries:
-        context['deliveries'].append({
-            'location': delivery.location.name,
-            'date': delivery.start.date(),
-            'orders': [{
-                            'label': quant['label'],
-                            'unit_type': units[quant['unit_type']],
-                            'quantity': quant['quantity']
-                       } for quant in delivery.get_needed_quantities()]})
 
-    return render(request, 'baskets/needed_quantities.html', context)
+    return render(request, 'baskets/needed_quantities.html',
+                                                    {'deliveries': deliveries})
 
 
 @login_required

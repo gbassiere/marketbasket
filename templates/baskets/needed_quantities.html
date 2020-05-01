@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load baskets %}
 {% block main %}
       {% if deliveries %}
         {% for d in deliveries %}
-          <h1>{{ d.location }} {{ d.date|date:"SHORT_DATE_FORMAT" }}</h1>
-          {% if d.orders %}
+          <h1>{{ d.location.name }} - {{ d.start|date:"SHORT_DATE_FORMAT" }}</h1>
+          {% with d.get_needed_quantities as orders %}
+          {% if orders %}
             <ul>
-            {% for o in d.orders %}
-              <li>{{ o.label }} : {{ o.quantity }} {{ o.unit_type }}</li>
+            {% for o in orders %}
+              <li>{{ o.label }} : {{ o.quantity|quantity:o.unit_type }}</li>
             {% endfor %}
             </ul>
           {% else %}
           <p>{% trans "No orders." %}</p>
           {% endif %}
+          {% endwith %}
         {% endfor %}
       {% else %}
       <p>{% trans "No delivery scheduled." %}</p>
