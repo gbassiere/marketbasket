@@ -57,8 +57,8 @@ class BasketTestCase(TestCase):
 
 class UnitTypesTests(TestCase):
     """
-    Test case for UnitTypes which is a mere TextChoices but have a custom
-    method.
+    Test case for UnitTypes which is a mere TextChoices but have custom
+    methods.
     """
     def test_hr_quantity(self):
         with self.assertRaises(ValueError):
@@ -72,6 +72,13 @@ class UnitTypesTests(TestCase):
         for value in (0.555, Decimal(.6), .7):
             self.assertRegex(UnitTypes.WEIGHT.hr_quantity(value),
                                                             r'^\d{3} ')
+    def test_hr_price(self):
+        with self.assertRaises(ValueError):
+            UnitTypes.UNIT.hr_price('1.0') # String is invalid input
+        values = (.8, 1, 1.0, 1.555, 3, 3.0, Decimal(1.0), Decimal(3))
+        for value in values:
+            self.assertRegex(UnitTypes.UNIT.hr_price(value), r'^\d+\.\d{2} €')
+            self.assertRegex(UnitTypes.WEIGHT.hr_price(value), r'^\d+\.\d{2} €')
 
 
 class SlotSelectTests(TestCase):

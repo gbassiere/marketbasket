@@ -22,6 +22,24 @@ class UnitTypes(models.TextChoices):
     UNIT = 'U', _('unit(s)')
     WEIGHT = 'W', _('Kg')
 
+    def hr_price(self, price):
+        """
+        Return human-readable price with localised unit
+        """
+
+        # non-numeric price would not make sense
+        if not isinstance(price, numbers.Number):
+            raise ValueError('A `price` should be numeric')
+
+        if self.value == self.UNIT:
+            unit = gettext('unit')
+        elif self.value == self.WEIGHT:
+            unit = gettext('Kg')
+        else:
+            return price
+
+        return '{price:.2f} €/{unit}'.format(price=price, unit=unit)
+
     def hr_quantity(self, quantity):
         """
         Return human-readable quantity with pluralized and localised unit
@@ -72,8 +90,11 @@ class Article(models.Model):
         verbose_name = _('article')
         verbose_name_plural = _('articles')
 
+    def hr_unit_price(self):
+        return UnitTypes(self.unit_type).hr_price(self.unit_price)
+
     def __str__(self):
-        return self.label
+        return '{0}, {1}'.format(self.label, self.hr_unit_price())
 
 
 class Merchant(models.Model):
@@ -270,6 +291,9 @@ class CartItem(models.Model):
 
     # Manager with prices computed automatically annotated
     objects = CartItemManager()
+
+    def hr_unit_price(self):
+        return UnitTypes(self.unit_type).hr_price(self.unit_price)
 
     def hr_quantity(self):
         return UnitTypes(self.unit_type).hr_quantity(self.quantity)
