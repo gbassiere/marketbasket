@@ -52,7 +52,7 @@ class BasketTestCase(TestCase):
             de = d + datetime.timedelta(minutes=(i+1)*interval)
             s = DeliverySlot(delivery=self.delivery, start=ds, end=de)
             s.save()
-            setattr(self, 'slot%d' % (i+1), s)
+            setattr(self, 'slot{:d}'.format((i+1)), s)
 
 
 class UnitTypesTests(TestCase):
@@ -198,7 +198,7 @@ class DeliveryTests(BasketTestCase):
         cart_count = 0
         self.install_slots(3, 7, 30, 4) # 4 slots (30' within 2h)
         for i in range(4):
-            s = getattr(self, 'slot%d' % (i+1))
+            s = getattr(self, 'slot{:d}'.format(i+1))
             for j in range(1 + i%2): # 1 or 2 carts by slots, 6 in total
                 Cart(user=self.francine, slot=s).save()
                 cart_count += 1
@@ -325,7 +325,7 @@ class ViewTests(BasketTestCase):
         Needed quantities view
         """
         path = reverse('needed_quantities')
-        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        redirect_path = '{0}?next={1}'.format(settings.LOGIN_URL, path)
         # anonymous user
         response = self.client.get(path)
         self.assertRedirects(response, redirect_path)
@@ -345,7 +345,7 @@ class ViewTests(BasketTestCase):
         New cart view
         """
         path = reverse('new_cart', args=[self.delivery.id])
-        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        redirect_path = '{0}?next={1}'.format(settings.LOGIN_URL, path)
         error_path = reverse('merchant')
         # anonymous user
         response = self.client.get(path)
@@ -449,7 +449,7 @@ class ViewTests(BasketTestCase):
         Prepare baskets view (list all baskets to be prepared)
         """
         path = reverse('prepare_baskets', args=[self.delivery.id])
-        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        redirect_path = '{0}?next={1}'.format(settings.LOGIN_URL, path)
         # anonymous user
         response = self.client.get(path)
         self.assertRedirects(response, redirect_path)
@@ -483,7 +483,7 @@ class ViewTests(BasketTestCase):
         c = Cart(user=self.francine, slot=self.slot1)
         c.save()
         path = reverse('prepare_basket', args=[c.id])
-        redirect_path = '%s?next=%s' % (settings.LOGIN_URL, path)
+        redirect_path = '{0}?next={1}'.format(settings.LOGIN_URL, path)
         # anonymous user
         response = self.client.get(path)
         self.assertRedirects(response, redirect_path)

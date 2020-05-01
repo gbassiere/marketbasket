@@ -112,10 +112,10 @@ class URL(models.Model):
 
     def __str__(self):
         if len(self.address) > 40:
-            address = '%s...' % self.address[:37]
+            address = '{:s}...'.format(self.address[:37])
         else:
             address = self.address
-        return '%s: %s' % (self.get_url_type_display(), address)
+        return '{:s}: {:s}'.format(self.get_url_type_display(), address)
 
 
 class DeliveryLocation(models.Model):
@@ -181,7 +181,7 @@ class Delivery(models.Model):
             hour = date_format(start_dt, 'TIME_FORMAT')
             return f'{loc} ({day} {hour})'
         else:
-            return gettext('%(place)s (undefined time slots)' % {'place': loc})
+            return gettext('{place} (undefined time slots)').format(place=loc)
 
 
 class DeliverySlot(models.Model):

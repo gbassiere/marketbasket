@@ -19,12 +19,12 @@ class SlotChoiceField(forms.ModelChoiceField):
     widget = SlotSelect
 
     def label_from_instance(self, obj):
-        lbl = _('between %(start)s and %(end)s') % {
-                'start': date_format(localtime(obj.start), 'TIME_FORMAT'),
-                'end': date_format(localtime(obj.end), 'TIME_FORMAT')}
+        lbl = _('between {start} and {end}').format(
+                    start=date_format(localtime(obj.start), 'TIME_FORMAT'),
+                    end=date_format(localtime(obj.end), 'TIME_FORMAT'))
         limit = obj.delivery.max_per_slot
         if limit > 0 and obj.cart_count >= limit:
-            lbl = _('%(slot)s (full)' % {'slot': lbl})
+            lbl = _('{slot} (full)').format(slot=lbl)
             # Mark label as disabled (i18n-independant)
             # This is ugly but I have not found any better way to pass the
             # information to widget.create_option.

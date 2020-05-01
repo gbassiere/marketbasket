@@ -29,14 +29,14 @@ msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
 #: baskets/forms.py:22
-#, python-format
-msgid "between %(start)s and %(end)s"
-msgstr "entre %(start)s et %(end)s"
+#, python-brace-format
+msgid "between {start} and {end}"
+msgstr "entre {start} et {end}"
 
 #: baskets/forms.py:27
-#, python-format
-msgid "%(slot)s (full)"
-msgstr "%(slot)s (complet)"
+#, python-brace-format
+msgid "{slot} (full)"
+msgstr "{slot} (complet)"
 
 #: baskets/forms.py:48
 msgid "This delivery slot is full."
@@ -170,10 +170,10 @@ msgstr "distribution"
 msgid "deliveries"
 msgstr "distributions"
 
-#: baskets/models.py:184
-#, python-format
-msgid "%(place)s (undefined time slots)"
-msgstr "%(place)s (créneaux horaire non définis)"
+#: baskets/models.py:189
+#, python-brace-format
+msgid "{place} (undefined time slots)"
+msgstr "{place} (créneaux horaire non définis)"
 
 #: baskets/models.py:188
 msgid "start at"
@@ -215,17 +215,16 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
-#: baskets/views.py:91
+#: baskets/views.py:81
 msgid "This delivery is full and does not accept any new order."
 msgstr ""
 "Cette distribution est complète et n'accepte plus de nouvelles commandes."
 
-#: baskets/views.py:139
-#, python-format
-msgid "Article \"%(label)s\" deleted"
-msgstr "Article \"%(label)s\" supprimé"
+#: baskets/views.py:129
+msgid "Article \"{label:s}\" deleted"
+msgstr "Article \"{label:s}\" supprimé"
 
-#: baskets/views.py:148
+#: baskets/views.py:138
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 
@@ -314,11 +313,11 @@ msgstr "Distribution complète"
 msgid "Place an order"
 msgstr "Commander"
 
-#: templates/baskets/needed_quantities.html:14
+#: templates/baskets/needed_quantities.html:16
 msgid "No orders."
 msgstr "Aucune commande."
 
-#: templates/baskets/needed_quantities.html:18
+#: templates/baskets/needed_quantities.html:21
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
 

@@ -24,7 +24,7 @@ def merchant(request):
     contacts = [(url.get_url_type_display(), url.address)
                             for url in merchant.contact_details.all()]
     contacts.append(
-                (merchant.owner.email, 'mailto:%s' % merchant.owner.email))
+            (merchant.owner.email, 'mailto:{0}'.format(merchant.owner.email)))
 
     # Can't find a way to annotate deliveries with an is_full field which would
     # be True when all slot have reached max_per_slot... Hence filtering and
@@ -97,7 +97,7 @@ def cart(request, id):
 
     if cart.user.id != request.user.id:
         return HttpResponseRedirect(
-                '%s?next=%s' % (settings.LOGIN_URL, request.path))
+                '{0}?next={1}'.format(settings.LOGIN_URL, request.path))
 
     # Default, for GET request or POST to the other form
     slot_form = SlotForm(initial={'slot': cart.slot})
@@ -125,7 +125,7 @@ def cart(request, id):
                     ci = cart.items.get(id=item_id)
                 except CartItem.DoesNotExist:
                     raise SuspiciousOperation()
-                msg = _('Article "%(label)s" deleted') % {'label': ci.label}
+                msg = _('Article "{label:s}" deleted').format(label=ci.label)
                 ci.delete()
                 messages.success(request, msg)
         elif 'slot_submit' in request.POST:
