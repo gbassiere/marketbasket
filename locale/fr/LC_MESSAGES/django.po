@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-01 16:32+0200\n"
+"POT-Creation-Date: 2020-05-01 16:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -253,7 +253,7 @@ msgstr "Ajouter au panier"
 msgid "Article"
 msgstr "Article"
 
-#: templates/baskets/cart.html:40 templates/baskets/prepare_basket.html:16
+#: templates/baskets/cart.html:40
 msgid "Quantity"
 msgstr "Quantité"
 
@@ -331,6 +331,10 @@ msgstr "Client :"
 #, python-format
 msgid "Expected pick-up between %(start)s and %(end)s."
 msgstr "Retrait prévu entre %(start)s et %(end)s."
+
+#: templates/baskets/prepare_basket.html:16
+msgid "Ordered quantity"
+msgstr "Quantité commandée"
 
 #: templates/baskets/prepare_basket.html:17
 msgid "Expected price"

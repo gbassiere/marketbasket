@@ -19,9 +19,9 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">{% trans "Customer" %}</th>
-      <th scope="col">{% trans "Items count" %}</th>
-      <th scope="col">{% trans "Status" %}</th>
-      <th scope="col">{% trans "Action" %}</th>
+      <th scope="col" class="text-center">{% trans "Items count" %}</th>
+      <th scope="col" class="text-center">{% trans "Status" %}</th>
+      <th scope="col" class="text-center">{% trans "Action" %}</th>
     </tr>
   </thead>
   {% for slot in delivery.get_active_carts_by_slot %}
@@ -35,9 +35,9 @@
     {% for cart in slot.baskets %}
     <tr>
       <td>{{ cart.user.get_full_name }}</td>
-      <td>{{ cart.items.count }}</td>
-      <td>{{ cart.get_status_display }}</td>
-      <td>
+      <td class="text-center">{{ cart.items.count }}</td>
+      <td class="text-center">{{ cart.get_status_display }}</td>
+      <td class="text-center">
         {% if cart.is_prepared %}
         <form action="" method="post">
           {% csrf_token %}

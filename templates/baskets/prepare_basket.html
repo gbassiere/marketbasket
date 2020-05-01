@@ -13,16 +13,16 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">{% trans "Article" %}</th>
-      <th scope="col">{% trans "Quantity" %}</th>
-      <th scope="col">{% trans "Expected price" %}</th>
+      <th scope="col" class="text-center">{% trans "Ordered quantity" %}</th>
+      <th scope="col" class="text-center">{% trans "Expected price" %}</th>
     </tr>
   </thead>
   <tbody>
     {% for item in basket.items.all %}
     <tr>
       <td>{{ item.label }}</td>
-      <td>{{ item.quantity }}</td>
-      <td>{{ item.price }}</td>
+      <td class="text-center">{{ item.hr_quantity }}</td>
+      <td class="text-center">{{ item.price|floatformat:2 }}€</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -41,7 +41,7 @@
   <div class="row">
     <div class="col">
       <p>
-        {% trans "Expected total price:" %} {{ basket.get_total }}<br>
+        <strong>{% trans "Expected total price:" %} {{ basket.get_total|floatformat:2 }}€</strong><br>
         {% trans "Article count:" %} {{ basket.items.count }}
       </p>
     </div>
