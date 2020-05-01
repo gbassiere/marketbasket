@@ -275,7 +275,4 @@ class CartItem(models.Model):
         return UnitTypes(self.unit_type).hr_quantity(self.quantity)
 
     def __str__(self):
-        q = self.quantity
-        u = self.get_unit_type_display()
-        item = self.label
-        return f'{item}: {q} {u}'
+        return '{0}: {1}'.format(self.label, self.hr_quantity())
