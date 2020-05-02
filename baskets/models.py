@@ -18,7 +18,7 @@ class CartStatuses(models.IntegerChoices):
     # Over, but not delivered, for some reason...
     ABANDONED = 50, _('abandoned')
 
-class UnitTypes(models.TextChoices):
+class UnitType(models.TextChoices):
     UNIT = 'U', _('unit(s)')
     WEIGHT = 'W', _('Kg')
 
@@ -80,8 +80,8 @@ class Article(models.Model):
     unit_type = models.CharField(
             _('unit type'),
             max_length=1,
-            choices=UnitTypes.choices,
-            default=UnitTypes.WEIGHT)
+            choices=UnitType.choices,
+            default=UnitType.WEIGHT)
     # category: food vs non-food, etc. May be useful later to emit invoices or
     # to decide which payment method is allowed
     # tax_rate: may be useful later to emit invoices
@@ -91,7 +91,7 @@ class Article(models.Model):
         verbose_name_plural = _('articles')
 
     def hr_unit_price(self):
-        return UnitTypes(self.unit_type).hr_price(self.unit_price)
+        return UnitType(self.unit_type).hr_price(self.unit_price)
 
     def __str__(self):
         return '{0}, {1}'.format(self.label, self.hr_unit_price())
@@ -282,7 +282,7 @@ class CartItem(models.Model):
     # history even when article definition is updated
     label = models.CharField(max_length=255)
     unit_price = models.DecimalField(max_digits=5, decimal_places=2)
-    unit_type = models.CharField(max_length=1, choices=UnitTypes.choices)
+    unit_type = models.CharField(max_length=1, choices=UnitType.choices)
     quantity = models.DecimalField(max_digits=6, decimal_places=3)
 
     class Meta:
@@ -293,10 +293,10 @@ class CartItem(models.Model):
     objects = CartItemManager()
 
     def hr_unit_price(self):
-        return UnitTypes(self.unit_type).hr_price(self.unit_price)
+        return UnitType(self.unit_type).hr_price(self.unit_price)
 
     def hr_quantity(self):
-        return UnitTypes(self.unit_type).hr_quantity(self.quantity)
+        return UnitType(self.unit_type).hr_quantity(self.quantity)
 
     def __str__(self):
         return '{0}: {1}'.format(self.label, self.hr_quantity())

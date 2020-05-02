@@ -2,7 +2,7 @@ import functools
 from django import template
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from ..models import UnitTypes
+from ..models import UnitType
 
 
 register = template.Library()
@@ -11,8 +11,8 @@ register = template.Library()
 def handle_typing_and_autoescaping(func):
     def _wrapper(value, unit_type, autoescape):
 
-        if not isinstance(unit_type, UnitTypes):
-            unit_type = UnitTypes(unit_type)
+        if not isinstance(unit_type, UnitType):
+            unit_type = UnitType(unit_type)
 
         res = func(value, unit_type, autoescape)
 

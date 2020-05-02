@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from .models import Delivery, DeliveryLocation, DeliverySlot, \
-                    UnitTypes, \
+                    UnitType, \
                     CartItem, Cart, CartStatuses
 from .forms import CartItemForm, AnnotationForm, SlotSelect, SlotForm
 from .admin import DeliverySlotForm
@@ -55,30 +55,30 @@ class BasketTestCase(TestCase):
             setattr(self, 'slot{:d}'.format((i+1)), s)
 
 
-class UnitTypesTests(TestCase):
+class UnitTypeTests(TestCase):
     """
-    Test case for UnitTypes which is a mere TextChoices but have custom
+    Test case for UnitType which is a mere TextChoices but have custom
     methods.
     """
     def test_hr_quantity(self):
         with self.assertRaises(ValueError):
-            UnitTypes.UNIT.hr_quantity('a string')
+            UnitType.UNIT.hr_quantity('a string')
         values = (1, 1.0, 3, 3.0, Decimal(1.0), Decimal(3))
         for value in values:
-            self.assertRegex(UnitTypes.UNIT.hr_quantity(value), r'^\d+')
+            self.assertRegex(UnitType.UNIT.hr_quantity(value), r'^\d+')
         for value in values + (1.5, 5.43, Decimal(1.555)):
-            self.assertRegex(UnitTypes.WEIGHT.hr_quantity(value),
+            self.assertRegex(UnitType.WEIGHT.hr_quantity(value),
                                                             r'^\d+\.?\d* ')
         for value in (0.555, Decimal(.6), .7):
-            self.assertRegex(UnitTypes.WEIGHT.hr_quantity(value),
+            self.assertRegex(UnitType.WEIGHT.hr_quantity(value),
                                                             r'^\d{3} ')
     def test_hr_price(self):
         with self.assertRaises(ValueError):
-            UnitTypes.UNIT.hr_price('1.0') # String is invalid input
+            UnitType.UNIT.hr_price('1.0') # String is invalid input
         values = (.8, 1, 1.0, 1.555, 3, 3.0, Decimal(1.0), Decimal(3))
         for value in values:
-            self.assertRegex(UnitTypes.UNIT.hr_price(value), r'^\d+\.\d{2} €')
-            self.assertRegex(UnitTypes.WEIGHT.hr_price(value), r'^\d+\.\d{2} €')
+            self.assertRegex(UnitType.UNIT.hr_price(value), r'^\d+\.\d{2} €')
+            self.assertRegex(UnitType.WEIGHT.hr_price(value), r'^\d+\.\d{2} €')
 
 
 class SlotSelectTests(TestCase):
@@ -226,7 +226,7 @@ class DeliveryTests(BasketTestCase):
         self.assertEqual(qs2.count(), 0)
         # One cart exist with one cartItem
         kwargs = {'cart': c1, 'label': 'xxx', 'unit_price': 2.5,
-                        'unit_type': UnitTypes.WEIGHT, 'quantity': 0.500}
+                        'unit_type': UnitType.WEIGHT, 'quantity': 0.500}
         CartItem(**kwargs).save()
         qs3 = self.delivery.get_needed_quantities()
         self.assertEqual(qs3.count(), 1)
