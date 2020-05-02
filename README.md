@@ -52,6 +52,17 @@ Install
     python3 manage.py runserver
 
 
+Translations
+------------
+
+Please update catalog with option `--add-location file`:
+
+    python3 manage.py makemessages -l fr --add-location file
+
+That way, line numbers are omitted and the `django.po` will not change as
+frequently. This makes Git history much more readable and avoid the hassle
+of pointless conflict resolution when rebasing.
+
 Semantic versioning
 -------------------
 

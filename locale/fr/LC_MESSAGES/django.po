@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-02 14:33+0200\n"
+"POT-Creation-Date: 2020-05-02 15:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Gilles Bassière <gbassiere@gmail.com>\n"
 "Language-Team: Gilles Bassière <gbassiere@gmail.com>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: baskets/admin.py:16
+#: baskets/admin.py
 msgid ""
 "Modifying this slot is not possible since customers have already placed "
 "orders"
@@ -24,386 +24,385 @@ msgstr ""
 "Il n'est plus possible d'éditer ce créneau car des clients y ont déjà "
 "commandé"
 
-#: baskets/admin.py:19
+#: baskets/admin.py
 msgid "Delivery slot cannot end before it starts"
 msgstr "Les créneaux de distribution ne peuvent finir avant de commencer"
 
-#: baskets/forms.py:22
+#: baskets/forms.py
 #, python-brace-format
 msgid "between {start} and {end}"
 msgstr "entre {start} et {end}"
 
-#: baskets/forms.py:27
+#: baskets/forms.py
 #, python-brace-format
 msgid "{slot} (full)"
 msgstr "{slot} (complet)"
 
-#: baskets/forms.py:48
+#: baskets/forms.py
 msgid "This delivery slot is full."
 msgstr "Ce créneau de distribution est complet."
 
-#: baskets/models.py:11
+#: baskets/models.py
 msgid "received"
 msgstr "reçu"
 
-#: baskets/models.py:13
+#: baskets/models.py
 msgid "preparation in progress"
 msgstr "préparation en cours"
 
-#: baskets/models.py:15
+#: baskets/models.py
 msgid "prepared"
 msgstr "préparé"
 
-#: baskets/models.py:17
+#: baskets/models.py
 msgid "delivered"
 msgstr "livré"
 
-#: baskets/models.py:19
+#: baskets/models.py
 msgid "abandoned"
 msgstr "abandonné"
 
-#: baskets/models.py:22
+#: baskets/models.py
 msgid "unit(s)"
 msgstr "unité(s)"
 
-#: baskets/models.py:23 baskets/models.py:37 baskets/models.py:62
+#: baskets/models.py
 msgid "Kg"
 msgstr "Kg"
 
-#: baskets/models.py:35
+#: baskets/models.py
 msgid "unit"
 msgstr "unité"
 
-#: baskets/models.py:57
+#: baskets/models.py
 msgid "g"
 msgstr "g"
 
-#: baskets/models.py:70
+#: baskets/models.py
 msgid "Facebook"
 msgstr "Facebook"
 
-#: baskets/models.py:71
+#: baskets/models.py
 msgid "Email address"
 msgstr "Adresse email"
 
-#: baskets/models.py:72
+#: baskets/models.py
 msgid "Phone number"
 msgstr "Numéro de téléphone"
 
-#: baskets/models.py:73
+#: baskets/models.py
 msgid "Website"
 msgstr "Site web"
 
-#: baskets/models.py:77
+#: baskets/models.py
 msgid "code"
 msgstr "code"
 
-#: baskets/models.py:78 baskets/models.py:101 baskets/models.py:143
+#: baskets/models.py
 msgid "name"
 msgstr "nom"
 
-#: baskets/models.py:79
+#: baskets/models.py
 msgid "unit price"
 msgstr "prix unitaire"
 
-#: baskets/models.py:81
+#: baskets/models.py
 msgid "unit type"
 msgstr "type d'unité"
 
-#: baskets/models.py:90
+#: baskets/models.py
 msgid "article"
 msgstr "article"
 
-#: baskets/models.py:91
+#: baskets/models.py
 msgid "articles"
 msgstr "articles"
 
-#: baskets/models.py:103
+#: baskets/models.py
 msgid "owner"
 msgstr "propriétaire"
 
-#: baskets/models.py:104
+#: baskets/models.py
 msgid "presentation"
 msgstr "présentation"
 
-#: baskets/models.py:111 baskets/models.py:127
+#: baskets/models.py
 msgid "merchant"
 msgstr "marchand"
 
-#: baskets/models.py:112
+#: baskets/models.py
 msgid "merchants"
 msgstr "marchands"
 
-#: baskets/models.py:119 baskets/models.py:131
+#: baskets/models.py
 msgid "URL"
 msgstr "URL"
 
-#: baskets/models.py:121
+#: baskets/models.py
 msgid "URL type"
 msgstr "type d'URL"
 
-#: baskets/models.py:132
+#: baskets/models.py
 msgid "URLs"
 msgstr "URLs"
 
-#: baskets/models.py:148
+#: baskets/models.py
 msgid "delivery location"
 msgstr "point de distribution"
 
-#: baskets/models.py:149
+#: baskets/models.py
 msgid "delivery locations"
 msgstr "points de distribution"
 
-#: baskets/models.py:159
+#: baskets/models.py
 msgid "location"
 msgstr "lieu"
 
-#: baskets/models.py:161
+#: baskets/models.py
 msgid "maximum number of baskets per slot"
 msgstr "nombre maximum de panier par créneau"
 
-#: baskets/models.py:162
+#: baskets/models.py
 msgid "Set 0 for unlimited carts per slot"
 msgstr "Mettre 0 pour ne pas limiter le nombre de panier"
 
-#: baskets/models.py:169 baskets/models.py:214
+#: baskets/models.py
 msgid "delivery"
 msgstr "distribution"
 
-#: baskets/models.py:170
+#: baskets/models.py
 msgid "deliveries"
 msgstr "distributions"
 
-#: baskets/models.py:205
+#: baskets/models.py
 #, python-brace-format
 msgid "{place} (undefined time slots)"
 msgstr "{place} (créneaux horaire non définis)"
 
-#: baskets/models.py:209
+#: baskets/models.py
 msgid "start at"
 msgstr "débute à"
 
-#: baskets/models.py:210
+#: baskets/models.py
 msgid "end at"
 msgstr "fini à"
 
-#: baskets/models.py:218
+#: baskets/models.py
 msgid "delivery time slot"
 msgstr "créneau de distribution"
 
-#: baskets/models.py:219
+#: baskets/models.py
 msgid "delivery time slots"
 msgstr "créneaux de distribution"
 
-#: baskets/models.py:239
+#: baskets/models.py
 msgid "status"
 msgstr "état"
 
-#: baskets/models.py:243
+#: baskets/models.py
 msgid "annotation"
 msgstr "annotation"
 
-#: baskets/models.py:249 baskets/models.py:280
+#: baskets/models.py
 msgid "cart"
 msgstr "panier"
 
-#: baskets/models.py:250
+#: baskets/models.py
 msgid "carts"
 msgstr "paniers"
 
-#: baskets/models.py:289
+#: baskets/models.py
 msgid "item"
 msgstr "article"
 
-#: baskets/models.py:290
+#: baskets/models.py
 msgid "items"
 msgstr "articles"
 
-#: baskets/views.py:81
+#: baskets/views.py
 msgid "This delivery is full and does not accept any new order."
 msgstr ""
 "Cette distribution est complète et n'accepte plus de nouvelles commandes."
 
-#: baskets/views.py:129
+#: baskets/views.py
 msgid "Article \"{label:s}\" deleted"
 msgstr "Article \"{label:s}\" supprimé"
 
-#: baskets/views.py:138
+#: baskets/views.py
 msgid "Time slot updated"
 msgstr "Créneau horaire mis à jour"
 
-#: templates/base.html:9
+#: templates/base.html
 msgid "Market pre-ordering system"
 msgstr "Système de pré-commande de produits maraîchers"
 
-#: templates/baskets/cart.html:18
+#: templates/baskets/cart.html
 msgid "Status:"
 msgstr "État :"
 
-#: templates/baskets/cart.html:27
+#: templates/baskets/cart.html
 msgid "Article:"
 msgstr "Article :"
 
-#: templates/baskets/cart.html:29
+#: templates/baskets/cart.html
 msgid "Quantity:"
 msgstr "Quantité :"
 
-#: templates/baskets/cart.html:31
+#: templates/baskets/cart.html
 msgid "Add to cart"
 msgstr "Ajouter au panier"
 
-#: templates/baskets/cart.html:39 templates/baskets/prepare_basket.html:15
+#: templates/baskets/cart.html templates/baskets/prepare_basket.html
 msgid "Article"
 msgstr "Article"
 
-#: templates/baskets/cart.html:40
+#: templates/baskets/cart.html
 msgid "Quantity"
 msgstr "Quantité"
 
-#: templates/baskets/cart.html:41
+#: templates/baskets/cart.html
 msgid "Unit price"
 msgstr "Prix unitaire"
 
-#: templates/baskets/cart.html:42
+#: templates/baskets/cart.html
 msgid "Price"
 msgstr "Prix"
 
-#: templates/baskets/cart.html:43 templates/baskets/prepare_baskets.html:24
+#: templates/baskets/cart.html templates/baskets/prepare_baskets.html
 msgid "Action"
 msgstr "Action"
 
-#: templates/baskets/cart.html:63
+#: templates/baskets/cart.html
 msgid "Your basket is empty..."
 msgstr "Votre panier est vide..."
 
-#: templates/baskets/cart.html:68
+#: templates/baskets/cart.html
 msgid "Total price:"
 msgstr "Prix total :"
 
-#: templates/baskets/cart.html:80
+#: templates/baskets/cart.html
 msgid "Basket collection time slot:"
 msgstr "Créneau horaire de retrait du panier:"
 
-#: templates/baskets/cart.html:82
+#: templates/baskets/cart.html
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/baskets/cart.html:92
+#: templates/baskets/cart.html
 msgid "Note to the merchant"
 msgstr "Message au marchand"
 
-#: templates/baskets/cart.html:96
+#: templates/baskets/cart.html
 msgid "Save note"
 msgstr "Enregistrer le message"
 
-#: templates/baskets/cart.html:99
+#: templates/baskets/cart.html
 #, python-format
 msgid "Note saved on %(d)s at %(t)s."
 msgstr "Message enregistré le %(d)s à %(t)s."
 
-#: templates/baskets/merchant.html:17
+#: templates/baskets/merchant.html
 msgid "Contacts:"
 msgstr "Contacts :"
 
-#: templates/baskets/merchant.html:30
+#: templates/baskets/merchant.html
 msgid "Upcoming delivery"
 msgstr "Distribution à venir"
 
-#: templates/baskets/merchant.html:35
+#: templates/baskets/merchant.html
 msgid "Delivery is full"
 msgstr "Distribution complète"
 
-#: templates/baskets/merchant.html:37
+#: templates/baskets/merchant.html
 msgid "Place an order"
 msgstr "Commander"
 
-#: templates/baskets/needed_quantities.html:16
+#: templates/baskets/needed_quantities.html
 msgid "No orders."
 msgstr "Aucune commande."
 
-#: templates/baskets/needed_quantities.html:21
+#: templates/baskets/needed_quantities.html
 msgid "No delivery scheduled."
 msgstr "Aucune distribution planifiée."
 
-#: templates/baskets/prepare_basket.html:6
+#: templates/baskets/prepare_basket.html
 msgid "Customer:"
 msgstr "Client :"
 
-#: templates/baskets/prepare_basket.html:9
-#: templates/baskets/prepare_baskets.html:32
+#: templates/baskets/prepare_basket.html templates/baskets/prepare_baskets.html
 #, python-format
 msgid "Expected pick-up between %(start)s and %(end)s."
 msgstr "Retrait prévu entre %(start)s et %(end)s."
 
-#: templates/baskets/prepare_basket.html:16
+#: templates/baskets/prepare_basket.html
 msgid "Ordered quantity"
 msgstr "Quantité commandée"
 
-#: templates/baskets/prepare_basket.html:17
+#: templates/baskets/prepare_basket.html
 msgid "Expected price"
 msgstr "Prix attendu"
 
-#: templates/baskets/prepare_basket.html:36
+#: templates/baskets/prepare_basket.html
 msgid "Customer's note"
 msgstr "Message du client"
 
-#: templates/baskets/prepare_basket.html:44
+#: templates/baskets/prepare_basket.html
 msgid "Expected total price:"
 msgstr "Prix total attendu :"
 
-#: templates/baskets/prepare_basket.html:45
+#: templates/baskets/prepare_basket.html
 msgid "Article count:"
 msgstr "Nombre d'article :"
 
-#: templates/baskets/prepare_basket.html:55
+#: templates/baskets/prepare_basket.html
 msgid "Put off"
 msgstr "Remettre à plus tard"
 
-#: templates/baskets/prepare_basket.html:59
+#: templates/baskets/prepare_basket.html
 msgid "Basket ready"
 msgstr "Panier prêt"
 
-#: templates/baskets/prepare_basket.html:64
+#: templates/baskets/prepare_basket.html
 msgid "Start preparing"
 msgstr "Commencer à préparer"
 
-#: templates/baskets/prepare_baskets.html:21
+#: templates/baskets/prepare_baskets.html
 msgid "Customer"
 msgstr "Client"
 
-#: templates/baskets/prepare_baskets.html:22
+#: templates/baskets/prepare_baskets.html
 msgid "Items count"
 msgstr "Nombre d'article"
 
-#: templates/baskets/prepare_baskets.html:23
+#: templates/baskets/prepare_baskets.html
 msgid "Status"
 msgstr "État"
 
-#: templates/baskets/prepare_baskets.html:45
+#: templates/baskets/prepare_baskets.html
 msgid "Deliver"
 msgstr "Livrer"
 
-#: templates/baskets/prepare_baskets.html:48
+#: templates/baskets/prepare_baskets.html
 msgid "Prepare"
 msgstr "Préparer"
 
-#: templates/navbar.html:19
+#: templates/navbar.html
 msgid "Log out"
 msgstr "Me déconnecter"
 
-#: templates/navbar.html:24
+#: templates/navbar.html
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: templates/navbar.html:27 templates/registration/login.html:36
+#: templates/navbar.html templates/registration/login.html
 msgid "Sign in"
 msgstr "S'identifier"
 
-#: templates/registration/login.html:8
+#: templates/registration/login.html
 msgid "Your username and password didn't match. Please try again."
 msgstr "Vos identifiants ne correspondent pas. Merci de réessayer."
 
-#: templates/registration/login.html:13
+#: templates/registration/login.html
 msgid ""
 "Your account doesn't have access to this page. To proceed, please login with "
 "an account that has access."
@@ -411,18 +410,18 @@ msgstr ""
 "Vous n'avez pas accès à cette page. Pour poursuivre, merci de vous connecter "
 "avec un compte bénéficiant des autorisations nécessaires."
 
-#: templates/registration/login.html:16
+#: templates/registration/login.html
 msgid "Please login to see this page."
 msgstr "Merci de vous connecter pour accéder à cette page."
 
-#: templates/registration/login.html:25
+#: templates/registration/login.html
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: templates/registration/login.html:29
+#: templates/registration/login.html
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/registration/login.html:41
+#: templates/registration/login.html
 msgid "Lost password?"
 msgstr "Mot de passe oublié ?"
