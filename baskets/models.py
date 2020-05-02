@@ -194,15 +194,15 @@ class Delivery(models.Model):
                                .annotate(quantity=models.Sum('quantity'))
 
     def __str__(self):
-        loc = self.location.name
+        ctx = {'place': self.location.name}
         first_slot = self.slots.order_by('start').first()
         if first_slot:
             start_dt = timezone.localtime(first_slot.start)
-            day = date_format(start_dt, 'SHORT_DATE_FORMAT')
-            hour = date_format(start_dt, 'TIME_FORMAT')
-            return f'{loc} ({day} {hour})'
+            ctx['day'] = date_format(start_dt, 'SHORT_DATE_FORMAT')
+            ctx['hour'] = date_format(start_dt, 'TIME_FORMAT')
+            return '{place} ({day} {hour})'.format(**ctx)
         else:
-            return gettext('{place} (undefined time slots)').format(place=loc)
+            return gettext('{place} (undefined time slots)').format(**ctx)
 
 
 class DeliverySlot(models.Model):
@@ -219,10 +219,11 @@ class DeliverySlot(models.Model):
         verbose_name_plural = _('delivery time slots')
 
     def __str__(self):
-        day = date_format(self.start, 'SHORT_DATE_FORMAT')
-        start = date_format(timezone.localtime(self.start), 'TIME_FORMAT')
-        end = date_format(timezone.localtime(self.end), 'TIME_FORMAT')
-        return f'{day} ({start}-{end})'
+        ctx = {
+            'day': date_format(self.start, 'SHORT_DATE_FORMAT'),
+            'start': date_format(timezone.localtime(self.start), 'TIME_FORMAT'),
+            'end': date_format(timezone.localtime(self.end), 'TIME_FORMAT')}
+        return '{day} ({start}-{end})'.format(**ctx)
 
 
 class Cart(models.Model):
@@ -259,11 +260,12 @@ class Cart(models.Model):
         return self.status == CartStatus.PREPARED
 
     def __str__(self):
-        day = date_format(timezone.localdate(self.slot.start),
-                            'SHORT_DATE_FORMAT')
-        user = self.user.get_full_name()
-        items = self.items.count()
-        return f'{day}: {user!s} ({items} items)'
+        ctx = {
+            'day': date_format(timezone.localdate(self.slot.start),
+                                                        'SHORT_DATE_FORMAT'),
+            'user': self.user.get_full_name(),
+            'items': self.items.count()}
+        return '{day}: {user!s} ({items} items)'.format(**ctx)
 
 
 class CartItemManager(models.Manager):
