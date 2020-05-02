@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.db.models import Min, Count, Prefetch
 
 from .models import Delivery, DeliverySlot, \
-                    Cart, CartItem, CartStatuses, \
+                    Cart, CartItem, CartStatus, \
                     Merchant
 from .forms import SlotForm, AnnotationForm, DelItemForm, CartItemForm
 
@@ -170,7 +170,7 @@ def prepare_baskets(request, id):
 
     if request.method == 'POST' and 'delivered_cart' in request.POST:
         cart = get_object_or_404(Cart, id=request.POST['delivered_cart'])
-        cart.status = CartStatuses.DELIVERED
+        cart.status = CartStatus.DELIVERED
         cart.save()
 
     return render(request, 'baskets/prepare_baskets.html',
@@ -185,18 +185,18 @@ def prepare_basket(request, id):
 
     if request.method == 'POST':
         if 'ready' in request.POST:
-            basket.status = CartStatuses.PREPARED
+            basket.status = CartStatus.PREPARED
             basket.save()
             return HttpResponseRedirect(reverse_lazy('prepare_baskets',
                                              args=[basket.slot.delivery.id]))
         elif 'postpone' in request.POST:
-            basket.status = CartStatuses.RECEIVED
+            basket.status = CartStatus.RECEIVED
             basket.save()
             return HttpResponseRedirect(reverse_lazy('prepare_baskets',
                                              args=[basket.slot.delivery.id]))
         elif 'start' in request.POST:
-            basket.status = CartStatuses.PREPARING
+            basket.status = CartStatus.PREPARING
             basket.save()
 
     return render(request,'baskets/prepare_basket.html',
-                                 {'basket': basket, 'statuses': CartStatuses})
+                                 {'basket': basket, 'statuses': CartStatus})

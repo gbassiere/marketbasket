@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class CartStatuses(models.IntegerChoices):
+class CartStatus(models.IntegerChoices):
     # Customer placed an order online, not yet processed
     RECEIVED = 10, _('received')
     # A packer starts to put items together
@@ -66,7 +66,7 @@ class UnitType(models.TextChoices):
             # for consistency
             return str(quantity)
 
-class URLTypes(models.TextChoices):
+class URLType(models.TextChoices):
     FB = 'F', _('Facebook')
     EMAIL = 'E', _('Email address')
     PHONE = 'P', _('Phone number')
@@ -120,8 +120,8 @@ class URL(models.Model):
     url_type = models.CharField(
             _('URL type'),
             max_length=1,
-            choices=URLTypes.choices,
-            default=URLTypes.WEB)
+            choices=URLType.choices,
+            default=URLType.WEB)
     merchant = models.ForeignKey(Merchant,
                                  on_delete=models.CASCADE,
                                  verbose_name=_('merchant'),
@@ -181,7 +181,7 @@ class Delivery(models.Model):
         return list(groups.values())
 
     def get_active_carts(self):
-        return Cart.objects.filter(status__lte=CartStatuses.PREPARED,
+        return Cart.objects.filter(status__lte=CartStatus.PREPARED,
                             slot__delivery__id=self.id)
 
     def get_needed_quantities(self):
@@ -237,8 +237,8 @@ class Cart(models.Model):
             related_name='carts')
     status = models.PositiveSmallIntegerField(
             _('status'),
-            choices=CartStatuses.choices,
-            default=CartStatuses.RECEIVED)
+            choices=CartStatus.choices,
+            default=CartStatus.RECEIVED)
     annotation = models.TextField(
             _('annotation'),
             blank=True,
@@ -256,7 +256,7 @@ class Cart(models.Model):
         return total
 
     def is_prepared(self):
-        return self.status == CartStatuses.PREPARED
+        return self.status == CartStatus.PREPARED
 
     def __str__(self):
         day = date_format(timezone.localdate(self.slot.start),

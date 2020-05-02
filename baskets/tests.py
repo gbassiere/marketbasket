@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from .models import Delivery, DeliveryLocation, DeliverySlot, \
                     UnitType, \
-                    CartItem, Cart, CartStatuses
+                    CartItem, Cart, CartStatus
 from .forms import CartItemForm, AnnotationForm, SlotSelect, SlotForm
 from .admin import DeliverySlotForm
 
@@ -268,9 +268,9 @@ class CartTests(BasketTestCase):
     def test_is_prepared(self):
         """ True when cart.status is prepared, False otherwise """
         self.assertFalse(self.cart.is_prepared())
-        self.cart.status = CartStatuses.PREPARED
+        self.cart.status = CartStatus.PREPARED
         self.assertTrue(self.cart.is_prepared())
-        self.cart.status = CartStatuses.DELIVERED
+        self.cart.status = CartStatus.DELIVERED
         self.assertFalse(self.cart.is_prepared())
 
 class CartItemTests(BasketTestCase):
@@ -480,7 +480,7 @@ class ViewTests(BasketTestCase):
         data = {'delivered_cart': c.id}
         response = self.client.post(path, data)
         c.refresh_from_db()
-        self.assertEqual(c.status, CartStatuses.DELIVERED)
+        self.assertEqual(c.status, CartStatus.DELIVERED)
         self.assertEqual(response.status_code, 200)
 
     def test_prepare_basket(self):
@@ -507,14 +507,14 @@ class ViewTests(BasketTestCase):
         # Trying to GET a normal delivery
         response = self.client.get(path)
         self.assertIn('basket', response.context)
-        self.assertEqual(c.status, CartStatuses.RECEIVED)
+        self.assertEqual(c.status, CartStatus.RECEIVED)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(path, {'start': ''})
         self.assertIn('basket', response.context)
         c.refresh_from_db()
-        self.assertEqual(c.status, CartStatuses.PREPARING)
+        self.assertEqual(c.status, CartStatus.PREPARING)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(path, {'ready': ''})
         c.refresh_from_db()
-        self.assertEqual(c.status, CartStatuses.PREPARED)
+        self.assertEqual(c.status, CartStatus.PREPARED)
         self.assertEqual(response.status_code, 302)
